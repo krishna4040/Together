@@ -4,13 +4,13 @@ require('dotenv').config();
 const User = require('../models/User');
 const OTP = require('../models/OTP');
 
-exports.signup = async (req,res) => {
+exports.signup = async (req, res) => {
     try {
-        const {userName , email, password , otp} = req.body;
+        const { userName, email, password, otp } = req.body;
         if (!userName || !email || !password || !otp) {
             throw new Error('All fields are required');
         }
-        const check = await User.find({email});
+        const check = await User.find({ email });
         if (check) {
             throw new Error('User already signed in');
         }
@@ -24,34 +24,61 @@ exports.signup = async (req,res) => {
             throw new Error('Invalid OTP');
         }
 
-        const hash = await bcrypt.hash(password,10);
-        const user = await User.create({userName,email,password:hash});
+        const hash = await bcrypt.hash(password, 10);
+        const user = await User.create({ userName, email, password: hash });
         if (!user) {
             throw new Error('smth went wring while signing up');
         }
         res.status(200).json({
-            success : true,
+            success: true,
             message: 'user signed up successfully'
         });
     } catch (error) {
         res.status(500).json({
-            success : false,
+            success: false,
             message: error
         })
     }
 }
 
-exports.login = async (req,res) => {
+exports.sendotp = async (req, res) => {
     try {
-        const {email , password} = req.body;
+        const { email } = req.body;
+        const checkUserPresent = await User.findOne({ email });
+        if (checkUserPresent) {
+            throw new Error('USer already present');
+        }
+
+        let otp = otpGenerator.generate(6, {
+            upperCaseAlphabets: false,
+            lowerCaseAlphabets: false,
+            specialChars: false,
+        });
+        const result = await OTP.findOne({ otp: otp });
+        while (result) { // making otp unique
+            otp = otpGenerator.generate(6, { upperCaseAlphabets: false });
+        }
+        await OTP.create({ email, otp });
+        res.status(200).json({
+            success: true,
+            message: "OTP Sent Successfully",
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error });
+    }
+};
+
+exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
         if (!userName || !password) {
             throw new Error('All feilds are requiered');
         }
-        const check = await User.findOne({email});
-        if (!check) { 
+        const check = await User.findOne({ email });
+        if (!check) {
             throw new Error('User not signed up');
         }
-        const compare = bcrypt.compare(password,check.password);
+        const compare = bcrypt.compare(password, check.password);
         if (!compare) {
             throw new Error('Password do not macth');
         }
@@ -61,8 +88,8 @@ exports.login = async (req,res) => {
             email: check.email,
             password: check.password
         }
-        const token = jwt.sign(payload , process.env.JWT_SECRET);
-        res.cookie('token',token).status(200).json({
+        const token = jwt.sign(payload, process.env.JWT_SECRET);
+        res.cookie('token', token).status(200).json({
             success: true,
             message: 'user signed in successfully'
         })
