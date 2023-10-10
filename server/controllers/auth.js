@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const User = require('../models/User');
 
-exports.sigup = async (req,res) => {
+exports.signup = async (req,res) => {
     try {
         const {userName , email, password} = req.body;
         if (!userName || !email || !password) {
