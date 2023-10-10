@@ -45,6 +45,7 @@ exports.login = async (req,res) => {
             throw new Error('Password do not macth');
         }
         const payload = {
+            id: check._id,
             userName: check.userName,
             email: check.email,
             password: check.password

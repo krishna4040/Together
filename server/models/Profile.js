@@ -9,7 +9,7 @@ const profileSchema = new mongoose.Schema({
         type: String,
         enum: ['Male','Female','Other']
     },
-    About: String,
+    about: String,
     pfp: String,
     user:{
         type: mongoose.Schema.Types.ObjectId,
