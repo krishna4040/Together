@@ -2,17 +2,28 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const User = require('../models/User');
+const OTP = require('../models/OTP');
 
 exports.signup = async (req,res) => {
     try {
-        const {userName , email, password} = req.body;
-        if (!userName || !email || !password) {
+        const {userName , email, password , otp} = req.body;
+        if (!userName || !email || !password || !otp) {
             throw new Error('All fields are required');
         }
         const check = await User.find({email});
         if (check) {
             throw new Error('User already signed in');
         }
+
+        // Email-verification
+        const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+        if (!response.length) {
+            throw new Error('OTP not found');
+        }
+        if (otp != response[0].otp) {
+            throw new Error('Invalid OTP');
+        }
+
         const hash = await bcrypt.hash(password,10);
         const user = await User.create({userName,email,password:hash});
         if (!user) {
