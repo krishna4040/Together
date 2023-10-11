@@ -27,7 +27,7 @@ exports.createPost = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         })
     }
 }
@@ -71,7 +71,7 @@ exports.likePost = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         });
     }
 }
@@ -98,7 +98,7 @@ exports.commentPost = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         });
     }
 }

@@ -18,7 +18,7 @@ exports.makeFriend = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         });
     }
 }
@@ -41,7 +41,7 @@ exports.removeFriend = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         });
     }
 }

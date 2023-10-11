@@ -36,7 +36,7 @@ exports.updateProfile = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         });
     }
 }
@@ -92,7 +92,7 @@ exports.getUserDetails = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         });
     }
 }

@@ -6,23 +6,23 @@ const OTP = require('../models/OTP');
 
 exports.signup = async (req, res) => {
     try {
-        const { userName, email, password, otp } = req.body;
-        if (!userName || !email || !password || !otp) {
+        const { userName, email, password } = req.body;
+        if (!userName || !email || !password) {
             throw new Error('All fields are required');
         }
-        const check = await User.find({ email });
+        const check = await User.findOne({ email });
         if (check) {
-            throw new Error('User already signed in');
+            throw new Error('user already signed up');
         }
 
         // Email-verification
-        const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-        if (!response.length) {
-            throw new Error('OTP not found');
-        }
-        if (otp != response[0].otp) {
-            throw new Error('Invalid OTP');
-        }
+        // const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+        // if (!response.length) {
+        //     throw new Error('OTP not found');
+        // }
+        // if (otp != response[0].otp) {
+        //     throw new Error('Invalid OTP');
+        // }
 
         const hash = await bcrypt.hash(password, 10);
         const user = await User.create({ userName, email, password: hash });
@@ -36,7 +36,7 @@ exports.signup = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         })
     }
 }
@@ -64,14 +64,14 @@ exports.sendotp = async (req, res) => {
             message: "OTP Sent Successfully",
         });
     } catch (error) {
-        return res.status(500).json({ success: false, message: error });
+        return res.status(500).json({ success: false, message: error.message });
     }
 };
 
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (!userName || !password) {
+        if (!email || !password) {
             throw new Error('All feilds are requiered');
         }
         const check = await User.findOne({ email });
@@ -91,12 +91,12 @@ exports.login = async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET);
         res.cookie('token', token).status(200).json({
             success: true,
-            message: 'user signed in successfully'
+            message: 'user logged in successfully'
         })
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: error.message
         });
     }
 }
