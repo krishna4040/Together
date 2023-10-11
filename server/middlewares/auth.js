@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 exports.auth = async (req,res,next) => {
     try {
-        const token = req.body || req.cookies.token || req.header('Authorization').replace("Bearer ","");
+        const token = req.cookies.token;
         if (!token) {
             throw new Error('token not found');
         }
@@ -10,7 +10,7 @@ exports.auth = async (req,res,next) => {
         if (!decode) {
             throw new Error('invalid token');
         }
-        res.user = decode;
+        req.user = decode;
         next();
     } catch (error) {
         res.status(500).json({success: false, message: error})

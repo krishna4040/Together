@@ -8,13 +8,12 @@ const { cdupload } = require('../utils/cloudinary');
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { firstName = '', lastName = '', dob = Date.now(), gender = '', about = '' } = req.body;
-        const userId = req.user.id;
-        const pfp = req.files.pfp;
-        if (!(firstName || lastName || gender || about || pfp)) {
-            throw new Error('At least one feild is required');
+        const { firstName, lastName, birthDay, gender, about='Tell us about Yourself' } = req.body;
+        const dob = new Date(birthDay);
+        const { id } = req.user;
+        if (!firstName || !lastName || !gender) {
+            throw new Error('All feilds are requiered');
         }
-        const uploaded = await cdupload(pfp, process.env.FOLDER);
         const data = await Profile.create({
             firstName,
             lastName,
@@ -22,13 +21,12 @@ exports.updateProfile = async (req, res) => {
             gender,
             about,
             age: Date.now() - dob,
-            pfp: uploaded,
-            user: userId
+            user: id
         });
         if (!data) {
             throw new Error('unable to update profile');
         }
-        await User.findByIdAndUpdate(userId, { profileDeatils: data._id });
+        await User.findByIdAndUpdate(id, { profileDeatils: data._id });
         res.status(200).json({
             success: true,
             message: 'Profile updated successfully'
@@ -36,7 +34,7 @@ exports.updateProfile = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
     }
 }
