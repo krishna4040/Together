@@ -3,11 +3,11 @@ const User = require('../models/User');
 exports.makeFriend = async (req, res) => {
     try {
         const { friendId } = req.body;
-        const userId = req.user.id;
+        const { id } = req.user;
         if (!friendId) {
             throw new Error('friend id is requiered');
         }
-        const user = await User.findByIdAndUpdate(userId, { $push: { friends: friendId } });
+        const user = await User.findByIdAndUpdate(id, { $push: { friends: friendId } });
         if (!user) {
             throw new Error('unable to make friend');
         }
@@ -26,11 +26,11 @@ exports.makeFriend = async (req, res) => {
 exports.removeFriend = async (req, res) => {
     try {
         const { friendId } = req.body;
-        const userId = req.user.id;
-        if (!friendId) {    
+        const { id } = req.user;
+        if (!friendId) {
             throw new Error('friend id is requiered');
         }
-        const user = await User.findByIdAndUpdate(userId,{$pull:{friends: friendId}});
+        const user = await User.findByIdAndUpdate(id, { $pull: { friends: friendId } });
         if (!user) {
             throw new Error('unable to remove friend');
         }

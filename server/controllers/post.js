@@ -79,13 +79,14 @@ exports.likePost = async (req, res) => {
 
 exports.commentPost = async (req, res) => {
     try {
-        const { postId, userId, comment } = req.body;
-        if (!postId || !userId) {
+        const { postId, comment } = req.body;
+        const { id } = req.user;
+        if (!postId || !comment) {
             throw new Error('All feilds are requiered');
         }
         const commentPost = await Comment.create({
             post: postId,
-            user: userId,
+            user: id,
             comment
         });
         if (!commentPost) {

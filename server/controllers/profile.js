@@ -77,7 +77,10 @@ exports.deleteUser = async (req, res) => {
         });
 
     } catch (error) {
-
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 }
 
@@ -86,7 +89,7 @@ exports.getUserDetails = async (req, res) => {
         const {id} = req.user;
         const user = await User.findById(id)
             .populate('profileDetails')
-            .populate({path: 'friends' , populate: {path: 'user' , populate: 'profileDetails'}})
+            .populate({path: 'friends' , populate: 'profileDetails'})
             .populate({path: 'posts' , populate: {path: 'likes' , populate: {path: 'user' , populate: 'profileDetails'}}})
             .populate({path: 'posts' , populate: {path: 'comments' , populate: {path: 'user' , populate: 'profileDetails'}}})
             .populate('chat')
