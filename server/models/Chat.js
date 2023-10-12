@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-const Notification = require('./Notification');
 
 const chatSchema = new mongoose.Schema({
     user: {
-        tpe: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     friend: {
@@ -14,8 +13,6 @@ const chatSchema = new mongoose.Schema({
     sentAt: Date
 });
 
-chatSchema.pre('save', async function() {
-    await Notification.create({from: this.user,message: this.message});
-})
 
-module.exports = mongoose.model('Chat',chatSchema);
+module.exports = mongoose.model('Chat', chatSchema);
+console.log("chat model created");

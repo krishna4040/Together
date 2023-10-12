@@ -115,8 +115,8 @@ exports.deleteUser = async (req, res) => {
 
 exports.getUserDetails = async (req, res) => {
     try {
-        const userId = req.user.id;
-        const user = await User.findById(userId).populate('profileDeatils').populate('friends').populate('posts').populate('chat').exec();
+        const {id} = req.user;
+        const user = await User.findById(id).populate('profileDetails').populate('friends').populate('posts').populate('chat').exec();
         if (!user) {
             throw new Error('Unable to get user details');
         }

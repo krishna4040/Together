@@ -17,4 +17,5 @@ const profileSchema = new mongoose.Schema({
     }
 });
 
+console.log("profile model created");
 module.exports = mongoose.model('Profile',profileSchema);

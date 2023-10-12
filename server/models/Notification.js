@@ -8,4 +8,5 @@ const notificationSchema = new mongoose.Schema({
     message: String,
 })
 
+console.log("notification model created");
 module.exports = mongoose.model('Notification',notificationSchema);

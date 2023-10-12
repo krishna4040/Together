@@ -26,4 +26,5 @@ otpSchema.pre('save' , async function(next){
     }
 })
 
+console.log("otp model created");
 module.exports = mongoose.model('OTP', otpSchema);
