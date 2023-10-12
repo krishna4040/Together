@@ -9,17 +9,17 @@ require('dotenv').config();
 exports.createPost = async (req, res) => {
     try {
         const { title, desc } = req.body;
-        const image = req.files.image;
-        const userId = req.user.id;
+        const { image } = req.files;
+        const { id } = req.user;
         if (!title || !desc || !image) {
             throw new Error('All feilds are requiered');
         }
-        const uploaded = cdupload(image, process.env.FOLDER);
-        const post = await Post.create({ title: title, desc: desc, image: uploaded, userId: userId });
+        const uploaded = await cdupload(image, process.env.FOLDER);
+        const post = await Post.create({ title: title, desc: desc, image: uploaded, user: id });
         if (!post) {
             throw new Error('uable to create post');
         }
-        await User.findByIdAndUpdate(userId, { $push: { posts: post._id } });
+        await User.findByIdAndUpdate(id, { $push: { posts: post._id } });
         res.status(200).json({
             success: true,
             message: 'Post created successfully',
@@ -52,13 +52,14 @@ exports.deletePost = async (req, res) => {
 
 exports.likePost = async (req, res) => {
     try {
-        const { postId, userId } = req.body;
-        if (!postId || !userId) {
-            throw new Error('All feilds are requiered');
+        const { id } = req.user;
+        const { postId } = req.body;
+        if (!postId) {
+            throw new Error('Post id is requiered');
         }
         const likedPost = await Like.create({
             post: postId,
-            user: userId
+            user: id
         });
         if (!likedPost) {
             throw new Error('unable to like post');
@@ -78,7 +79,7 @@ exports.likePost = async (req, res) => {
 
 exports.commentPost = async (req, res) => {
     try {
-        const { postId, userId , comment } = req.body;
+        const { postId, userId, comment } = req.body;
         if (!postId || !userId) {
             throw new Error('All feilds are requiered');
         }

@@ -3,41 +3,9 @@ const Profile = require('../models/Profile');
 const Post = require('../models/Post');
 const Like = require('../models/Like');
 const Comment = require('../models/Comment');
+const Chat = require('../models/Chat');
 const { cdupload } = require('../utils/cloudinary');
 require('dotenv').config();
-
-// exports.updateProfile = async (req, res) => {
-//     try {
-//         const { firstName, lastName, birthDay, gender, about='Tell us about Yourself' } = req.body;
-//         const dob = new Date(birthDay);
-//         const { id } = req.user;
-//         if (!firstName || !lastName || !gender) {
-//             throw new Error('All feilds are requiered');
-//         }
-//         const data = await Profile.create({
-//             firstName,
-//             lastName,
-//             dob,
-//             gender,
-//             about,
-//             age: Date.now() - dob,
-//             user: id
-//         });
-//         if (!data) {
-//             throw new Error('unable to update profile');
-//         }
-//         await User.findByIdAndUpdate(id, { profileDeatils: data._id });
-//         res.status(200).json({
-//             success: true,
-//             message: 'Profile updated successfully'
-//         });
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: error.message,
-//         });
-//     }
-// }
 
 exports.createProfile = async (req, res) => {
     try {
@@ -116,7 +84,13 @@ exports.deleteUser = async (req, res) => {
 exports.getUserDetails = async (req, res) => {
     try {
         const {id} = req.user;
-        const user = await User.findById(id).populate('profileDetails').populate('friends').populate('posts').populate('chat').exec();
+        const user = await User.findById(id)
+            .populate('profileDetails')
+            .populate({path: 'friends' , populate: {path: 'user' , populate: 'profileDetails'}})
+            .populate({path: 'posts' , populate: {path: 'likes' , populate: {path: 'user' , populate: 'profileDetails'}}})
+            .populate({path: 'posts' , populate: {path: 'comments' , populate: {path: 'user' , populate: 'profileDetails'}}})
+            .populate('chat')
+            .exec();
         if (!user) {
             throw new Error('Unable to get user details');
         }
@@ -129,6 +103,56 @@ exports.getUserDetails = async (req, res) => {
         res.status(500).json({
             success: false,
             message: error.message
+        });
+    }
+}
+
+exports.updatePfp = async (req,res) => {
+    try {
+        const {pfp} = req.files;
+        if (!pfp) {
+            return new Error('pfp not found');
+        }
+        const {id} = req.user;
+        const user = await User.findById(id);
+        const uploaded = await cdupload(pfp,process.env.FOLDER);
+        if (!uploaded) {    
+            throw new Error('unable to upload pfp');
+        }
+        await Post.findByIdAndUpdate(user.profileDetails,{image: uploaded});
+        res.status(200).json({
+            success: true,
+            messgae: 'pfp updated successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            messgae: error.message
+        });
+    }
+}
+
+exports.updateAbout = async (req, res) => {
+    try {
+        const {about} = req.body;
+        if (!about) {
+            return new Error('about not found');
+        }
+        const {id} = req.user;
+        const user = await User.findById(id);
+        const uploaded = await cdupload(pfp,process.env.FOLDER);
+        if (!uploaded) {    
+            throw new Error('unable to upload pfp');
+        }
+        await Post.findByIdAndUpdate(user.profileDetails,{about: uploaded});
+        res.status(200).json({
+            success: true,
+            messgae: 'about updated successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            messgae: error.message
         });
     }
 }

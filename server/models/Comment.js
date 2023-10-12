@@ -12,5 +12,4 @@ const commentSchema = new mongoose.Schema({
     comment: String
 });
 
-console.log("comment model created");
 module.exports = mongoose.model('Comment', commentSchema);

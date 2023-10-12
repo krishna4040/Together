@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Notification = require('./Notification');
 
 const chatSchema = new mongoose.Schema({
     user: {
@@ -13,6 +14,11 @@ const chatSchema = new mongoose.Schema({
     sentAt: Date
 });
 
+chatSchema.pre('save' , function() {
+    Notification.create({
+        from: this.friend,
+        message: this.message
+    });
+});
 
 module.exports = mongoose.model('Chat', chatSchema);
-console.log("chat model created");
