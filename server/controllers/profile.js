@@ -3,30 +3,68 @@ const Profile = require('../models/Profile');
 const Post = require('../models/Post');
 const Like = require('../models/Like');
 const Comment = require('../models/Comment');
-
 const { cdupload } = require('../utils/cloudinary');
+require('dotenv').config();
 
-exports.updateProfile = async (req, res) => {
+// exports.updateProfile = async (req, res) => {
+//     try {
+//         const { firstName, lastName, birthDay, gender, about='Tell us about Yourself' } = req.body;
+//         const dob = new Date(birthDay);
+//         const { id } = req.user;
+//         if (!firstName || !lastName || !gender) {
+//             throw new Error('All feilds are requiered');
+//         }
+//         const data = await Profile.create({
+//             firstName,
+//             lastName,
+//             dob,
+//             gender,
+//             about,
+//             age: Date.now() - dob,
+//             user: id
+//         });
+//         if (!data) {
+//             throw new Error('unable to update profile');
+//         }
+//         await User.findByIdAndUpdate(id, { profileDeatils: data._id });
+//         res.status(200).json({
+//             success: true,
+//             message: 'Profile updated successfully'
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: error.message,
+//         });
+//     }
+// }
+
+exports.createProfile = async (req, res) => {
     try {
-        const { firstName, lastName, birthDay, gender, about='Tell us about Yourself' } = req.body;
-        const dob = new Date(birthDay);
         const { id } = req.user;
-        if (!firstName || !lastName || !gender) {
+        const { firstName, lastName, bday, gender, about } = req.body;
+        const dob = new Date(bday);
+        const { pfp } = req.files;
+        if (!firstName || !lastName || !pfp || !dob || !gender || !about) {
             throw new Error('All feilds are requiered');
         }
+        const uploaded = await cdupload(pfp, process.env.FOLDER);
         const data = await Profile.create({
             firstName,
             lastName,
-            dob,
             gender,
             about,
-            age: Date.now() - dob,
-            user: id
+            pfp: uploaded,
+            user: id,
+            dob,
+            age: new Date().getFullYear() - dob.getFullYear()
         });
         if (!data) {
             throw new Error('unable to update profile');
         }
-        await User.findByIdAndUpdate(id, { profileDeatils: data._id });
+        const user = await User.findById(id);
+        user.profileDetails = data._id;
+        user.save();
         res.status(200).json({
             success: true,
             message: 'Profile updated successfully'
