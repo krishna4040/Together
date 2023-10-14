@@ -1,9 +1,12 @@
 import React from 'react'
+import Sidebar from '../components/common/Sidebar'
+import { Outlet } from 'react-router-dom'
 
 const Home = () => {
     return (
-        <div>
-            
+        <div className='relative'>
+            <Sidebar />
+            <Outlet />
         </div>
     )
 }

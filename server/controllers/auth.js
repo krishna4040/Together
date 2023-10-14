@@ -91,7 +91,8 @@ exports.login = async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET);
         res.cookie('token', token).status(200).json({
             success: true,
-            message: 'user logged in successfully'
+            message: 'user logged in successfully',
+            token
         })
     } catch (error) {
         res.status(500).json({
