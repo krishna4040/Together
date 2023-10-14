@@ -1,48 +1,39 @@
 import React from 'react'
-import { AiFillHome } from 'react-icons/ai'
-import { BsFillChatFill, BsFillCameraVideoFill } from 'react-icons/bs'
-import { IoSettings } from 'react-icons/io5'
-import { BiSolidPhoneCall } from 'react-icons/bi'
+import { AiFillHome , AiOutlineHeart } from 'react-icons/ai'
+import { IoSettings , IoCreateOutline } from 'react-icons/io5'
+import { BiMessageSquareDots,BiSearch } from 'react-icons/bi'
 import { FiLogOut } from 'react-icons/fi'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+const arr = [
+    {title: 'Home' , icon: AiFillHome , link: '/'},
+    {title: 'Search' , icon: BiSearch , link: '/search'},
+    {title: 'Messages' , icon: BiMessageSquareDots , link: '/chat'},
+    {title: 'Notification' , icon: AiOutlineHeart , link: '/notifications'},
+    {title: 'Create' , icon: IoCreateOutline , link: '/create'},
+    {title: 'Profile' , icon: AiFillHome , link: '/profile'},
+    {title: 'Settings' , icon: IoSettings , link: '/settings'},
+    {title: 'Logout' , icon: FiLogOut , link: '/logout'},
+]
 
 const Sidebar = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
     return (
-        <aside className='flex flex-col justify-center gap-2 border bg-gray-950 w-[150px] fixed top-48 left-0 rounded-md p-3'>
-            <div className={`flex items-center gap-2 p-1 transition-all duration-200 ${location.pathname === '/' ? 'bg-yellow-950 rounded-md' : ''}`}
-                onClick={() => {navigate('/')}}>
-                <AiFillHome className='text-3xl text-white' />
-                <p className='text-xl text-white'>Home</p>
-            </div>
-            <div className={`flex items-center gap-2 p-1 transition-all duration-200 ${location.pathname === '/chat' ? 'bg-yellow-950 rounded-md' : ''}`}
-                onClick={() => {navigate('/chat')}}>
-                <BsFillChatFill className='text-3xl text-white' />
-                <p className='text-xl text-white'>Chat</p>
-            </div>
-            <div className={`flex items-center gap-2 p-1 transition-all duration-200 ${location.pathname === '/audio' ? 'bg-yellow-950 rounded-md' : ''}`}
-                onClick={() => {navigate('/audio')}}>
-                <BiSolidPhoneCall className='text-3xl text-white' />
-                <p className='text-xl text-white'>Audio</p>
-            </div>
-            <div className={`flex items-center gap-2 p-1 transition-all duration-200 ${location.pathname === '/video' ? 'bg-yellow-950 rounded-md' : ''}`}
-                onClick={() => {navigate('/video')}}>
-                <BsFillCameraVideoFill className='text-3xl text-white' />
-                <p className='text-xl text-white'>Video</p>
-            </div>
-            <div className={`flex items-center gap-2 p-1 transition-all duration-200 ${location.pathname === '/settings' ? 'bg-yellow-950 rounded-md' : ''}`}
-                onClick={() => {navigate('/settings')}}>
-                <IoSettings className='text-3xl text-white' />
-                <p className='text-xl text-white'>Settings</p>
-            </div>
-            <div className={`flex items-center gap-2 p-1 transition-all duration-200 ${location.pathname === '/logout' ? 'bg-yellow-950 rounded-md' : ''}`}
-                onClick={() => {navigate('/logout')}}>
-                <FiLogOut className='text-3xl text-white' />
-                <p className='text-xl text-white'>Logout</p>
-            </div>
-        </aside>
+        <div className='flex flex-col justify-center gap-7 bg-black w-[200px] fixed top-0 left-0 p-3 h-screen'>
+            <h1 className='text-2xl text-white'>Togethr</h1>
+            {
+                arr.map((item,index) => {
+                    return(
+                        <div className='flex items-center gap-3 p-2 transition-all duration-200 rounded-md hover:bg-gray-400 hover:scale-110' key={index} onClick={() => {navigate(item.link)}}>
+                            <item.icon className='text-xl text-white'/>
+                            <p className='text-xl text-white'>{item.title}</p>
+                        </div>
+                    )
+                })
+            }
+        </div>
     )
 }
 

@@ -29,7 +29,7 @@ const LoginForm = () => {
                 throw new Error(response.data.message);
             }
             toast.success("signed up successfully");
-            localStorage.setItem("token",response.data.token);
+            sessionStorage.setItem("token",response.data.token);
             dispacth(setToken(response.data.token));
             navigate('/');
         } catch (error) {

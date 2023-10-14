@@ -78,7 +78,7 @@ exports.login = async (req, res) => {
         if (!check) {
             throw new Error('User not signed up');
         }
-        const compare = bcrypt.compare(password, check.password);
+        const compare = await bcrypt.compare(password, check.password);
         if (!compare) {
             throw new Error('Password do not macth');
         }
