@@ -8,13 +8,14 @@ const Friends = () => {
     
     const fecthFriends = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`);
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`,{withCredentials: true});
+            console.log(response);
             if (!response.data.succsess) {
                 throw new Error(response.data.message);
             }
             setFriends(response.data.data.friends);
         } catch (error) {
-            console.log(error.message);
+            console.log(error);
             toast.error('unable to fecth friends');
         }
     }

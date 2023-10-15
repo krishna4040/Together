@@ -89,7 +89,11 @@ exports.login = async (req, res) => {
             password: check.password
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET);
-        res.cookie('token', token).status(200).json({
+        const options = {
+            expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+            httpOnly: true,
+        };
+        res.cookie('token', token , options).status(200).json({
             success: true,
             message: 'user logged in successfully',
             token

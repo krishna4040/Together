@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import nick from '../assets/nick.png'
+import insta from '../assets/insta.png'
 import LoginForm from '../components/core/Auth/LoginForm'
 import SignupForm from '../components/core/Auth/SignupForm'
 
@@ -8,11 +8,11 @@ const Auth = () => {
     const [tab, setTab] = useState('signup');
 
     return (
-        <section className='flex flex-col gap-5 p-2 justify-center bg-gradient-to-b from-[rgba(2,0,36,1)] via-[rgba(1,98,137,1)] to-[rgba(0,212,255,1)] h-screen overflow-hidden'>
+        <section className='flex flex-col justify-center h-screen gap-5 p-2 overflow-hidden bg-gray-950'>
             <h1 className='p-2 text-5xl font-bold text-center text-white font-Confortaa'>Together</h1>
-            <div className='flex items-center justify-between p-2'>
-                <div className='flex items-center justify-center w-1/2 overflow-hidden'>
-                    <img src={nick} alt="image" className='w-full h-[550px]' />
+            <div className='flex items-center justify-center gap-20 p-2'>
+                <div className='flex items-center justify-center overflow-hidden'>
+                    <img src={insta} alt="image" className='' />
                 </div>
                 <div className='flex flex-col w-1/2 gap-5'>
                     <div className='flex items-center justify-center gap-10'>
