@@ -45,3 +45,22 @@ exports.removeFriend = async (req, res) => {
         });
     }
 }
+
+exports.searchDatabase = async (req,res) => {
+    try {
+        const users = await User.find({}).populate('profileDetails').exec();
+        if (!users) {
+            throw new Error('unable to fecth users');
+        }
+        res.status(200).json({
+            success: true,
+            message: 'search database succesfull',
+            data: users
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}

@@ -92,7 +92,7 @@ exports.commentPost = async (req, res) => {
         if (!commentPost) {
             throw new Error('unable to comment post');
         }
-        await Post.findByIdAndUpdate(postId, { $push: { comment: commentPost._id } });
+        await Post.findByIdAndUpdate(postId, { $push: { comments: commentPost._id } });
         res.status(200).json({
             success: true,
             message: "post commented successfully"
