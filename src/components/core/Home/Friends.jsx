@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 
 const Friends = () => {
 
     const [friends , setFriends] = useState([]);
-    
+    const {token} = useSelector(state => state.user);
     const fecthFriends = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`,{withCredentials: true});
-            console.log(response);
-            if (!response.data.succsess) {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`,{withCredentials: true , headers:{Authorization: `Bearer ${token}`}});
+            if (!response.data.success) {
                 throw new Error(response.data.message);
             }
             setFriends(response.data.data.friends);
@@ -25,12 +25,12 @@ const Friends = () => {
     },[]);
 
     return (
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-start gap-5'>
             {
                 friends.map((friend,index) => {
                     return(
-                        <div key={index}>
-                            <img src={friend.profileDetails.pfp} alt="friend" />
+                        <div key={index} className='h-[80px] w-[80px] border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
+                            <img src={friend.profileDetails.pfp} alt="friend" className='w-full'/>
                         </div>
                     )
                 })

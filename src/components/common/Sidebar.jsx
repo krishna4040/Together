@@ -21,7 +21,7 @@ const Sidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     return (
-        <div className='flex flex-col justify-center gap-7 bg-black w-[200px] fixed top-0 left-0 p-3 h-screen'>
+        <div className='flex flex-col justify-center gap-7 bg-black w-[200px] fixed top-0 left-0 p-3 h-screen border-r border-gray-500'>
             <h1 className='text-2xl text-white'>Togethr</h1>
             {
                 arr.map((item,index) => {
