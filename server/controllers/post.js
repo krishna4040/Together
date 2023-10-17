@@ -104,3 +104,23 @@ exports.commentPost = async (req, res) => {
         });
     }
 }
+
+exports.likedPostByaUser = async (req, res) => {
+    try {
+        const { id } = req.user;
+        const allLikedPost = await Like.find({ user: id });
+        if (!allLikedPost) {
+            throw new Error('no post liked yet');
+        }
+        res.status(200).json({
+            success: true,
+            message: 'fecthed all liked post by the user',
+            data: allLikedPost
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: true,
+            message: error.message
+        });
+    }
+}
