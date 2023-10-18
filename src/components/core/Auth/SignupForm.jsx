@@ -42,19 +42,19 @@ const SignupForm = ({ setTab }) => {
                 <tbody>
                     <tr>
                         <td><label htmlFor="userName" className='text-xs text-white uppercase w-fit'>User Name:</label></td>
-                        <td><input type="text" {...register('userName', { required: true })} className='text-white input success lg' placeholder='Enter your User Name' /></td>
+                        <td><input type="text" {...register('userName', { required: true })} className='text-white input success lg' placeholder='Enter your User Name' autoComplete='off' /></td>
                     </tr>
                     <tr>
                         <td><label htmlFor="email" className='text-xs text-white uppercase w-fit'>Email:</label></td>
-                        <td><input type="email" {...register('email', { required: true })} className='text-white input success lg' placeholder='Enter your Email' /></td>
+                        <td><input type="email" {...register('email', { required: true })} className='text-white input success lg' placeholder='Enter your Email' autoComplete='off' /></td>
                     </tr>
                     <tr>
                         <td><label htmlFor="password" className='text-xs text-white uppercase w-fit'>Password:</label></td>
-                        <td><input type="password" {...register('password', { required: true })} className='text-white input success lg' placeholder='Enter Password' /></td>
+                        <td><input type="password" {...register('password', { required: true })} className='text-white input success lg' placeholder='Enter Password' autoComplete='off' /></td>
                     </tr>
                     <tr>
                         <td><label htmlFor="confirmPassword" className='text-xs text-white uppercase w-fit'>Confirm Password:</label></td>
-                        <td><input type="password" {...register('confirmPassword', { required: true })} className='text-white input success lg' placeholder='Confirm Password' /></td>
+                        <td><input type="password" {...register('confirmPassword', { required: true })} className='text-white input success lg' placeholder='Confirm Password' autoComplete='off' /></td>
                     </tr>
                 </tbody>
             </table>

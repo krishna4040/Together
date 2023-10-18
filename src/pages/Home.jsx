@@ -1,19 +1,19 @@
 import React from 'react'
 import Friends from '../components/core/Home/Friends'
 import FriendPostSection from '../components/core/Home/FriendPostSection'
+import AllUsers from '../components/core/Home/AllUsers'
 import { useLocation } from 'react-router-dom'
 
 const Home = () => {
 
-    const location = useLocation();
-
     return (
-        <div className='relative bg-black'>
-            <div className='w-7/12 p-10 mx-auto overflow-x-auto overflow-y-hidden'>
+        <div className='relative flex justify-center bg-black'>
+            <div className='flex flex-col justify-center gap-16 p-10 ml-60 w-[800px]'>
                 <Friends />
-            </div>
-            <div className='w-7/12 mx-auto'>
                 <FriendPostSection />
+            </div>
+            <div>
+                <AllUsers />
             </div>
         </div>
     )

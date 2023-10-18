@@ -25,7 +25,7 @@ exports.searchDbByUsername = async (req, res) => {
         if (!userName) {
             throw new Error('userName not found');
         }
-        const user = await User.find({userName});
+        const user = await User.find({userName}).populate('profileDetails').exec();
         if (!user) {
             throw new Error('No user with given userName exist');
         }

@@ -45,11 +45,11 @@ const LoginForm = () => {
                 <tbody>
                     <tr>
                         <td><label htmlFor="email" className='text-xs text-white uppercase w-fit'>Email:</label></td>
-                        <td><input type='email' className='text-white input success lg' placeholder='Enter your email' {...register('email', { required: true })} /></td>
+                        <td><input type='email' className='text-white input success lg' placeholder='Enter your email' {...register('email', { required: true })} autoComplete='off' /></td>
                     </tr>
                     <tr>
                         <td><label htmlFor="password" className='text-xs text-white uppercase w-fit'>Password:</label></td>
-                        <td><input type="password" {...register('password', { required: true })} className='text-white input success lg' placeholder='Enter your Password' /></td>
+                        <td><input type="password" {...register('password', { required: true })} className='text-white input success lg' placeholder='Enter your Password' autoComplete='off' /></td>
                     </tr>
                 </tbody>
             </table>

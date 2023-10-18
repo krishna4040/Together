@@ -14,7 +14,6 @@ const FriendPostSection = () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/getFriendPost`, { headers: { Authorization: `Bearer ${token}` } });
             setPosts(response.data.data);
-            console.log(response.data.data)
         } catch (error) {
             console.log(error);
             toast.error('unable to fecth friends posts');

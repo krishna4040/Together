@@ -4,19 +4,17 @@ import axios from 'axios'
 
 const Search = ({ setSearch }) => {
 
-    const [userName,setUserName] = useState('');
+    const [userName, setUserName] = useState('');
+    const [user, setUser] = useState([]);
 
     const fecthUser = async () => {
         try {
-            const response = await axios
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/searchByUsername`, { userName });
+            setUser(response.data.data);
         } catch (error) {
-            
+            console.log(error);
         }
     }
-
-    // useEffect(() => {
-    //     fecthUser();
-    // },[userName]);
 
     return (
         <div>
@@ -30,12 +28,24 @@ const Search = ({ setSearch }) => {
                             Username
                         </div>
                         <div className='is-divider' />
-                        <input placeholder='Enter Username to search' value={userName} onChange={(event) => {setUserName(event.target.value)}} />
-                        <BsSearch/>
+                        <input placeholder='Enter Username to search' value={userName} onChange={(event) => { setUserName(event.target.value) }} />
+                        <BsSearch />
                     </div>
                 </div>
+                {
+                    user.length ?
+                    <div className='flex items-center gap-5'>
+                        <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
+                            <img src={user[0].profileDetails.pfp} alt="user_image" className='w-full' />
+                        </div>
+                        <p className='min-w-[55px] text-lg capitalize'>{user[0].userName}</p>
+                        <button className='btn outline success'>Connect</button>
+                    </div>
+                    :
+                    null
+                }
                 <div className="flex gap-3">
-                    <button className="flex-1 btn solid danger">Search</button>
+                    <button className="flex-1 btn solid danger" onClick={() => {fecthUser()}}>Search</button>
                 </div>
             </div>
         </div>

@@ -124,3 +124,24 @@ exports.likedPostByaUser = async (req, res) => {
         });
     }
 }
+
+exports.getPostComment = async (req, res) => {
+    try {
+        const { postId } = req.body;
+        if (!postId) {
+            throw new Error('post Id not found');
+        }
+        const post = await Post.findById(postId);
+        const comments = post.comments;
+        res.status(200).json({
+            success: true,
+            message: 'Comments for a Post fecthed',
+            data: comments
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
