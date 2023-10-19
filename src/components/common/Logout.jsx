@@ -13,7 +13,7 @@ const Logout = ({ setLogout }) => {
     return (
         <div>
             <label class="modal-overlay"></label>
-            <div class={`modal flex flex-col gap-5 show pause-scroll`}>
+            <div class={`modal flex flex-col gap-5 show pause-scroll w-full lg:w-[25%]`}>
                 <button class={`absolute right-4 top-3`} onClick={() => { setLogout(false) }}>✕</button>
                 <h2 class="text-xl">Logout</h2>
                 <span>Sure You wanna Logout</span>

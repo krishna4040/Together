@@ -7,12 +7,12 @@ import { useLocation } from 'react-router-dom'
 const Home = () => {
 
     return (
-        <div className='relative flex justify-center bg-black'>
-            <div className='flex flex-col justify-center gap-16 p-10 ml-60 w-[800px]'>
+        <div className='relative flex justify-center w-full mb-20 bg-black lg:mb-0'>
+            <div className='flex flex-col justify-center gap-10 lg:gap-16 lg:p-10 p-3 lg:ml-60 lg:w-[800px] w-full'>
                 <Friends />
                 <FriendPostSection />
             </div>
-            <div>
+            <div className='hidden lg:block'>
                 <AllUsers />
             </div>
         </div>

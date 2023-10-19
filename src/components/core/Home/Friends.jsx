@@ -25,7 +25,7 @@ const Friends = () => {
     },[]);
 
     return (
-        <div className='flex items-center justify-start h-24 gap-5 p-4 overflow-x-auto overflow-y-hidden'>
+        <div className='flex items-center justify-start h-24 gap-5 overflow-x-auto overflow-y-hidden lg:p-4'>
             {
                 friends.map((friend,index) => {
                     return(

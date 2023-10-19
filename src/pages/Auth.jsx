@@ -8,13 +8,13 @@ const Auth = () => {
     const [tab, setTab] = useState('signup');
 
     return (
-        <section className='flex flex-col justify-center h-screen gap-5 p-2 overflow-hidden bg-gray-950'>
+        <section className='flex flex-col justify-center h-screen gap-10 p-2 lg:gap-5 lg:overflow-hidden bg-gray-950'>
             <h1 className='p-2 text-5xl font-bold text-center text-white font-Confortaa'>Together</h1>
-            <div className='flex items-center justify-center gap-20 p-2'>
-                <div className='flex items-center justify-center overflow-hidden'>
+            <div className='flex flex-col items-center justify-center gap-20 p-2 lg:flex-row'>
+                <div className='items-center justify-center hidden overflow-hidden lg:flex'>
                     <img src={insta} alt="image" className='' />
                 </div>
-                <div className='flex flex-col w-1/2 gap-5'>
+                <div className='flex flex-col w-full gap-5 lg:w-1/2'>
                     <div className='flex items-center justify-center gap-10'>
                         <button onClick={() => { setTab('signup') }} className={`text-white uppercase transition-all duration-200 ${tab === 'signup' ? 'btn solid info' : ''}`}>Signup</button>
                         <button onClick={() => { setTab('login') }} className={`text-white uppercase transition-all duration-200 ${tab === 'login' ? 'btn solid info' : ''}`}>Login</button>

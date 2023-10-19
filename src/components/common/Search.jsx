@@ -16,10 +16,18 @@ const Search = ({ setSearch }) => {
         }
     }
 
+    const clickHandler = async () => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}makeFirend`,{});
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div>
             <label className="modal-overlay"></label>
-            <div className="flex flex-col gap-5 modal show pause-scroll">
+            <div className="flex flex-col w-full lg:w-[25%] gap-5 modal show pause-scroll">
                 <button className="absolute right-4 top-3" onClick={() => { setSearch(false) }}>✕</button>
                 <h2 className="text-xl">Search</h2>
                 <div className='grid gap-4'>

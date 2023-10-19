@@ -25,19 +25,19 @@ const FriendPostSection = () => {
     }, []);
 
     return (
-        <div className='flex flex-col items-center justify-center gap-10'>
+        <div className='flex flex-col items-center justify-center w-full gap-10'>
             {
                 posts.map((post, index) => {
                     return (
                         post.length !== 0 &&
-                        <div key={index} className='flex flex-col justify-center gap-3'>
+                        <div key={index} className='flex flex-col justify-center w-full gap-3'>
                             <div className='flex items-center gap-3'>
                                 <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
                                     <img src={post[0].user.profileDetails.pfp} alt="friend" className='w-full' />
                                 </div>
                                 <h1 className='text-xl text-white capitalize'>{post[0].user.userName}</h1>
                             </div>
-                            <div className='relative w-[600px]'>
+                            <div className='relative lg:w-[600px] w-full mx-auto'>
                                 <img src={post[0].image} alt="post_here" />
                             </div>
                             <div className='flex items-center gap-3'>
