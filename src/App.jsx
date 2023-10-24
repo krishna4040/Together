@@ -27,7 +27,7 @@ const App = () => {
   const [notifications, setNotifications] = useState(false);
 
   return (
-    <div className='w-screen'>
+    <div className='w-screen bg-black'>
       <Routes>
         <Route path='/' element={token ? <Home /> : <Auth />} />
         <Route path='/chat' element={<Chat />} />
