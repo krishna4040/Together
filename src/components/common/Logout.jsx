@@ -1,9 +1,18 @@
 import React from 'react'
+import { setToken } from '../../store/slices/user'
+import { useDispatch } from 'react-redux'
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Logout = ({ setLogout }) => {
 
+    const dispacth = useDispatch();
+    const navigate = useNavigate();
     const btn1Handler = () => {
-
+        dispacth(setToken(null));
+        toast.success('Logged out');
+        setLogout(false);
+        navigate('/');
     }
 
     const btn2Handler = () => {

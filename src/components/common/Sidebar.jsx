@@ -7,16 +7,16 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
-const Sidebar = ({ setLogout, setSearch }) => {
+const Sidebar = ({ setLogout, setSearch , setNotifications }) => {
 
     const arr = [
         { title: 'Home', icon: AiFillHome, link: '/' },
         { title: 'Search', icon: BiSearch, clickHandler: setSearch },
         { title: 'Messages', icon: BiMessageSquareDots, link: '/chat' },
-        { title: 'Notification', icon: AiOutlineHeart, link: '/notifications' },
+        { title: 'Notification', icon: AiOutlineHeart, clickHandler: setNotifications },
         { title: 'Create', icon: IoCreateOutline, link: '/create' },
         { title: 'Profile', icon: AiFillHome, link: '/profile' },
-        { title: 'Settings', icon: IoSettings, link: '/settings' },
+        { title: 'Settings', icon: IoSettings, link: '/edit-profile' },
         { title: 'Logout', icon: FiLogOut, clickHandler: setLogout },
     ];
 
