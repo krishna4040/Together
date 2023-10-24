@@ -24,7 +24,7 @@ const AllUsers = () => {
                 users.map((user,index) => {
                     return(
                         <div key={index} className='flex items-center gap-5'>
-                            <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
+                            <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
                                 <img src={user.profileDetails.pfp} alt="user_image" className='w-full' />
                             </div>
                             <p className='min-w-[55px] text-lg capitalize text-white'>{user.userName}</p>

@@ -34,7 +34,6 @@ const Profile = () => {
 
     const navigate = useNavigate();
     const editHandler = () => {
-        console.log("han han bhai abhi krta hu edit");
         navigate('/edit-profile');
     }
 

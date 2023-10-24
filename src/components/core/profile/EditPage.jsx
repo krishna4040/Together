@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 
 const EditPage = () => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors , isSubmitSuccessful } , reset } = useForm();
     const { token } = useSelector(state => state.user);
     const [user, setUser] = useState({});
     const fecthUser = async () => {
@@ -25,16 +25,51 @@ const EditPage = () => {
         fecthUser();
     }, []);
 
-    const onSubmit = async (data) => {
-        console.log(data);
+    const updatePfp = async (pfp) => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}updatePfp`, { pfp }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const updateAbout = async (about) => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}updateAbout`, { about }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const sumbitHandler = (data) => {
+        if (data.pfp) {
+            updatePfp(data.pfp[0]);
+            console.log(data.pfp[0]);
+        }
+        if (data.about) {
+            updateAbout(data.about);
+            console.log(data.about);
+        }
     };
+
+    useEffect(() => {
+        reset();
+    },[isSubmitSuccessful]);
 
     const handleClick = () => {
         document.querySelector('#fileInput').click();
     };
 
     return (
-        <form className='ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-center' onSubmit={handleSubmit(onSubmit)}>
+        <form className='ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-center' onSubmit={handleSubmit(sumbitHandler)}>
             {
                 Object.keys(user).length &&
                 (
@@ -44,48 +79,50 @@ const EditPage = () => {
                                 <img src={user.profileDetails.pfp} alt="user" />
                             </div>
                             <div>
-                                <button onClick={handleClick} className="btn solid bw">
-                                    Upload Profile Picture
+                                <button onClick={handleClick} className="btn solid bw" type='button'>
+                                    Update Profile Picture
                                 </button>
                                 <input
                                     type="file"
                                     {...register("pfp")}
                                     id='fileInput'
                                     style={{ display: 'none' }}
+                                    accept='.png , .jpg , .jpeg , .svg , .gif , .ico , .svg'
                                 />
                             </div>
                         </div>
                         <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[100px]'>User Name:</label>
+                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>User Name:</label>
                             <input
                                 type="text"
-                                {...register("userName")}
                                 placeholder={user.userName}
                                 className='input success pill'
+                                disabled
                             />
                         </div>
                         <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[100px]'>Email:</label>
+                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Email:</label>
                             <input
                                 type="email"
-                                {...register("email")}
                                 placeholder={user.email}
                                 className='input success pill'
+                                disabled
                             />
                         </div>
                         <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[100px]'>Date Of Birth:</label>
+                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Date Of Birth:</label>
                             <input
-                                type="date"
-                                {...register("dob")}
+                                type="text"
+                                placeholder={user.profileDetails.dob}
                                 className='input success pill'
+                                disabled
                             />
                         </div>
                         <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[100px]'>Gender:</label>
-                            <select className='select pill success' {...register("dob")} defaultValue={user.profileDetails.gender}>
+                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Gender:</label>
+                            <select className='select pill success' defaultValue={user.profileDetails.gender} disabled>
                                 <option value={"Male"}>
-                                    Male 
+                                    Male
                                 </option>
                                 <option value={"Female"}>
                                     Female
@@ -93,7 +130,7 @@ const EditPage = () => {
                             </select>
                         </div>
                         <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[100px]'>About:</label>
+                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>About:</label>
                             <input
                                 type="text"
                                 {...register("about")}

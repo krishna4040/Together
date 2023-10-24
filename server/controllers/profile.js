@@ -86,12 +86,12 @@ exports.deleteUser = async (req, res) => {
 
 exports.getUserDetails = async (req, res) => {
     try {
-        const {id} = req.user;
+        const { id } = req.user;
         const user = await User.findById(id)
             .populate('profileDetails')
-            .populate({path: 'friends' , populate: 'profileDetails'})
-            .populate({path: 'posts' , populate: {path: 'likes' , populate: {path: 'user' , populate: 'profileDetails'}}})
-            .populate({path: 'posts' , populate: {path: 'comments' , populate: {path: 'user' , populate: 'profileDetails'}}})
+            .populate({ path: 'friends', populate: 'profileDetails' })
+            .populate({ path: 'posts', populate: { path: 'likes', populate: { path: 'user', populate: 'profileDetails' } } })
+            .populate({ path: 'posts', populate: { path: 'comments', populate: { path: 'user', populate: 'profileDetails' } } })
             .populate('chat')
             .exec();
         if (!user) {
@@ -110,19 +110,19 @@ exports.getUserDetails = async (req, res) => {
     }
 }
 
-exports.updatePfp = async (req,res) => {
+exports.updatePfp = async (req, res) => {
     try {
-        const {pfp} = req.files;
+        const { pfp } = req.files;
         if (!pfp) {
             return new Error('pfp not found');
         }
-        const {id} = req.user;
+        const { id } = req.user;
         const user = await User.findById(id);
-        const uploaded = await cdupload(pfp,process.env.FOLDER);
-        if (!uploaded) {    
+        const uploaded = await cdupload(pfp, process.env.FOLDER);
+        if (!uploaded) {
             throw new Error('unable to upload pfp');
         }
-        await Post.findByIdAndUpdate(user.profileDetails,{image: uploaded});
+        await Profile.findByIdAndUpdate(user.profileDetails, { image: uploaded });
         res.status(200).json({
             success: true,
             messgae: 'pfp updated successfully'
@@ -137,17 +137,13 @@ exports.updatePfp = async (req,res) => {
 
 exports.updateAbout = async (req, res) => {
     try {
-        const {about} = req.body;
+        const { about } = req.body;
         if (!about) {
             return new Error('about not found');
         }
-        const {id} = req.user;
+        const { id } = req.user;
         const user = await User.findById(id);
-        const uploaded = await cdupload(pfp,process.env.FOLDER);
-        if (!uploaded) {    
-            throw new Error('unable to upload pfp');
-        }
-        await Post.findByIdAndUpdate(user.profileDetails,{about: uploaded});
+        await Profile.findByIdAndUpdate(user.profileDetails, { about });
         res.status(200).json({
             success: true,
             messgae: 'about updated successfully'
