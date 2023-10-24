@@ -108,7 +108,7 @@ exports.commentPost = async (req, res) => {
 exports.likedPostByaUser = async (req, res) => {
     try {
         const { id } = req.user;
-        const allLikedPost = await Like.find({ user: id });
+        const allLikedPost = await Like.find({ user: id }).populate('post').exec();
         if (!allLikedPost) {
             throw new Error('no post liked yet');
         }

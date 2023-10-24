@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Posts from '../components/core/profile/Posts'
 import Liked from '../components/core/profile/Liked'
-import Tagged from '../components/core/profile/Tagged'
+import Friends from '../components/core/profile/Friends'
 
 const Profile = () => {
 
@@ -14,9 +14,6 @@ const Profile = () => {
     const [user, setUser] = useState({});
 
     const [step, setStep] = useState('posts');
-    const tab1 = useRef();
-    const tab2 = useRef();
-    const tab3 = useRef();
 
     const fecthUser = async () => {
         try {
@@ -68,20 +65,20 @@ const Profile = () => {
                     </div>
                     <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto'>
                         <div className='text-white tabs bordered success bottom ml-[200px]'>
-                            <div className='p-4 tab' onClick={() => { setStep('posts') }} ref={tab1}>
+                            <div className={`p-4 tab ${step === 'posts' ? 'active': null}`} onClick={() => { setStep('posts') }}>
                                 Posts
                             </div>
-                            <div className='p-4 tab' onClick={() => { setStep('liked') }} ref={tab2}>
+                            <div className={`p-4 tab ${step === 'liked' ? 'active': null}`} onClick={() => { setStep('liked') }}>
                                 Liked
                             </div>
-                            <div className='p-4 tab' onClick={() => { setStep('tagged') }} ref={tab3}>
-                                Tagged
+                            <div className={`p-4 tab ${step === 'friends' ? 'active': null}`} onClick={() => { setStep('friends') }}>
+                                Friends
                             </div>
                         </div>
 
-                        {step === 'liked' && <Liked />}
-                        {step === 'posts' && <Posts />}
-                        {step === 'tagged' && <Tagged />}
+                        {step === 'liked' && <Liked user={user} />}
+                        {step === 'posts' && <Posts user={user} />}
+                        {step === 'friends' && <Friends user={user} />}
                     </div>
                 </>
             }
