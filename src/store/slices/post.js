@@ -3,17 +3,22 @@ import { createSlice } from '@reduxjs/toolkit'
 const postSlice = createSlice({
     name: 'post',
     initialState: {
-        liked: [],
+        title: null,
+        image: null,
+        caption: null,
     },
     reducers: {
-        likePost: (state, action) => {
-            state.liked.push(action.payload);
+        setTitle: (state,action) => {
+            state.title = action.payload;
         },
-        unlikePost: (state, action) => {
-            state.liked.filter(item => item.id !== action.payload)
+        setCation: (state,action) => {
+            state.caption = action.payload;
+        },
+        setImage: (state,action) => {
+            state.image = action.payload;
         }
     }
 });
 
-export const { likePost, unlikePost } = postSlice.actions;
+export const { setTitle , setCation , setImage } = postSlice.actions;
 export default postSlice.reducer;

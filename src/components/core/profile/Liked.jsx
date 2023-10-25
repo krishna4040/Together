@@ -5,7 +5,7 @@ import Post from './Post'
 
 const Liked = ({ user }) => {
 
-    const [posts, setPosts] = useState([]);
+    const [liked , setLiked] = useState([]);
     const { token } = useSelector(state => state.user);
 
     const fecthLikedPosts = async () => {
@@ -15,7 +15,7 @@ const Liked = ({ user }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            setPosts(response.data.data);
+            setLiked(response.data.data);
         } catch (error) {
             console.log(error);
         }
@@ -25,15 +25,15 @@ const Liked = ({ user }) => {
         fecthLikedPosts();
     },[]);
 
-    if (!posts.length) {
+    if (!liked.length) {
         return <p className='relative text-xl text-center text-white capitalize translate-x-24'>No Post liked Yet</p>
     }
 
     return (
         <div className='text-5xl text-white ml-[200px]'>
             {
-                posts.map(post => {
-                    <Post key={post._id} title={post.title} imageSrc={post.image} likes={post.likes.length} comments={post.comments.length} />
+                liked.map(like => {
+                    <Post key={like.post._id} title={like.post.title} imageSrc={like.post.image} likes={like.post.likes.length} comments={like.post.comments.length} />
                 })
             }
         </div>
