@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { setImage } from '../../../store/slices/post'
 import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 
 const Image = ({ setStep }) => {
 
@@ -8,6 +9,10 @@ const Image = ({ setStep }) => {
     const dispacth = useDispatch();
 
     const clickHandler = () => {
+        if (!postImage) {
+            toast.error("please provide a post image");
+            return;
+        }
         dispacth(setImage(postImage));
         setStep("caption");
     }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { setCation } from '../../../store/slices/post'
 import { useDispatch } from 'react-redux'
+import toast from 'react-hot-toast';
 
 const Caption = ({ setStep }) => {
 
@@ -8,6 +9,10 @@ const Caption = ({ setStep }) => {
     const dispacth = useDispatch();
 
     const clickHandler = () => {
+        if (!postCaption) {
+            toast.error("please provide a caption");
+            return;
+        }
         dispacth(setCation(postCaption));
         setStep("preview");
     }

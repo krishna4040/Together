@@ -29,12 +29,12 @@ const Preview = ({ setStep }) => {
 
     const clcikHandler = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}createPost`,{
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}createPost`, {
                 title: post.title,
                 desc: post.caption,
                 image: post.image
-            },{
-                headers:{
+            }, {
+                headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
@@ -47,8 +47,13 @@ const Preview = ({ setStep }) => {
         }
     }
 
+    const cancelHandler = () => {
+        toast.error("Post upload cancelled");
+        setStep("title");
+    }
+
     return (
-        <div className='flex flex-col justify-center w-[500px] gap-3'>
+        <div className='flex flex-col justify-center w-[500px] gap-5'>
             {
                 Object.keys(user).length &&
                 <>
@@ -69,7 +74,10 @@ const Preview = ({ setStep }) => {
                         <p className='text-2xl text-white'><span className='text-base text-blue-400'>#caption</span> {post.title}</p>
                         <p className='text-2xl text-white'><span className='text-base text-blue-400'>#postDesc</span> {post.caption}</p>
                     </div>
-                    <button className='bn29' onClick={clcikHandler}>Post</button>
+                    <div className='flex items-center justify-start gap-7'>
+                        <button className='bn29' onClick={clcikHandler}>Post</button>
+                        <button className='bn5' onClick={cancelHandler}>Cancel</button>
+                    </div>
                 </>
             }
         </div>

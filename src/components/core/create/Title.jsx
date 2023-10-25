@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { setTitle } from '../../../store/slices/post'
 import { useDispatch } from 'react-redux'
+import toast from 'react-hot-toast';
 
 const Title = ({ setStep }) => {
 
@@ -8,6 +9,10 @@ const Title = ({ setStep }) => {
     const dispacth = useDispatch();
 
     const clickHandler = () => {
+        if (!postTitle) {
+            toast.error("Please select a title");
+            return;
+        }
         dispacth(setTitle(postTitle));
         setStep("image");
     }
