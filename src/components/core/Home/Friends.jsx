@@ -29,7 +29,7 @@ const Friends = () => {
             {
                 friends.map((friend,index) => {
                     return(
-                        <div key={index} className='h-[80px] w-[80px] flex items-center justify-center p-2 border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
+                        <div key={index} className='h-[80px] w-[80px] flex items-center justify-center p-1 border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
                             <img src={friend.profileDetails.pfp} alt="friend" className='w-full'/>
                         </div>
                     )

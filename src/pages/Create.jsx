@@ -12,13 +12,13 @@ function Create() {
     return (
         <div className="min-w-screen ml-[200px] min-h-screen bg-black p-10 flex flex-col items-center justify-start gap-20">
             <div className='steps success top'>
-                <div className={`step text-white ${step === 'title' ? 'active' : null}`}>
+                <div className={`step text-white active`}>
                     Title
                 </div>
-                <div className={`step text-white ${step === 'image' ? 'active' : null}`}>
+                <div className={`step text-white ${step === 'image' && 'caption' && 'preview' ? 'active' : null}`}>
                     Image
                 </div>
-                <div className={`step text-white ${step === 'caption' ? 'active' : null}`}>
+                <div className={`step text-white ${step === 'caption' && 'preview' ? 'active' : null}`}>
                     Caption
                 </div>
                 <div className={`step text-white ${step === 'preview' ? 'active' : null}`}>

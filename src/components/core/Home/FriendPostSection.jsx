@@ -32,7 +32,7 @@ const FriendPostSection = () => {
                         post.length !== 0 &&
                         <div key={index} className='flex flex-col justify-center w-full gap-3'>
                             <div className='flex items-center gap-3'>
-                                <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
+                                <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
                                     <img src={post[0].user.profileDetails.pfp} alt="friend" className='w-full' />
                                 </div>
                                 <h1 className='text-xl text-white capitalize'>{post[0].user.userName}</h1>

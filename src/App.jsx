@@ -40,7 +40,7 @@ const App = () => {
       {token && <BottomNavigation setLogout={setLogout} setSearch={setSearch} />}
       {logout && <Logout setLogout={setLogout} />}
       {search && <Search setSearch={setSearch} />}
-      {notifications && <Notifications setLogout={setLogout} />}
+      {notifications && <Notifications setNotifications={setNotifications} />}
     </div>
   )
 }
