@@ -8,7 +8,10 @@ exports.addMessage = async (req, res) => {
         const check = await Chat.find({ user: id, friend: friend_id });
         if (check.length) {
             await Chat.findOneAndUpdate({ user: id, friend: friend_id }, {
-                $push: { messages: { id, message } }
+                $push: { messages: { whoSent: id, message } }
+            });
+            await Chat.findOneAndUpdate({ user: friend_id, friend: id }, {
+                $push: { messages: { whoSent: friend_id, message } }
             });
             res.status(200).json({
                 success: true,
@@ -21,12 +24,23 @@ exports.addMessage = async (req, res) => {
                 friend: friend_id,
                 messages: [
                     {
-                        id,
+                        whoSent: id,
+                        message
+                    }
+                ]
+            });
+            const friendChat = await Chat.create({
+                user: friend_id,
+                friend: id,
+                messages: [
+                    {
+                        whoSent: friend_id,
                         message
                     }
                 ]
             });
             await User.findByIdAndUpdate(id, { $push: { chat: chat._id } });
+            await User.findByIdAndUpdate(friend_id, { $push: { chat: friendChat._id } });
             res.status(200).json({
                 success: true,
                 message: 'Message added to db succesesfully'
@@ -43,6 +57,9 @@ exports.addMessage = async (req, res) => {
 exports.getFriendChat = async (req, res) => {
     try {
         const { id } = req.user;
+        if (!id) {
+            throw new Error('id not found');
+        }
         const { friend_id } = req.body;
         if (!friend_id) {
             throw new Error('friend id not received');
