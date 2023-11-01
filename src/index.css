@@ -143,3 +143,8 @@ body {
     width: 115%;
     height: 115%;
 }
+
+.chat-gradient {
+    background: rgb(0, 0, 0);
+    background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(142, 142, 160, 1) 100%, rgba(172, 172, 190, 1) 100%);
+}

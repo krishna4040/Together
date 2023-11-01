@@ -7,7 +7,8 @@ const { signup, sendotp, login } = require('../controllers/auth');
 const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = require('../controllers/profile');
 const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment } = require('../controllers/post');
 const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/friend');
-const { searchDatabase, searchDbByUsername } = require('../controllers/allUsers')
+const { searchDatabase, searchDbByUsername } = require('../controllers/allUsers');
+const { getFriendChat, addMessage } = require('../controllers/chat');
 
 router.post('/signup', signup);
 router.post('/login', login);
@@ -26,11 +27,14 @@ router.post('/createPost', auth, createPost);
 router.delete('/deletePost', auth, deletePost);
 router.post('/likePost', auth, likePost);
 router.get('/allLikedPost', auth, likedPostByaUser);
-router.get('/getPostComments',getPostComment);
+router.get('/getPostComments', getPostComment);
 router.post('/commentPost', auth, commentPost);
 
 router.post('/makeFriend', auth, makeFriend);
 router.delete('/removeFriend', auth, removeFriend);
 router.get('/getFriendPost', auth, getFriendsPost);
+
+router.post('/getFriendChat', auth, getFriendChat);
+router.post('/addMessage', auth, addMessage);
 
 module.exports = router;

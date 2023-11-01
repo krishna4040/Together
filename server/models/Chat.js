@@ -10,11 +10,19 @@ const chatSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    message: String,
+    messages: [
+        {
+            whoSent: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            message: String
+        }
+    ],
     sentAt: Date
 });
 
-chatSchema.pre('save' , function() {
+chatSchema.pre('save', function () {
     Notification.create({
         from: this.friend,
         message: this.message
