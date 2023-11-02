@@ -28,7 +28,7 @@ const Chat = () => {
     const [selectedFriend, setSelectedFriend] = useState({});
 
     return (
-        <div className='flex items-center justify-between ml-[200px] min-h-screen'>
+        <div className='flex items-center justify-between ml-[230px] min-h-screen'>
             <table className='border-r border-separate border-gray-500 border-spacing-3'>
                 <tbody>
                     {

@@ -15,13 +15,13 @@ function Create() {
                 <div className={`step text-white active`}>
                     Title
                 </div>
-                <div className={`step text-white ${step === 'image' && 'caption' && 'preview' ? 'active' : null}`}>
+                <div className={`step text-white ${(step === 'image' || step === 'caption' || step === 'preview') ? 'active' : ''}`}>
                     Image
                 </div>
-                <div className={`step text-white ${step === 'caption' && 'preview' ? 'active' : null}`}>
+                <div className={`step text-white ${(step === 'caption' || step === 'preview') ? 'active' : ''}`}>
                     Caption
                 </div>
-                <div className={`step text-white ${step === 'preview' ? 'active' : null}`}>
+                <div className={`step text-white ${(step === 'preview') ? 'active' : ''}`}>
                     Preview
                 </div>
             </div>

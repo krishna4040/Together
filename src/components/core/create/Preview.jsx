@@ -44,6 +44,7 @@ const Preview = ({ setStep }) => {
             }
         } catch (error) {
             console.log(error);
+            toast.error("Error uploading post");
         }
     }
 
