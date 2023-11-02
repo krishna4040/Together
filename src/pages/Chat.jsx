@@ -29,7 +29,7 @@ const Chat = () => {
 
     return (
         <div className='flex items-center justify-between ml-[200px]'>
-            <div className='flex flex-col items-start justify-start min-h-screen gap-3 p-10 border-r border-gray-500 w-[300px]'>
+            <div className='flex flex-col items-start justify-start min-h-screen gap-3 p-10 border-r border-gray-500 w-[450px]'>
                 {
                     friends.map((friend, index) => {
                         return (

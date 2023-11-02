@@ -18,7 +18,7 @@ const Search = ({ setSearch }) => {
 
     const clickHandler = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}makeFirend`,{});
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}makeFirend`, {});
         } catch (error) {
             console.log(error);
         }
@@ -30,30 +30,28 @@ const Search = ({ setSearch }) => {
             <div className="flex flex-col w-full lg:w-[25%] gap-5 modal show pause-scroll">
                 <button className="absolute right-4 top-3" onClick={() => { setSearch(false) }}>✕</button>
                 <h2 className="text-xl">Search</h2>
-                <div className='grid gap-4'>
-                    <div className='input success solid'>
-                        <div>
-                            Username
-                        </div>
-                        <div className='is-divider' />
-                        <input placeholder='Enter Username to search' value={userName} onChange={(event) => { setUserName(event.target.value) }} />
-                        <BsSearch />
+                <div className='flex items-center gap-1'>
+                    <div>
+                        Username
                     </div>
+                    <div className='is-divider' />
+                    <input placeholder='Enter Username to search' value={userName} onChange={(event) => { setUserName(event.target.value) }} className='input success' />
+                    <BsSearch className='text-3xl font-bold' />
                 </div>
                 {
                     user.length ?
-                    <div className='flex items-center gap-5'>
-                        <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
-                            <img src={user[0].profileDetails.pfp} alt="user_image" className='w-full' />
+                        <div className='flex items-center gap-5'>
+                            <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
+                                <img src={user[0].profileDetails.pfp} alt="user_image" className='w-full' />
+                            </div>
+                            <p className='min-w-[55px] text-lg capitalize'>{user[0].userName}</p>
+                            <button className='btn outline success'>Connect</button>
                         </div>
-                        <p className='min-w-[55px] text-lg capitalize'>{user[0].userName}</p>
-                        <button className='btn outline success'>Connect</button>
-                    </div>
-                    :
-                    null
+                        :
+                        null
                 }
                 <div className="flex gap-3">
-                    <button className="flex-1 btn solid danger" onClick={() => {fecthUser()}}>Search</button>
+                    <button className="flex-1 btn solid danger" onClick={() => { fecthUser() }}>Search</button>
                 </div>
             </div>
         </div>
