@@ -16,6 +16,7 @@ import EditPage from './components/core/profile/EditPage'
 import Auth from './pages/Auth'
 import { useSelector } from 'react-redux'
 import BottomNavigation from './components/common/BottomNavigation'
+import ProfileAuth from './pages/ProfileAuth'
 
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
     <div className='w-screen bg-black'>
       <Routes>
         <Route path='/' element={token ? <Home /> : <Auth />} />
+        <Route path='/create-profile' element={<ProfileAuth />} />
         <Route path='/chat' element={<Chat />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/edit-profile' element={<EditPage />} />

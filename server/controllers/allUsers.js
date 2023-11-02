@@ -2,7 +2,8 @@ const User = require('../models/User');
 
 exports.searchDatabase = async (req, res) => {
     try {
-        const users = await User.find({}).populate('profileDetails').exec();
+        const { id } = req.user;
+        const users = await User.find({ _id: { $ne: id } }).populate('profileDetails').exec();
         if (!users) {
             throw new Error('unable to fecth users');
         }
@@ -25,7 +26,7 @@ exports.searchDbByUsername = async (req, res) => {
         if (!userName) {
             throw new Error('userName not found');
         }
-        const user = await User.find({userName}).populate('profileDetails').exec();
+        const user = await User.find({ userName }).populate('profileDetails').exec();
         if (!user) {
             throw new Error('No user with given userName exist');
         }

@@ -20,7 +20,7 @@ router.post('/updateAbout', auth, updateAbout);
 router.delete('/deleteUser', auth, deleteUser);
 router.get('/getUserDetails', auth, getUserDetails);
 
-router.get('/search', searchDatabase);
+router.get('/search', auth, searchDatabase);
 router.post('/searchByUsername', searchDbByUsername);
 
 router.post('/createPost', auth, createPost);
@@ -31,7 +31,7 @@ router.get('/getPostComments', getPostComment);
 router.post('/commentPost', auth, commentPost);
 
 router.post('/makeFriend', auth, makeFriend);
-router.delete('/removeFriend', auth, removeFriend);
+router.post('/removeFriend', auth, removeFriend);
 router.get('/getFriendPost', auth, getFriendsPost);
 
 router.post('/getFriendChat', auth, getFriendChat);

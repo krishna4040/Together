@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { DevTool } from '@hookform/devtools'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../store/slices/user'
@@ -20,7 +20,7 @@ const LoginForm = () => {
         if (isSubmitSuccessful) {
             reset();
         }
-    },[isSubmitSuccessful])
+    }, [isSubmitSuccessful])
 
     const sumbitHandler = async (data) => {
         try {
@@ -29,9 +29,9 @@ const LoginForm = () => {
                 throw new Error(response.data.message);
             }
             toast.success("signed up successfully");
-            sessionStorage.setItem("token",response.data.token);
+            sessionStorage.setItem("token", response.data.token);
             dispacth(setToken(response.data.token));
-            navigate('/');
+            navigate('/create-profile');
         } catch (error) {
             console.log(error.message);
             toast.error("unable to sign in");
