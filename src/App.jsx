@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 
 import Sidebar from './components/common/Sidebar'
 import Logout from './components/common/Logout'
@@ -22,6 +22,7 @@ import ProfileAuth from './pages/ProfileAuth'
 const App = () => {
 
   const { token } = useSelector(state => state.user);
+  const location = useLocation();
 
   const [logout, setLogout] = useState(false);
   const [search, setSearch] = useState(false);
@@ -38,7 +39,7 @@ const App = () => {
         <Route path='*' element={<Error />} />
         <Route path='/create' element={<Create />} />
       </Routes>
-      {token && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotifications={setNotifications} />}
+      {token && location !== 'create-profile' && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotifications={setNotifications} />}
       {token && <BottomNavigation setLogout={setLogout} setSearch={setSearch} />}
       {logout && <Logout setLogout={setLogout} />}
       {search && <Search setSearch={setSearch} />}

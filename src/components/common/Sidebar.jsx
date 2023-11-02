@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
-const Sidebar = ({ setLogout, setSearch , setNotifications }) => {
+const Sidebar = ({ setLogout, setSearch, setNotifications }) => {
 
     const arr = [
         { title: 'Home', icon: AiFillHome, link: '/' },
@@ -22,11 +22,11 @@ const Sidebar = ({ setLogout, setSearch , setNotifications }) => {
 
     const [pfp, setPfp] = useState('');
 
-    const {token} = useSelector(state => state.user);
+    const { token } = useSelector(state => state.user);
 
     const fecthUser = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`,{withCredentials: true , headers:{Authorization: `Bearer ${token}`}});
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, { withCredentials: true, headers: { Authorization: `Bearer ${token}` } });
             setPfp(response.data.data.profileDetails.pfp);
         } catch (error) {
             console.log(error);
@@ -40,7 +40,7 @@ const Sidebar = ({ setLogout, setSearch , setNotifications }) => {
     const navigate = useNavigate();
     return (
         <div className='lg:flex flex-col hidden justify-center gap-7 bg-black w-[200px] fixed top-0 left-0 p-3 h-screen border-r border-gray-500'>
-            <h1 className='text-2xl text-white'>Togethr</h1>
+            <h1 className='text-2xl text-white'>Together</h1>
             {
                 arr.map((item, index) => {
                     return (

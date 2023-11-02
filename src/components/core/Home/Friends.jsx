@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux';
 
 const Friends = () => {
 
-    const [friends , setFriends] = useState([]);
-    const {token} = useSelector(state => state.user);
+    const [friends, setFriends] = useState([]);
+    const { token } = useSelector(state => state.user);
     const fecthFriends = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`,{withCredentials: true , headers:{Authorization: `Bearer ${token}`}});
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, { withCredentials: true, headers: { Authorization: `Bearer ${token}` } });
             if (!response.data.success) {
                 throw new Error(response.data.message);
             }
@@ -22,19 +22,21 @@ const Friends = () => {
 
     useEffect(() => {
         fecthFriends();
-    },[]);
+    }, []);
 
     return (
-        <div className='flex items-center justify-start h-24 gap-5 overflow-x-auto overflow-y-hidden lg:p-4'>
-            {
-                friends.map((friend,index) => {
-                    return(
-                        <div key={index} className='h-[80px] w-[80px] flex items-center justify-center p-1 border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
-                            <img src={friend.profileDetails.pfp} alt="friend" className='w-full'/>
-                        </div>
-                    )
-                })
-            }
+        <div className='w-[600px] overflow-x-auto overflow-y-hidden fixed top-4 left-[250px] border-b border-r rounded-lg'>
+            <div className='flex items-center justify-start h-24 gap-5 flex-nowrap lg:p-4 min-w-max'>
+                {
+                    friends.map((friend, index) => {
+                        return (
+                            <div key={index} className='h-[80px] w-[80px] flex items-center justify-center p-1 border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
+                                <img src={friend.profileDetails.pfp} alt="friend" className='w-full' />
+                            </div>
+                        )
+                    })
+                }
+            </div>
         </div>
     )
 }

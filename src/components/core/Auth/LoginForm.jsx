@@ -31,7 +31,7 @@ const LoginForm = () => {
             toast.success("signed up successfully");
             sessionStorage.setItem("token", response.data.token);
             dispacth(setToken(response.data.token));
-            navigate('/create-profile');
+            navigate('/');
         } catch (error) {
             console.log(error.message);
             toast.error("unable to sign in");
@@ -54,7 +54,7 @@ const LoginForm = () => {
                 </tbody>
             </table>
 
-            <button className='btn solid success'>Connect</button>
+            <button className='w-24 btn solid success'>Connect</button>
 
             <DevTool control={control} />
         </form>

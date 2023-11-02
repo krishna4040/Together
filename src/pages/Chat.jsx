@@ -28,22 +28,30 @@ const Chat = () => {
     const [selectedFriend, setSelectedFriend] = useState({});
 
     return (
-        <div className='flex items-center justify-between ml-[200px]'>
-            <div className='flex flex-col items-start justify-start min-h-screen gap-3 p-10 border-r border-gray-500 w-[450px]'>
-                {
-                    friends.map((friend, index) => {
-                        return (
-                            <div key={index} className='flex items-center gap-5'>
-                                <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
-                                    <img src={friend.profileDetails.pfp} alt="user_image" className='w-full' />
-                                </div>
-                                <p className='min-w-[55px] text-lg capitalize text-white'>{friend.userName}</p>
-                                <button className='btn outline success' onClick={() => { setSelectedFriend(friend) }}>Message</button>
-                            </div>
-                        )
-                    })
-                }
-            </div>
+        <div className='flex items-center justify-between ml-[200px] min-h-screen'>
+            <table className='border-r border-separate border-gray-500 border-spacing-3'>
+                <tbody>
+                    {
+                        friends.map((friend, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>
+                                        <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
+                                            <img src={friend.profileDetails.pfp} alt="user_image" className='w-full' />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p className='min-w-[55px] text-lg capitalize text-white'>{friend.userName}</p>
+                                    </td>
+                                    <td>
+                                        <button className='btn outline success' onClick={() => { setSelectedFriend(friend) }}>Message</button>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
             {selectedFriend ? <ChatPage friend={selectedFriend} /> : null}
         </div>
     )

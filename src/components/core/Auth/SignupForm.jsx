@@ -3,7 +3,7 @@ import { DevTool } from '@hookform/devtools'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 
 const SignupForm = ({ setTab }) => {
 
@@ -30,6 +30,7 @@ const SignupForm = ({ setTab }) => {
             }
             toast.success("signed up successfully");
             setTab("login");
+            navigate('/create-profile');
         } catch (error) {
             console.log(error.message);
             toast.error("unable to sign up");
@@ -59,7 +60,7 @@ const SignupForm = ({ setTab }) => {
                 </tbody>
             </table>
 
-            <button className='btn solid success'>Connect</button>
+            <button className='w-24 btn solid success'>Connect</button>
 
             <DevTool control={control} />
 
