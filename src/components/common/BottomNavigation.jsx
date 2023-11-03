@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { AiFillHome } from 'react-icons/ai'
 import { IoCreateOutline } from 'react-icons/io5'
 import { BiMessageSquareDots, BiSearch } from 'react-icons/bi'
 import { FiLogOut } from 'react-icons/fi'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const BottomNavigation = ({ setSearch, setLogout }) => {
@@ -19,22 +18,7 @@ const BottomNavigation = ({ setSearch, setLogout }) => {
     ];
 
     const navigate = useNavigate();
-
-    const [pfp, setPfp] = useState('');
-    const { token } = useSelector(state => state.user);
-
-    const fecthUser = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, { withCredentials: true, headers: { Authorization: `Bearer ${token}` } });
-            setPfp(response.data.data.profileDetails.pfp);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        fecthUser();
-    }, []);
+    const user = useSelector(state => state.user);
 
     return (
         <div className='fixed bottom-0 left-0 right-0 flex items-center justify-center gap-8 p-5 bg-black lg:hidden'>
@@ -46,7 +30,7 @@ const BottomNavigation = ({ setSearch, setLogout }) => {
                                 item.title !== 'Profile' ? <item.icon className='text-3xl text-white' />
                                     :
                                     <div className='flex items-center justify-center w-12 h-12 p-2 overflow-hidden border rounded-full'>
-                                        <img src={pfp} alt="pfp_pic" className='w-full' />
+                                        <img src={user.profileDetails.pfp} alt="pfp_pic" className='w-full' />
                                     </div>
                             }
                         </div>

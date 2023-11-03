@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import toast from 'react-hot-toast';
-import {AiOutlineHeart,AiTwotoneHeart,AiOutlineComment} from 'react-icons/ai'
+import { AiOutlineHeart, AiTwotoneHeart, AiOutlineComment } from 'react-icons/ai'
 
 const FriendPostSection = () => {
 
-    const { token } = useSelector(state => state.user);
+    const { token } = useSelector(state => state.auth);
 
     const [posts, setPosts] = useState([]);
 
@@ -41,8 +41,8 @@ const FriendPostSection = () => {
                                 <img src={post[0].image} alt="post_here" />
                             </div>
                             <div className='flex items-center gap-3'>
-                                <AiOutlineHeart className='text-3xl text-white'/>
-                                <AiOutlineComment className='text-3xl text-white'/>
+                                <AiOutlineHeart className='text-3xl text-white' />
+                                <AiOutlineComment className='text-3xl text-white' />
                             </div>
                             <div>
                                 <p className='text-2xl text-white'><span className='text-base text-blue-400'>#caption</span> {post[0].title}</p>

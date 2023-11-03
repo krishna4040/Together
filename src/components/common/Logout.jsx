@@ -1,5 +1,5 @@
 import React from 'react'
-import { setToken } from '../../store/slices/user'
+import { setToken } from '../../store/slices/auth'
 import { useDispatch } from 'react-redux'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';

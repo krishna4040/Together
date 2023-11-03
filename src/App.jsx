@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 
 import Sidebar from './components/common/Sidebar'
@@ -14,19 +14,40 @@ import Create from './pages/Create'
 import EditPage from './components/core/profile/EditPage'
 
 import Auth from './pages/Auth'
-import { useSelector } from 'react-redux'
 import BottomNavigation from './components/common/BottomNavigation'
 import ProfileAuth from './pages/ProfileAuth'
-
+import FriendProfile from './pages/FriendProfile'
+import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from './store/slices/user'
 
 const App = () => {
 
-  const { token } = useSelector(state => state.user);
-  const location = useLocation();
+  const { token } = useSelector(state => state.auth);
+  const dispacth = useDispatch();
 
   const [logout, setLogout] = useState(false);
   const [search, setSearch] = useState(false);
   const [notifications, setNotifications] = useState(false);
+
+  const fecthUser = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      dispacth(setUser(response.data.data));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      fecthUser();
+    }
+  }, [token]);
 
   return (
     <div className='w-screen bg-black'>
@@ -35,11 +56,12 @@ const App = () => {
         <Route path='/create-profile' element={<ProfileAuth />} />
         <Route path='/chat' element={<Chat />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/profile' element={<FriendProfile />} />
         <Route path='/edit-profile' element={<EditPage />} />
         <Route path='*' element={<Error />} />
         <Route path='/create' element={<Create />} />
       </Routes>
-      {token && location !== 'create-profile' && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotifications={setNotifications} />}
+      {token && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotifications={setNotifications} />}
       {token && <BottomNavigation setLogout={setLogout} setSearch={setSearch} />}
       {logout && <Logout setLogout={setLogout} />}
       {search && <Search setSearch={setSearch} />}

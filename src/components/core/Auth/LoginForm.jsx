@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react'
-import { DevTool } from '@hookform/devtools'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setToken } from '../../../store/slices/user'
+import { setToken } from '../../../store/slices/auth'
 
 const LoginForm = () => {
 
     const form = useForm();
     const { register, control, handleSubmit, formState, reset } = form;
-    const { errors, isSubmitSuccessful } = formState;
+    const { isSubmitSuccessful } = formState;
 
     const navigate = useNavigate();
     const dispacth = useDispatch();
@@ -56,7 +55,6 @@ const LoginForm = () => {
 
             <button className='w-24 btn solid success'>Connect</button>
 
-            <DevTool control={control} />
         </form>
     )
 }

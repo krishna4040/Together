@@ -7,25 +7,8 @@ import toast from 'react-hot-toast';
 const Preview = ({ setStep }) => {
 
     const post = useSelector(state => state.post);
+    const user = useSelector(state => state.user);
     const { token } = useSelector(state => state.user);
-
-    const [user, setUser] = useState({});
-    const fecthUser = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setUser(response.data.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        fecthUser();
-    }, []);
 
     const clcikHandler = async () => {
         try {

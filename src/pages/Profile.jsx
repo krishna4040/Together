@@ -10,27 +10,8 @@ import Friends from '../components/core/profile/Friends'
 
 const Profile = () => {
 
-    const { token } = useSelector(state => state.user);
-    const [user, setUser] = useState({});
-
+    const user = useSelector(state => state.user);
     const [step, setStep] = useState('posts');
-
-    const fecthUser = async () => {
-        try {
-            const respose = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setUser(respose.data.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        fecthUser();
-    }, []);
 
     const navigate = useNavigate();
     const editHandler = () => {
@@ -64,13 +45,13 @@ const Profile = () => {
                     </div>
                     <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto'>
                         <div className='text-white tabs bordered success bottom ml-[200px]'>
-                            <div className={`p-4 tab ${step === 'posts' ? 'active': null}`} onClick={() => { setStep('posts') }}>
+                            <div className={`p-4 tab ${step === 'posts' ? 'active' : null}`} onClick={() => { setStep('posts') }}>
                                 Posts
                             </div>
-                            <div className={`p-4 tab ${step === 'liked' ? 'active': null}`} onClick={() => { setStep('liked') }}>
+                            <div className={`p-4 tab ${step === 'liked' ? 'active' : null}`} onClick={() => { setStep('liked') }}>
                                 Liked
                             </div>
-                            <div className={`p-4 tab ${step === 'friends' ? 'active': null}`} onClick={() => { setStep('friends') }}>
+                            <div className={`p-4 tab ${step === 'friends' ? 'active' : null}`} onClick={() => { setStep('friends') }}>
                                 Friends
                             </div>
                         </div>

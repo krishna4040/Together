@@ -5,25 +5,9 @@ import { useForm } from 'react-hook-form';
 
 const EditPage = () => {
 
-    const { register, handleSubmit, formState: { errors , isSubmitSuccessful } , reset } = useForm();
-    const { token } = useSelector(state => state.user);
-    const [user, setUser] = useState({});
-    const fecthUser = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            setUser(response.data.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        fecthUser();
-    }, []);
+    const { register, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm();
+    const { token } = useSelector(state => state.auth);
+    const user = useSelector(state => state.user);
 
     const updatePfp = async (pfp) => {
         try {
@@ -62,7 +46,7 @@ const EditPage = () => {
 
     useEffect(() => {
         reset();
-    },[isSubmitSuccessful]);
+    }, [isSubmitSuccessful]);
 
     const handleClick = () => {
         document.querySelector('#fileInput').click();

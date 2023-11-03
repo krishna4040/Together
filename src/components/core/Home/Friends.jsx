@@ -1,34 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import toast from 'react-hot-toast';
+import React from 'react'
 import { useSelector } from 'react-redux';
 
 const Friends = () => {
 
-    const [friends, setFriends] = useState([]);
-    const { token } = useSelector(state => state.user);
-    const fecthFriends = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, { withCredentials: true, headers: { Authorization: `Bearer ${token}` } });
-            if (!response.data.success) {
-                throw new Error(response.data.message);
-            }
-            setFriends(response.data.data.friends);
-        } catch (error) {
-            console.log(error);
-            toast.error('unable to fecth friends');
-        }
-    }
-
-    useEffect(() => {
-        fecthFriends();
-    }, []);
+    const user = useSelector(state => state.user);
 
     return (
-        <div className='w-[600px] overflow-x-auto overflow-y-hidden fixed top-4 left-[250px] border-b border-r rounded-lg'>
+        user.email &&
+        <div className='lg:w-[600px] w-full overflow-x-auto overflow-y-hidden fixed top-4 lg:left-[250px] left-0 border-b lg:border-r rounded-md'>
             <div className='flex items-center justify-start h-24 gap-5 flex-nowrap lg:p-4 min-w-max'>
                 {
-                    friends.map((friend, index) => {
+                    user.friends.map((friend, index) => {
                         return (
                             <div key={index} className='h-[80px] w-[80px] flex items-center justify-center p-1 border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
                                 <img src={friend.profileDetails.pfp} alt="friend" className='w-full' />

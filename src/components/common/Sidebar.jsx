@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { AiFillHome, AiOutlineHeart } from 'react-icons/ai'
 import { IoSettings, IoCreateOutline } from 'react-icons/io5'
 import { BiMessageSquareDots, BiSearch } from 'react-icons/bi'
 import { FiLogOut } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { useSelector } from 'react-redux'
 
 const Sidebar = ({ setLogout, setSearch, setNotifications }) => {
+
+    const user = useSelector(state => state.user);
 
     const arr = [
         { title: 'Home', icon: AiFillHome, link: '/' },
@@ -19,23 +20,6 @@ const Sidebar = ({ setLogout, setSearch, setNotifications }) => {
         { title: 'Settings', icon: IoSettings, link: '/edit-profile' },
         { title: 'Logout', icon: FiLogOut, clickHandler: setLogout },
     ];
-
-    const [pfp, setPfp] = useState('');
-
-    const { token } = useSelector(state => state.user);
-
-    const fecthUser = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, { withCredentials: true, headers: { Authorization: `Bearer ${token}` } });
-            setPfp(response.data.data.profileDetails.pfp);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        fecthUser();
-    }, [])
 
     const navigate = useNavigate();
     return (
@@ -49,7 +33,7 @@ const Sidebar = ({ setLogout, setSearch, setNotifications }) => {
                                 item.title !== 'Profile' ? <item.icon className='text-xl text-white' />
                                     :
                                     <div className='flex items-center justify-center w-12 h-12 p-2 overflow-hidden border rounded-full'>
-                                        <img src={pfp} alt="pfp_pic" className='w-full' />
+                                        <img src={user.profileDetails.pfp} alt="pfp_pic" className='w-full' />
                                     </div>
                             }
                             <p className='text-xl text-white'>{item.title}</p>

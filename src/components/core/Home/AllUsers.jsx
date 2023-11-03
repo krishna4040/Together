@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 const AllUsers = () => {
 
-    const { token } = useSelector(state => state.user);
+    const { token } = useSelector(state => state.auth);
     const [users, setUsers] = useState([]);
     const [currentUser, setCurrentUser] = useState({});
 
@@ -71,9 +71,6 @@ const AllUsers = () => {
             console.log(error);
         }
     }
-
-    //  className='flex flex-col items-center justify-center gap-3 p-10'
-    //  className='flex items-center gap-5'
 
     return (
         <table className='border-separate border-spacing-3'>

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { DevTool } from '@hookform/devtools'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -8,8 +7,8 @@ import { toast } from 'react-hot-toast'
 const SignupForm = ({ setTab }) => {
 
     const form = useForm();
-    const { register, control, handleSubmit, formState, reset } = form;
-    const { errors, isSubmitSuccessful } = formState;
+    const { register, handleSubmit, formState, reset } = form;
+    const { isSubmitSuccessful } = formState;
 
     const navigate = useNavigate();
 
@@ -61,8 +60,6 @@ const SignupForm = ({ setTab }) => {
             </table>
 
             <button className='w-24 btn solid success'>Connect</button>
-
-            <DevTool control={control} />
 
         </form>
     )

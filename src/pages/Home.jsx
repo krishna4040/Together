@@ -2,7 +2,6 @@ import React from 'react'
 import Friends from '../components/core/Home/Friends'
 import FriendPostSection from '../components/core/Home/FriendPostSection'
 import AllUsers from '../components/core/Home/AllUsers'
-import { useLocation } from 'react-router-dom'
 
 const Home = () => {
 
