@@ -1,14 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineHeart, AiOutlineComment } from 'react-icons/ai'
 import toast from 'react-hot-toast';
+import { addPost } from '../../../store/slices/user'
 
 const Preview = ({ setStep }) => {
 
     const post = useSelector(state => state.post);
     const user = useSelector(state => state.user);
     const { token } = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
     const clcikHandler = async () => {
         try {
@@ -23,6 +25,7 @@ const Preview = ({ setStep }) => {
             });
             if (response.data.success) {
                 toast.success("Post uploaded successfully");
+                dispatch(addPost(response.data.data));
                 setStep("title");
             }
         } catch (error) {

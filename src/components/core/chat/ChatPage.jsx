@@ -6,11 +6,7 @@ import { BiSolidPhoneCall } from 'react-icons/bi'
 
 const ChatPage = ({ friend }) => {
 
-    if (!Object.keys(friend).length) {
-        return;
-    }
-
-    const { token } = useSelector(state => state.user);
+    const { token } = useSelector(state => state.auth);
     const [chats, setChats] = useState({});
     const [sendText, setSendText] = useState('');
 

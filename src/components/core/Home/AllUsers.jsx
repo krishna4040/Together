@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useDebugValue, useEffect, useState } from 'react'
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import { setFriend, removeFriend } from '../../../store/slices/user'
 
 const AllUsers = () => {
 
     const { token } = useSelector(state => state.auth);
+    const currentUser = useSelector(state => state.user);
     const [users, setUsers] = useState([]);
-    const [currentUser, setCurrentUser] = useState({});
-
-    const fecthCurrentUserDetails = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setCurrentUser(response.data.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const dispacth = useDispatch();
 
     const fecthAllUsers = async () => {
         try {
@@ -37,7 +26,6 @@ const AllUsers = () => {
 
     useEffect(() => {
         fecthAllUsers();
-        fecthCurrentUserDetails();
     }, []);
 
     const connectHandler = async (friend) => {
@@ -50,7 +38,7 @@ const AllUsers = () => {
                 }
             });
             toast.success("Friend connected");
-            fecthCurrentUserDetails();
+            dispacth(setFriend(friend));
         } catch (error) {
             console.log(error);
         }
@@ -66,7 +54,7 @@ const AllUsers = () => {
                 }
             });
             toast.error("Friend removed");
-            fecthCurrentUserDetails();
+            dispacth(removeFriend(friend._id));
         } catch (error) {
             console.log(error);
         }
@@ -76,7 +64,7 @@ const AllUsers = () => {
         <table className='border-separate border-spacing-3'>
             <tbody>
                 {
-                    users.length && Object.keys(currentUser).length ?
+                    users.length ?
                         users.map((user, index) => {
                             return (
                                 <tr key={index}>
@@ -99,9 +87,9 @@ const AllUsers = () => {
                             )
                         })
                         :
-                        <div className='w-screen h-screen text-center'>
-                            <span className='loader'></span>
-                        </div>
+                        <tr className='w-screen h-screen text-center'>
+                            <td className='loader'></td>
+                        </tr>
                 }
             </tbody>
         </table>

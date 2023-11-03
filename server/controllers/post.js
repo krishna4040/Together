@@ -23,6 +23,7 @@ exports.createPost = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Post created successfully',
+            data: post
         });
     } catch (error) {
         res.status(500).json({

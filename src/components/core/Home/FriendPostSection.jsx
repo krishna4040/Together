@@ -7,7 +7,6 @@ import { AiOutlineHeart, AiTwotoneHeart, AiOutlineComment } from 'react-icons/ai
 const FriendPostSection = () => {
 
     const { token } = useSelector(state => state.auth);
-
     const [posts, setPosts] = useState([]);
 
     const fecthFriendsPosts = async () => {
