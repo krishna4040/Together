@@ -1,15 +1,40 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React from 'react';
 import { FaHeart, FaComment } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md'
+import { useDispatch, useSelector } from 'react-redux';
+import { removePost } from '../../../store/slices/user'
+import toast from 'react-hot-toast';
 
-function InstagramPost({ title, imageSrc, likes, comments }) {
-    const [showFullPost, setShowFullPost] = useState(false);
+function Post({ title, imageSrc, likes, comments, _id }) {
 
-    const toggleFullPost = () => {
-        setShowFullPost(!showFullPost);
-    };
+    const dispacth = useDispatch();
+    const { token } = useSelector(state => state.auth);
+
+    const handleDelete = async (_id) => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}deletePost`, {
+                postId: _id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            toast.error("post deleted");
+            dispacth(removePost(_id));
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
-        <div className="max-w-sm p-4 text-black bg-white rounded-lg shadow-lg">
+        <div className="relative max-w-sm p-4 text-black bg-white rounded-lg shadow-lg">
+            {
+                _id &&
+                <span className="absolute p-2 text-gray-500 cursor-pointer top-3 right-3 hover:text-red-500">
+                    <MdDelete onClick={() => { handleDelete(_id) }} className='text-3xl' />
+                </span>
+            }
             <div>
                 <h2 className="mb-2 text-xl font-semibold">{title}</h2>
                 <img src={imageSrc} alt={title} className="w-full mb-2 rounded-lg" />
@@ -23,7 +48,8 @@ function InstagramPost({ title, imageSrc, likes, comments }) {
                 </div>
             </div>
         </div>
+
     );
 }
 
-export default InstagramPost;
+export default Post;

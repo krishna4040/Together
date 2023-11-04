@@ -78,6 +78,29 @@ exports.likePost = async (req, res) => {
     }
 }
 
+exports.unlikePost = async (req, res) => {
+    try {
+        const { postId } = req.body;
+        if (!postId) {
+            throw new Error('Post id is requiered');
+        }
+        const unlikePost = await Like.findByIdAndDelete(postId);
+        if (!unlikePost) {
+            throw new Error('unable to like post');
+        }
+        await Post.findByIdAndUpdate(postId, { $pull: { likes: unlikePost._id } });
+        res.status(200).json({
+            success: true,
+            message: 'post unliked successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
 exports.commentPost = async (req, res) => {
     try {
         const { postId, comment } = req.body;

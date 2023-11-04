@@ -5,7 +5,7 @@ const { auth } = require('../middlewares/auth');
 
 const { signup, sendotp, login } = require('../controllers/auth');
 const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = require('../controllers/profile');
-const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment } = require('../controllers/post');
+const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost } = require('../controllers/post');
 const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/friend');
 const { searchDatabase, searchDbByUsername } = require('../controllers/allUsers');
 const { getFriendChat, addMessage } = require('../controllers/chat');
@@ -24,8 +24,9 @@ router.get('/search', auth, searchDatabase);
 router.post('/searchByUsername', searchDbByUsername);
 
 router.post('/createPost', auth, createPost);
-router.delete('/deletePost', auth, deletePost);
+router.post('/deletePost', auth, deletePost);
 router.post('/likePost', auth, likePost);
+router.post('/unlikePost', unlikePost);
 router.get('/allLikedPost', auth, likedPostByaUser);
 router.get('/getPostComments', getPostComment);
 router.post('/commentPost', auth, commentPost);

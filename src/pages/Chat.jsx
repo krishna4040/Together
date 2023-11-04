@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import ChatPage from '../components/core/chat/ChatPage'
 
@@ -33,7 +32,7 @@ const Chat = () => {
                     }
                 </tbody>
             </table>
-            {selectedFriend ? <ChatPage friend={selectedFriend} /> : null}
+            {Object.keys(selectedFriend).length ? <ChatPage friend={selectedFriend} /> : null}
         </div>
     )
 }

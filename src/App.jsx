@@ -56,7 +56,7 @@ const App = () => {
         <Route path='/create-profile' element={<ProfileAuth />} />
         <Route path='/chat' element={<Chat />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path='/profile' element={<FriendProfile />} />
+        <Route path='/view-profile/:userName' element={<FriendProfile />} />
         <Route path='/edit-profile' element={<EditPage />} />
         <Route path='*' element={<Error />} />
         <Route path='/create' element={<Create />} />

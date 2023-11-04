@@ -56,9 +56,15 @@ const userSlice = createSlice({
         },
         addChat: (state, action) => {
             state.chat.push(action.payload);
+        },
+        setAbout: (state, action) => {
+            state.profileDetails.about = action.payload;
+        },
+        setPfp: (state, action) => {
+            state.profileDetails.pfp = action.payload;
         }
     }
 });
 
-export const { setUser, setFriend, removeFriend, addPost, addChat } = userSlice.actions;
+export const { setUser, setFriend, removeFriend, addPost, addChat, removePost } = userSlice.actions;
 export default userSlice.reducer;

@@ -5,12 +5,12 @@ import Post from './Post'
 
 const Liked = ({ user }) => {
 
-    const [liked , setLiked] = useState([]);
+    const [liked, setLiked] = useState([]);
     const { token } = useSelector(state => state.user);
 
     const fecthLikedPosts = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/allLikedPost`, {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}allLikedPost`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -23,7 +23,7 @@ const Liked = ({ user }) => {
 
     useEffect(() => {
         fecthLikedPosts();
-    },[]);
+    }, []);
 
     if (!liked.length) {
         return <p className='relative text-xl text-center text-white capitalize translate-x-24'>No Post liked Yet</p>

@@ -24,7 +24,7 @@ const FriendPostSection = () => {
     }, []);
 
     return (
-        <div className='flex flex-col items-center justify-center w-full gap-10'>
+        <div className='flex flex-col items-center justify-center w-full gap-10 lg:mt-28'>
             {
                 posts.map((post, index) => {
                     return (

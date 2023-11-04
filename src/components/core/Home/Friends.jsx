@@ -7,7 +7,7 @@ const Friends = () => {
 
     return (
         user.email &&
-        <div className='lg:w-[600px] w-full overflow-x-auto overflow-y-hidden fixed top-4 lg:left-[250px] left-0 border-b lg:border-r rounded-md'>
+        <div className='lg:w-[600px] w-full overflow-x-auto overflow-y-hidden border-b lg:border-r rounded-md lg:fixed lg:left-[250px] lg:top-4'>
             <div className='flex items-center justify-start h-24 gap-5 flex-nowrap lg:p-4 min-w-max'>
                 {
                     user.friends.map((friend, index) => {

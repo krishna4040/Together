@@ -1,10 +1,10 @@
 import React from 'react'
 import Post from './Post'
 
-const Posts = ({user}) => {
+const Posts = ({ user }) => {
 
     if (!user.posts.length) {
-        return <p className='relative text-xl text-center text-white capitalize translate-x-24'>No Post liked Yet</p>
+        return <p className='relative text-xl text-center text-white capitalize translate-x-24'>No Post Posted Yet</p>
     }
 
     return (
@@ -12,7 +12,7 @@ const Posts = ({user}) => {
             {
                 user.posts.map(post => {
                     return (
-                        <Post key={post._id} title={post.title} imageSrc={post.image} likes={post.likes.length} comments={post.comments.length} />
+                        <Post key={post._id} _id={post._id} title={post.title} imageSrc={post.image} likes={post.likes.length} comments={post.comments.length} />
                     )
                 })
             }
