@@ -17,7 +17,7 @@ router.post('/sendotp', sendotp);
 router.post('/createProfile', auth, createProfile);
 router.post('/updatePfp', auth, updatePfp);
 router.post('/updateAbout', auth, updateAbout);
-router.delete('/deleteUser', auth, deleteUser);
+router.post('/deleteUser', auth, deleteUser);
 router.get('/getUserDetails', auth, getUserDetails);
 
 router.get('/search', auth, searchDatabase);

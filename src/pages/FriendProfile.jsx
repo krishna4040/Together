@@ -45,23 +45,6 @@ const FriendProfile = () => {
                             </div>
                         </div>
                     </div>
-                    {/* <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto'>
-                        <div className='text-white tabs bordered success bottom ml-[200px]'>
-                            <div className={`p-4 tab ${step === 'posts' ? 'active' : null}`} onClick={() => { setStep('posts') }}>
-                                Posts
-                            </div>
-                            <div className={`p-4 tab ${step === 'liked' ? 'active' : null}`} onClick={() => { setStep('liked') }}>
-                                Liked
-                            </div>
-                            <div className={`p-4 tab ${step === 'friends' ? 'active' : null}`} onClick={() => { setStep('friends') }}>
-                                Friends
-                            </div>
-                        </div>
-
-                        {step === 'liked' && <Liked user={friend} />}
-                        {step === 'posts' && <Posts user={friend} />}
-                        {step === 'friends' && <Friends user={friend} />}
-                    </div> */}
                 </>
             }
         </div>

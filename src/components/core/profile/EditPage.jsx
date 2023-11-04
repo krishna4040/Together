@@ -1,11 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { useForm } from 'react-hook-form';
+import { setToken } from '../../../store/slices/auth'
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import DeleteModal from '../../common/DeleteModal'
 
 const EditPage = () => {
 
     const { register, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm();
+    const dispacth = useDispatch();
+    const navigate = useNavigate();
     const { token } = useSelector(state => state.auth);
     const user = useSelector(state => state.user);
 
@@ -51,6 +57,25 @@ const EditPage = () => {
     const handleClick = () => {
         document.querySelector('#fileInput').click();
     };
+
+    const deleteProfileHandler = async () => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}deleteUser`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.data.success) {
+                toast.error("profile deleted");
+                dispacth(setToken(null));
+                navigate('/');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const [modal, setModal] = useState(false);
 
     return (
         <form className='ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-center' onSubmit={handleSubmit(sumbitHandler)}>
@@ -122,10 +147,14 @@ const EditPage = () => {
                                 className='input success pill'
                             />
                         </div>
-                        <button type='submit' className='btn solid warn'>Update Changes</button>
+                        <div className='flex items-center justify-center gap-10'>
+                            <button type='submit' className='btn solid warn'>Update Changes</button>
+                            <button type='button' className='btn solid danger' onClick={() => { setModal(true) }}>Delete Profile</button>
+                        </div>
                     </>
                 )
             }
+            {modal && <DeleteModal setModal={setModal} deleteHandler={deleteProfileHandler} />}
         </form>
     )
 }
