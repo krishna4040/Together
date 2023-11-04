@@ -1,32 +1,22 @@
 const mongoose = require('mongoose');
-const Notification = require('./Notification');
 
 const chatSchema = new mongoose.Schema({
-    user: {
+    chatName: String,
+    isGroupChat: Boolean,
+    users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    }],
+    latestMessage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
     },
-    friend: {
+    groupAdmin: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
-    messages: [
-        {
-            whoSent: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            message: String
-        }
-    ],
-    sentAt: Date
-});
-
-chatSchema.pre('save', function () {
-    Notification.create({
-        from: this.friend,
-        message: this.message
-    });
+    }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Chat', chatSchema);

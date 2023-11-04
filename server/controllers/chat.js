@@ -1,82 +1,55 @@
 const Chat = require('../models/Chat');
 const User = require('../models/User');
 
-exports.addMessage = async (req, res) => {
+exports.accessChat = async (req, res) => {
     try {
-        const { id } = req.user;
-        const { message, friend_id } = req.body;
-        const check = await Chat.find({ user: id, friend: friend_id });
-        if (check.length) {
-            await Chat.findOneAndUpdate({ user: id, friend: friend_id }, {
-                $push: { messages: { whoSent: id, message } }
-            });
-            await Chat.findOneAndUpdate({ user: friend_id, friend: id }, {
-                $push: { messages: { whoSent: friend_id, message } }
-            });
-            res.status(200).json({
-                success: true,
-                message: 'Message added successfully'
-            });
+        const { userId } = req.body;
+        if (!userId) {
+            throw new Error('userId not provided');
         }
-        else {
-            const chat = await Chat.create({
-                user: id,
-                friend: friend_id,
-                messages: [
-                    {
-                        whoSent: id,
-                        message
-                    }
-                ]
-            });
-            const friendChat = await Chat.create({
-                user: friend_id,
-                friend: id,
-                messages: [
-                    {
-                        whoSent: friend_id,
-                        message
-                    }
-                ]
-            });
-            await User.findByIdAndUpdate(id, { $push: { chat: chat._id } });
-            await User.findByIdAndUpdate(friend_id, { $push: { chat: friendChat._id } });
-            res.status(200).json({
-                success: true,
-                message: 'Message added to db succesesfully'
-            });
+        let isChat = await Chat.find({
+            isGroupChat: false,
+            $and: [
+                { users: { $elemMatch: { $eq: req.user.id } } },
+                { users: { $elemMatch: { $eq: userId } } }
+            ]
+        })
+            .populate('users')
+            .populate('latestMessage')
+
+        isChat = await User.populate(isChat, {
+            path: 'latestMessage.sender',
+            select: 'profileDetails'
+        });
+
+        if (isChat.length) {
+            res.send(isChat[0]);
+        } else {
+            const chatData = {
+                chatName: 'sender',
+                isGroupChat: false,
+                users: [req.user.id, userId]
+            }
+            const createdChat = await Chat.create(chatData);
+            const fullChat = await Chat.findOne({ _id: createdChat._id }).populate('users').populate('lastestMessage')
+            res.send(fullChat);
         }
     } catch (error) {
         res.status(500).json({
             success: false,
             message: error.message
-        });
+        })
     }
 }
 
-exports.getFriendChat = async (req, res) => {
+exports.fecthChat = async (req, res) => {
     try {
-        const { id } = req.user;
-        if (!id) {
-            throw new Error('id not found');
-        }
-        const { friend_id } = req.body;
-        if (!friend_id) {
-            throw new Error('friend id not received');
-        }
-        const chat = await Chat.find({ user: id, friend: friend_id });
-        if (!chat.length) {
-            throw new Error('unable to fecth chat')
-        }
-        res.status(200).json({
-            success: true,
-            message: 'Friend chat fecthed successfully',
-            data: chat
-        });
+        const userChat = await Chat.find({ users: { $elemMatch: { $eq: req.user.id } } });
+        res.send(userChat);
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error.message,
-        });
+            message: error.message
+        })
     }
 }

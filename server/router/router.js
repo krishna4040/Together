@@ -8,7 +8,8 @@ const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = re
 const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost } = require('../controllers/post');
 const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/friend');
 const { searchDatabase, searchDbByUsername } = require('../controllers/allUsers');
-const { getFriendChat, addMessage } = require('../controllers/chat');
+const { accessChat } = require('../controllers/chat');
+// const { getFriendChat, addMessage } = require('../controllers/chat');
 
 router.post('/signup', signup);
 router.post('/login', login);
@@ -35,7 +36,11 @@ router.post('/makeFriend', auth, makeFriend);
 router.post('/removeFriend', auth, removeFriend);
 router.get('/getFriendPost', auth, getFriendsPost);
 
-router.post('/getFriendChat', auth, getFriendChat);
-router.post('/addMessage', auth, addMessage);
+router.post('/createChat', auth, accessChat);
+// router.get('/fecthUserChats', auth , fetchUserChats);
+// router.post('/group', auth, createGroupChat);
+// router.put('/rename', auth, reNameGroup);
+// router.put('/groupRemove',auth, removeFromGroup);
+// router.put('/groupAdd',auth, addToGroupChat);
 
 module.exports = router;
