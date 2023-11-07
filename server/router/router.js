@@ -7,39 +7,45 @@ const { signup, sendotp, login } = require('../controllers/auth');
 const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = require('../controllers/profile');
 const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost } = require('../controllers/post');
 const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/friend');
-const { searchDatabase, searchDbByUsername } = require('../controllers/allUsers');
+const { getAllUsers, search } = require('../controllers/allUsers');
 const { accessChat, fecthChat, createGroupChat, renameGroup, addToGroup, removeFromGrp } = require('../controllers/chat');
 
-router.post('/signup', signup);
-router.post('/login', login);
-router.post('/sendotp', sendotp);
+// Auth Routes
+router.post('/auth/signup', signup);
+router.post('/auth/login', login);
+router.post('/auth/sendotp', sendotp);
 
-router.post('/createProfile', auth, createProfile);
-router.post('/updatePfp', auth, updatePfp);
-router.post('/updateAbout', auth, updateAbout);
-router.post('/deleteUser', auth, deleteUser);
-router.get('/getUserDetails', auth, getUserDetails);
+// User Routes
+router.post('/user/createProfile', auth, createProfile);
+router.put('/user/updatePfp', auth, updatePfp);
+router.put('/user/updateAbout', auth, updateAbout);
+router.delete('/user/deleteUser', auth, deleteUser);
+router.get('/user/getUserDetails', auth, getUserDetails);
 
-router.get('/search', auth, searchDatabase);
-router.post('/searchByUsername', searchDbByUsername);
+// AllUsers
+router.get('/all-users/getAllUsers', auth, getAllUsers);
+router.get('/all-users/search', search);
 
-router.post('/createPost', auth, createPost);
-router.post('/deletePost', auth, deletePost);
-router.post('/likePost', auth, likePost);
-router.post('/unlikePost', unlikePost);
-router.get('/allLikedPost', auth, likedPostByaUser);
-router.get('/getPostComments', getPostComment);
-router.post('/commentPost', auth, commentPost);
+// Post Routes
+router.post('/post/createPost', auth, createPost);
+router.delete('/post/deletePost', auth, deletePost);
+router.post('/post/likePost', auth, likePost);
+router.post('/post/unlikePost', unlikePost);
+router.get('/post/allLikedPost', auth, likedPostByaUser);
+router.get('/post/getPostComments', getPostComment);
+router.post('/post/commentPost', auth, commentPost);
 
-router.post('/makeFriend', auth, makeFriend);
-router.post('/removeFriend', auth, removeFriend);
-router.get('/getFriendPost', auth, getFriendsPost);
+// Friends Routes
+router.put('/friends/makeFriend', auth, makeFriend);
+router.put('/friends/removeFriend', auth, removeFriend);
+router.get('/friends/getFriendPost', auth, getFriendsPost);
 
-router.post('/createChat', auth, accessChat);
-router.get('/fecthUserChats', auth, fecthChat);
-router.post('/group', auth, createGroupChat);
-router.put('/rename', auth, renameGroup);
-router.put('/groupRemove', auth, removeFromGrp);
-router.put('/groupAdd', auth, addToGroup);
+// Chat Routes
+router.post('/chat/createChat', auth, accessChat);
+router.get('/chat/fecthUserChats', auth, fecthChat);
+router.post('/chat/group', auth, createGroupChat);
+router.put('/chat/rename', auth, renameGroup);
+router.put('/chat/groupRemove', auth, removeFromGrp);
+router.put('/chat/groupAdd', auth, addToGroup);
 
 module.exports = router;
