@@ -8,8 +8,7 @@ const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = re
 const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost } = require('../controllers/post');
 const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/friend');
 const { searchDatabase, searchDbByUsername } = require('../controllers/allUsers');
-const { accessChat } = require('../controllers/chat');
-// const { getFriendChat, addMessage } = require('../controllers/chat');
+const { accessChat, fecthChat, createGroupChat, renameGroup, addToGroup, removeFromGrp } = require('../controllers/chat');
 
 router.post('/signup', signup);
 router.post('/login', login);
@@ -37,10 +36,10 @@ router.post('/removeFriend', auth, removeFriend);
 router.get('/getFriendPost', auth, getFriendsPost);
 
 router.post('/createChat', auth, accessChat);
-// router.get('/fecthUserChats', auth , fetchUserChats);
-// router.post('/group', auth, createGroupChat);
-// router.put('/rename', auth, reNameGroup);
-// router.put('/groupRemove',auth, removeFromGroup);
-// router.put('/groupAdd',auth, addToGroupChat);
+router.get('/fecthUserChats', auth, fecthChat);
+router.post('/group', auth, createGroupChat);
+router.put('/rename', auth, renameGroup);
+router.put('/groupRemove', auth, removeFromGrp);
+router.put('/groupAdd', auth, addToGroup);
 
 module.exports = router;
