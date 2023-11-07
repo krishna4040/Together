@@ -7,9 +7,25 @@ const expressFileUpload = require('express-fileupload')
 const cookieParser = require('cookie-parser');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
-const { registerOrderHandlers } = require("./controllers/chat");
-const { registerUserHandlers } = require("./controllers/chat");
+const specs = swaggerJsdoc({
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Together',
+            description: 'Api for Chat application',
+            version: '1.0.0'
+        },
+        servers: [
+            {
+                url: 'http://localhost:4000'
+            }
+        ]
+    },
+    apis: ['./router/router.js', './models/*.js']
+})
 
 const app = express();
 const httpServer = createServer(app);
@@ -27,6 +43,7 @@ io.on('connection', (socket) => {
 dbConnect();
 cdConnect();
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json({
     limit: '1mb'
 }));
