@@ -30,7 +30,7 @@ const specs = swaggerJsdoc({
             }
         ]
     },
-    apis: ['./router/router.js', './models/*.js']
+    apis: ['./router/*.js', './models/*.js']
 })
 
 const app = express();
