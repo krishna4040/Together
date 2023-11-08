@@ -22,11 +22,15 @@ const specs = swaggerJsdoc({
         info: {
             title: 'Together',
             description: 'Api for Chat application',
-            version: '1.0.0'
+            version: '1.0.0',
+            contact: {
+                name: 'Krishna',
+                email: 'krishnajain5050@gmail.com'
+            }
         },
         servers: [
             {
-                url: 'http://localhost:4000'
+                url: 'http://localhost:4000/api/v1'
             }
         ]
     },

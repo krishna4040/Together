@@ -7,7 +7,7 @@ const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/fri
 // Friends Routes
 /**
  * @swagger
- * /makeFriend:
+ * /friends/makeFriend:
  *   put:
  *     summary: Make a friend
  *     description: Send a friend request and make a friend with another user.
@@ -30,33 +30,37 @@ const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/fri
  *     responses:
  *       200:
  *         description: Friend added successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.put('/makeFriend', auth, makeFriend);
 
 /**
  * @swagger
- * /removeFriend:
- *    put:
+ * /friends/removeFriend:
+ *   put:
  *     summary: Remove a friend
  *     description: Remove a friend from the user's friend list.
  *     tags:
@@ -78,32 +82,36 @@ router.put('/makeFriend', auth, makeFriend);
  *     responses:
  *       200:
  *         description: Friend removed successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.put('/removeFriend', auth, removeFriend);
 
 /**
  * @swagger
- * /getFriendsPost/{id}:
+ * /friends/getFriendsPost/{id}:
  *   get:
  *     summary: Get posts from friends
  *     description: Retrieves posts from the friends of a user by providing the user's ID.

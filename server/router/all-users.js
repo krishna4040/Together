@@ -7,7 +7,7 @@ const { getAllUsers, search } = require('../controllers/allUsers');
 // AllUsers
 /**
  * @swagger
- * /getAllUsers:
+ * /all-users/getAllUsers:
  *   get:
  *     summary: Get all users
  *     description: Retrieves a list of all users (excluding the authenticated user) in the database.
@@ -46,7 +46,7 @@ router.get('/getAllUsers', auth, getAllUsers);
 
 /**
  * @swagger
- * /search:
+ * /all-users/search:
  *   get:
  *     summary: Search for a user by username
  *     description: Searches for a user by their username.

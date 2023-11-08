@@ -7,7 +7,7 @@ const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = re
 // User Routes
 /**
  * @swagger
- * /createProfile:
+ * /user/createProfile:
  *   post:
  *     summary: Create a user profile
  *     description: Creates a user profile by providing details such as first name, last name, birthday, gender, about, and profile picture (pfp).
@@ -15,71 +15,81 @@ const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = re
  *       - User
  *     security:
  *       - BearerAuth: []
- *     parameters:
- *       - name: body
- *         in: body
- *         description: User profile information.
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             firstName:
- *               type: string
- *               description: The first name of the user.
- *             lastName:
- *               type: string
- *               description: The last name of the user.
- *             bday:
- *               type: string
- *               description: The user's birthday in the format 'YYYY-MM-DD'.
- *             gender:
- *               type: string
- *               description: The gender of the user.
- *             about:
- *               type: string
- *               description: Information about the user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The first name of the user.
+ *               lastName:
+ *                 type: string
+ *                 description: The last name of the user.
+ *               bday:
+ *                 type: string
+ *                 format: date
+ *                 description: The user's birthday in the format 'YYYY-MM-DD'.
+ *               gender:
+ *                 type: string
+ *                 description: The gender of the user.
+ *               about:
+ *                 type: string
+ *                 description: Information about the user.
+ *               pfp:
+ *                 type: string
+ *                 format: binary
+ *                 description: The user profile picture (pfp).
  *     consumes:
  *       - multipart/form-data
  *     responses:
  *       200:
  *         description: User profile created and updated successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
  *       400:
  *         description: Invalid request data or missing fields.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the issue with the request data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the issue with the request data.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.post('/createProfile', auth, createProfile);
 
 /**
  * @swagger
- * /updatePfp:
+ * /user/updatePfp:
  *   put:
  *     summary: Update user profile picture (pfp)
  *     description: Updates the user's profile picture (pfp) by providing a new image file.
@@ -87,54 +97,65 @@ router.post('/createProfile', auth, createProfile);
  *       - User
  *     security:
  *       - BearerAuth: []
- *     parameters:
- *       - name: pfp
- *         in: formData
- *         description: The new user profile picture (pfp).
- *         required: true
- *         type: file
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pfp:
+ *                 type: string
+ *                 format: binary
+ *                 description: The new user profile picture (pfp).
  *     consumes:
  *       - multipart/form-data
  *     responses:
  *       200:
  *         description: User profile picture (pfp) updated successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
  *       400:
  *         description: Invalid request data or missing fields.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the issue with the request data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the issue with the request data.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.put('/updatePfp', auth, updatePfp);
 
 /**
  * @swagger
- * /updateAbout:
+ * /user/updateAbout:
  *   put:
  *     summary: Update user's about information
  *     description: Updates the user's about information by providing a new description.
@@ -142,57 +163,62 @@ router.put('/updatePfp', auth, updatePfp);
  *       - User
  *     security:
  *       - BearerAuth: []
- *     parameters:
- *       - name: body
- *         in: body
- *         description: New about information for the user's profile.
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             about:
- *               type: string
- *               description: The new about information for the user's profile.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               about:
+ *                 type: string
+ *                 description: The new about information for the user's profile.
  *     responses:
  *       200:
  *         description: User's about information updated successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
  *       400:
  *         description: Invalid request data or missing fields.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the issue with the request data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the issue with the request data.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.put('/updateAbout', auth, updateAbout);
 
 /**
  * @swagger
- * /deleteUser:
+ * /user/deleteUser:
  *   delete:
  *     summary: Delete user account
  *     description: Deletes a user's account, including their profile, posts, likes, comments, and user information.
@@ -228,7 +254,7 @@ router.delete('/deleteUser', auth, deleteUser);
 
 /**
  * @swagger
- * /getUserDetails:
+ * /user/getUserDetails:
  *   get:
  *     summary: Get user details
  *     description: Retrieves detailed information about a user, including their profile, friends, posts, likes, comments, and chat data.

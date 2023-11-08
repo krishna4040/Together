@@ -7,7 +7,7 @@ const { accessChat, fecthChat, createGroupChat, renameGroup, addToGroup, removeF
 // Chat Routes
 /**
  * @swagger
- * /accessChat:
+ * /chat/accessChat:
  *   post:
  *     summary: Access a chat with another user
  *     description: Access an existing chat or create a new chat with another user by providing their user ID.
@@ -25,40 +25,44 @@ const { accessChat, fecthChat, createGroupChat, renameGroup, addToGroup, removeF
  *           properties:
  *             userId:
  *               type: string
- *         example:
- *           userId: "user_id"
+ *           example:
+ *             userId: "user_id"
  *     responses:
  *       200:
  *         description: Chat found or created successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
- *             data:
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
- *               description: The chat information.
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 data:
+ *                   type: object
+ *                   description: The chat information.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.post('/createChat', auth, accessChat);
 
 /**
  * @swagger
- * /fetchChat:
+ * /chat/fetchChat:
  *   get:
  *     summary: Fetch user's chats
  *     description: Fetch all the chats in which the current user is participating.
@@ -99,7 +103,7 @@ router.get('/fecthUserChats', auth, fecthChat);
 
 /**
  * @swagger
- * /createGroupChat:
+ * /chat/createGroupChat:
  *   post:
  *     summary: Create a group chat
  *     description: Create a new group chat with multiple users.
@@ -127,35 +131,39 @@ router.get('/fecthUserChats', auth, fecthChat);
  *     responses:
  *       200:
  *         description: Group chat created successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
- *             data:
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
- *               description: Information about the created group chat.
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 data:
+ *                   type: object
+ *                   description: Information about the created group chat.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.post('/group', auth, createGroupChat);
 
 /**
  * @swagger
- * /renameGroup:
+ * /chat/renameGroup:
  *   put:
  *     summary: Rename a group chat
  *     description: Rename an existing group chat.
@@ -181,35 +189,39 @@ router.post('/group', auth, createGroupChat);
  *     responses:
  *       200:
  *         description: Group chat renamed successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
- *             data:
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
- *               description: Information about the updated group chat.
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 data:
+ *                   type: object
+ *                   description: Information about the updated group chat.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.put('/rename', auth, renameGroup);
 
 /**
  * @swagger
- * /removeFromGrp:
+ * /chat/removeFromGrp:
  *   put:
  *     summary: Remove a user from a group chat
  *     description: Remove a user from an existing group chat.
@@ -235,35 +247,39 @@ router.put('/rename', auth, renameGroup);
  *     responses:
  *       200:
  *         description: User removed from group chat successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
- *             data:
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
- *               description: Information about the updated group chat after user removal.
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 data:
+ *                   type: object
+ *                   description: Information about the updated group chat after user removal.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.put('/groupRemove', auth, removeFromGrp);
 
 /**
  * @swagger
- * /addToGroup:
+ * /chat/addToGroup:
  *   put:
  *     summary: Add a user to a group chat
  *     description: Add a user to an existing group chat.
@@ -289,29 +305,33 @@ router.put('/groupRemove', auth, removeFromGrp);
  *     responses:
  *       200:
  *         description: User added to group chat successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
- *             data:
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
- *               description: Information about the updated group chat after user addition.
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 data:
+ *                   type: object
+ *                   description: Information about the updated group chat after user addition.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.put('/groupAdd', auth, addToGroup);
 
