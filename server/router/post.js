@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost } = require('../controllers/post');
+const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost, getPostForUser } = require('../controllers/post');
 
 // Post Routes
 /**
@@ -80,48 +80,75 @@ router.post('/createPost', auth, createPost);
 
 /**
  * @swagger
- * /post/deletePost:
+ * /posts/deletePost:
  *   delete:
  *     summary: Delete a post
- *     description: Deletes a post by providing the post ID.
+ *     description: Deletes a post by providing the post ID and ensuring the user has the necessary permissions.
  *     tags:
  *       - Post
  *     security:
  *       - BearerAuth: []
  *     parameters:
- *       - name: body
- *         in: body
- *         description: Post ID to be deleted.
+ *       - name: postId
+ *         in: query
+ *         description: The ID of the post to delete.
  *         required: true
  *         schema:
- *           type: object
- *           properties:
- *             postId:
- *               type: string
- *               description: The ID of the post to be deleted.
+ *           type: string
+ *         example: post_id_here
  *     responses:
  *       200:
  *         description: Post deleted successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *       400:
+ *         description: Invalid request data or missing fields.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the issue with the request data.
+ *       403:
+ *         description: Unauthorized. The user does not have permission to delete the post.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message indicating the lack of permission.
  *       500:
  *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
  */
 router.delete('/deletePost', auth, deletePost);
 
@@ -366,5 +393,67 @@ router.get('/getPostComments/:postId', getPostComment);
  *                   description: An error message describing the internal server error.
  */
 router.post('/commentPost', auth, commentPost);
+
+/**
+ * @swagger
+ * /posts/getUserPost/{userId}:
+ *   get:
+ *     summary: Get posts for a specific user
+ *     description: Fetches posts created by a specific user based on their user ID.
+ *     tags:
+ *       - Post
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         description: The ID of the user for whom to fetch posts.
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: user_id_here
+ *     responses:
+ *       200:
+ *         description: User's posts retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation was successful (true for success).
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 data:
+ *                   type: array
+ *                   description: An array of posts created by the user.
+ *       400:
+ *         description: Invalid user ID or missing fields.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the issue with the request data.
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the operation failed (false for failure).
+ *                 message:
+ *                   type: string
+ *                   description: An error message describing the internal server error.
+ */
+router.get('/getUserPost/:userId', getPostForUser);
 
 module.exports = router;
