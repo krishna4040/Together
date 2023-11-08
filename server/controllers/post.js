@@ -80,7 +80,7 @@ exports.likePost = async (req, res) => {
 
 exports.unlikePost = async (req, res) => {
     try {
-        const { postId } = req.body;
+        const { postId } = req.query;
         if (!postId) {
             throw new Error('Post id is requiered');
         }
@@ -131,7 +131,7 @@ exports.commentPost = async (req, res) => {
 
 exports.likedPostByaUser = async (req, res) => {
     try {
-        const { id } = req.user;
+        const { id } = req.params;
         const allLikedPost = await Like.find({ user: id }).populate('post').exec();
         if (!allLikedPost) {
             throw new Error('no post liked yet');
@@ -151,7 +151,7 @@ exports.likedPostByaUser = async (req, res) => {
 
 exports.getPostComment = async (req, res) => {
     try {
-        const { postId } = req.body;
+        const { postId } = req.params;
         if (!postId) {
             throw new Error('post Id not found');
         }
