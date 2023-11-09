@@ -9,9 +9,7 @@ const FriendProfile = () => {
 
     const fecthFriend = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}searchByUsername`, {
-                userName
-            });
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
             setFriend(response.data.data[0]);
         } catch (error) {
             console.log(error);

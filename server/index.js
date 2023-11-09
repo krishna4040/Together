@@ -8,6 +8,7 @@ const { createServer } = require('http');
 const { Server } = require('socket.io');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const cors = require('cors');
 
 const allUserRouter = require('./router/all-users');
 const authRouter = require('./router/auth');
@@ -53,6 +54,10 @@ io.on('connection', (socket) => {
 dbConnect();
 cdConnect();
 
+app.use(cors({
+    origin: '*',
+    credentials: true
+}));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json({
     limit: '1mb'

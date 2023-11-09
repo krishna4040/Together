@@ -13,7 +13,7 @@ function Post({ title, imageSrc, likes, comments, _id }) {
 
     const handleDelete = async (_id) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}deletePost`, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/post/deletePost?postId=${_id}`, {
                 postId: _id
             }, {
                 headers: {

@@ -9,7 +9,7 @@ import { setToken } from '../../../store/slices/auth'
 const LoginForm = () => {
 
     const form = useForm();
-    const { register, control, handleSubmit, formState, reset } = form;
+    const { register, handleSubmit, formState, reset } = form;
     const { isSubmitSuccessful } = formState;
 
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ const LoginForm = () => {
 
     const sumbitHandler = async (data) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}login`, data);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, data);
             if (!response.data.success) {
                 throw new Error(response.data.message);
             }

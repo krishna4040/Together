@@ -69,7 +69,7 @@ exports.removeFriend = async (req, res) => {
 
 exports.getFriendsPost = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.user;
         const user = await User.findById(id);
         const friends = user.friends;
 

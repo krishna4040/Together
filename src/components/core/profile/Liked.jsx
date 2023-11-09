@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useSelector } from 'react-redux';
 import Post from './Post'
 
 const Liked = ({ user }) => {
 
     const [liked, setLiked] = useState([]);
-    const { token } = useSelector(state => state.user);
 
     const fecthLikedPosts = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}allLikedPost`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/likePostByaUser/${user._id}`);
             setLiked(response.data.data);
         } catch (error) {
             console.log(error);

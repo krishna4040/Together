@@ -283,7 +283,7 @@ router.delete('/unlikePost', unlikePost);
  *               type: string
  *               description: An error message describing the internal server error.
  */
-router.get('/allLikedPost/:id', likedPostByaUser);
+router.get('/likedPostByaUSer/:id', likedPostByaUser);
 
 /**
  * @swagger

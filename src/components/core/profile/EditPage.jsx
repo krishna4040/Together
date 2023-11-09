@@ -17,11 +17,14 @@ const EditPage = () => {
 
     const updatePfp = async (pfp) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}updatePfp`, { pfp }, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/updatePfp`, { pfp }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -29,11 +32,14 @@ const EditPage = () => {
 
     const updateAbout = async (about) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}updateAbout`, { about }, {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/user/updateAbout`, { about }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -60,7 +66,7 @@ const EditPage = () => {
 
     const deleteProfileHandler = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}deleteUser`, {}, {
+            const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/user/deleteUser`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

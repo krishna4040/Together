@@ -113,7 +113,7 @@ router.put('/removeFriend', auth, removeFriend);
  * @swagger
  * /friends/getFriendsPost/{id}:
  *   get:
- *     summary: Get posts from friends
+ *     summary: Get All posts of all the friends for a user
  *     description: Retrieves posts from the friends of a user by providing the user's ID.
  *     tags:
  *       - Friends
@@ -150,6 +150,6 @@ router.put('/removeFriend', auth, removeFriend);
  *               type: string
  *               description: An error message describing the internal server error.
  */
-router.get('/getFriendsPost/:id', getFriendsPost);
+router.get('/getFriendsPost', auth, getFriendsPost);
 
 module.exports = router;

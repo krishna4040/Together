@@ -32,7 +32,7 @@ const App = () => {
 
   const fecthUser = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}getUserDetails`, {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/user/getUserDetails`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

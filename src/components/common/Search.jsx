@@ -16,7 +16,7 @@ const Search = ({ setSearch }) => {
 
     const fecthUser = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}searchByUsername`, { userName });
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
             if (response.data.success) {
                 setUser(response.data.data[0]);
             }
@@ -27,13 +27,16 @@ const Search = ({ setSearch }) => {
 
     const connectHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}makeFriend`, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/makeFriend`, {
                 friendId: friend._id
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
             toast.success("friend connected");
             dispacth(setFriend(friend));
         } catch (error) {
@@ -43,13 +46,16 @@ const Search = ({ setSearch }) => {
 
     const removeHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}removeFriend`, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
                 friendId: friend._id
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
             toast.error("Friend removed");
             dispacth(removeFriend(friend._id));
         } catch (error) {

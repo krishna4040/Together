@@ -11,7 +11,11 @@ const FriendPostSection = () => {
 
     const fecthFriendsPosts = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/getFriendPost`, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/friends/getFriendsPost`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             setPosts(response.data.data);
         } catch (error) {
             console.log(error);
