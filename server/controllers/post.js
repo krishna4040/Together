@@ -35,10 +35,10 @@ exports.createPost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
     try {
-        const { postId } = req.body;
+        const { postId } = req.query;
         const userId = req.user.id;
         const deleted = await Post.findByIdAndDelete(postId);
-        const user = await User.findByIdAndUpdate(userId, { $pull: { posts: postId } });
+        await User.findByIdAndUpdate(userId, { $pull: { posts: postId } });
         res.status(200).json({
             success: true,
             message: 'Deleted succesfully'
@@ -80,7 +80,7 @@ exports.likePost = async (req, res) => {
 
 exports.unlikePost = async (req, res) => {
     try {
-        const { postId } = req.body;
+        const { postId } = req.query;
         if (!postId) {
             throw new Error('Post id is requiered');
         }
@@ -131,7 +131,7 @@ exports.commentPost = async (req, res) => {
 
 exports.likedPostByaUser = async (req, res) => {
     try {
-        const { id } = req.user;
+        const { id } = req.params;
         const allLikedPost = await Like.find({ user: id }).populate('post').exec();
         if (!allLikedPost) {
             throw new Error('no post liked yet');
@@ -151,7 +151,7 @@ exports.likedPostByaUser = async (req, res) => {
 
 exports.getPostComment = async (req, res) => {
     try {
-        const { postId } = req.body;
+        const { postId } = req.params;
         if (!postId) {
             throw new Error('post Id not found');
         }
@@ -161,6 +161,29 @@ exports.getPostComment = async (req, res) => {
             success: true,
             message: 'Comments for a Post fecthed',
             data: comments
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+exports.getPostForUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        if (!userId) {
+            throw new Error('user id not found');
+        }
+        const post = await Post.find({ user: userId });
+        if (!post) {
+            throw new Error('unable to find user posts');
+        }
+        res.status(200).json({
+            success: true,
+            message: 'fecthed user posts',
+            data: post
         });
     } catch (error) {
         res.status(500).json({

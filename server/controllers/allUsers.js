@@ -1,6 +1,6 @@
 const User = require('../models/User');
 
-exports.searchDatabase = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
     try {
         const { id } = req.user;
         const users = await User.find({ _id: { $ne: id } }).populate('profileDetails').exec();
@@ -20,9 +20,9 @@ exports.searchDatabase = async (req, res) => {
     }
 }
 
-exports.searchDbByUsername = async (req, res) => {
+exports.search = async (req, res) => {
     try {
-        const { userName } = req.body;
+        const { userName } = req.query;
         if (!userName) {
             throw new Error('userName not found');
         }

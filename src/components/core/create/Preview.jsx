@@ -14,7 +14,7 @@ const Preview = ({ setStep }) => {
 
     const clcikHandler = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}createPost`, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/post/createPost`, {
                 title: post.title,
                 desc: post.caption,
                 image: post.image

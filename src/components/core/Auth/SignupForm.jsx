@@ -23,7 +23,7 @@ const SignupForm = ({ setTab }) => {
             if (data.password !== data.confirmPassword) {
                 throw new Error('password do not macth');
             }
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}signup`, data);
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/signup`, data);
             if (!response.data.success) {
                 throw new Error(response.data.message);
             }

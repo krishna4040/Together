@@ -3,12 +3,18 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { BsFillCameraVideoFill } from 'react-icons/bs'
 import { BiSolidPhoneCall } from 'react-icons/bi'
+import { io } from 'socket.io-client'
 
 const ChatPage = ({ friend }) => {
 
     const { token } = useSelector(state => state.auth);
     const [chats, setChats] = useState({});
     const [sendText, setSendText] = useState('');
+
+    const socket = io("http://localhost:4000");
+    socket.on("connect", () => {
+        console.log(socket);
+    })
 
     const fecthPrevMessages = async () => {
         try {
