@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import insta from '../assets/insta.png'
 import LoginForm from '../components/core/Auth/LoginForm'
 import SignupForm from '../components/core/Auth/SignupForm'
+import VerificationForm from '../components/core/Auth/VeificationForm'
 
 const Auth = () => {
 
@@ -22,6 +23,7 @@ const Auth = () => {
                     <div className='min-h-[400px] p-4'>
                         {tab === 'signup' && <SignupForm setTab={setTab} />}
                         {tab === 'login' && <LoginForm />}
+                        {tab === 'verification' && <VerificationForm setTab={setTab} />}
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp } = require('../controllers/profile');
+const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp, updateFirstName, updateLastName, updateDob } = require('../controllers/profile');
 
 // User Routes
 /**
@@ -215,6 +215,9 @@ router.put('/updatePfp', auth, updatePfp);
  *                   description: An error message describing the internal server error.
  */
 router.put('/updateAbout', auth, updateAbout);
+router.put('/updatFirstName', auth, updateFirstName);
+router.put('/updateLastName', auth, updateLastName);
+router.put('/updateDob', auth, updateDob);
 
 /**
  * @swagger
