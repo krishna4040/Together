@@ -8,7 +8,7 @@ const OTP = require('../models/OTP');
 exports.signup = async (req, res) => {
     try {
         const { userName, email, password, otp } = req.body;
-        if (!userName || !email || !password) {
+        if (!userName || !email || !password || !otp) {
             throw new Error('All fields are required');
         }
         const check = await User.findOne({ email });

@@ -4,15 +4,20 @@ const authSlice = createSlice({
     name: 'user',
     initialState: {
         token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : null,
-        signupData: []
+        signupData: {
+            userName: null,
+            email: null,
+            password: null,
+            gender: null
+        }
     },
     reducers: {
         setToken: (state, action) => {
             state.token = action.payload;
         },
         setSignupData: (state, action) => {
-            state.signupData.push(action.payload);
-        }
+            state.signupData = action.payload;
+        },
     }
 });
 

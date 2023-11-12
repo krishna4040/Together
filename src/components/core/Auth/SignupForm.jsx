@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { setSignupData } from '../../../store/slices/auth'
 import { useDispatch } from 'react-redux'
+import axios from 'axios'
 
 const SignupForm = ({ setTab }) => {
 
@@ -19,19 +20,15 @@ const SignupForm = ({ setTab }) => {
 
     const sumbitHandler = async (data) => {
         try {
-            //     if (data.password !== data.confirmPassword) {
-            //         throw new Error('password do not macth');
-            //     }
-            //     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/signup`, data);
-            //     if (!response.data.success) {
-            //         throw new Error(response.data.message);
-            //     }
-            //     toast.success("signed up successfully");
             dispacth(setSignupData(data));
-            setTab("verification");
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, {
+                email: data.email
+            });
+            if (response.data.success) {
+                setTab("verification");
+            }
         } catch (error) {
-            console.log(error.message);
-            toast.error("unable to sign up");
+            toast.error(error.response.data.message);
         }
     }
 

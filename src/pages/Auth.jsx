@@ -17,7 +17,10 @@ const Auth = () => {
                 </div>
                 <div className='flex flex-col w-full gap-5 lg:w-1/2'>
                     <div className='flex items-center justify-center gap-10'>
-                        <button onClick={() => { setTab('signup') }} className={`text-white uppercase transition-all duration-200 ${tab === 'signup' ? 'btn solid info' : ''}`}>Signup</button>
+                        <button onClick={() => { setTab('signup') }} className={`text-white uppercase transition-all duration-200 ${tab === 'signup' || tab === 'verification' ? 'btn solid info' : ''}`}>
+                            {(tab === 'signup' || tab === 'login') && "Signup"}
+                            {tab === 'verification' && "Verify"}
+                        </button>
                         <button onClick={() => { setTab('login') }} className={`text-white uppercase transition-all duration-200 ${tab === 'login' ? 'btn solid info' : ''}`}>Login</button>
                     </div>
                     <div className='min-h-[400px] p-4'>
