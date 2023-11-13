@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dicebear/collection": "^7.0.1",
+    "@dicebear/core": "^7.0.1",
     "@socket.io/mongo-adapter": "^0.3.0",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",

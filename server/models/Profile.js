@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const cloudinary = require('cloudinary').v2
 
 /**
  * @swagger
@@ -39,16 +40,35 @@ const mongoose = require('mongoose');
  */
 
 const profileSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    dob: Date,
-    age: Number,
+    firstName: {
+        type: String,
+        default: ''
+    },
+    lastName: {
+        type: String,
+        default: ''
+    },
+    dob: {
+        type: Date,
+        default: null
+    },
+    age: {
+        type: Number,
+        default: null
+    },
     gender: {
         type: String,
-        enum: ['Male', 'Female', 'Other']
+        enum: ['Male', 'Female', 'Other'],
+        requiered: true
     },
-    about: String,
-    pfp: String,
+    about: {
+        type: String,
+        default: 'New to together'
+    },
+    pfp: {
+        type: String,
+        requiered: true
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

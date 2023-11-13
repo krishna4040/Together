@@ -6,26 +6,21 @@ const Comment = require('../models/Comment');
 const Chat = require('../models/Chat');
 const { cdupload } = require('../utils/cloudinary');
 require('dotenv').config();
+const cloudinary = require('cloudinary').v2;
 
 exports.createProfile = async (req, res) => {
     try {
-        const { id } = req.user;
-        const { firstName, lastName, bday, gender, about } = req.body;
-        const dob = new Date(bday);
-        const { pfp } = req.files;
-        if (!firstName || !lastName || !pfp || !dob || !gender || !about) {
-            throw new Error('All feilds are requiered');
+        const { gender, id } = req.body;
+        let pfp;
+        if (gender === 'Male') {
+            pfp = cloudinary.url('Together/Firefly_user_icon_45739_yj31wj');
+        } else {
+            pfp = cloudinary.url('Together/Firefly_user_icon_72437_ne1d0o');
         }
-        const uploaded = await cdupload(pfp, process.env.FOLDER);
         const data = await Profile.create({
-            firstName,
-            lastName,
             gender,
-            about,
-            pfp: uploaded,
+            pfp,
             user: id,
-            dob,
-            age: new Date().getFullYear() - dob.getFullYear()
         });
         if (!data) {
             throw new Error('unable to update profile');
@@ -147,6 +142,68 @@ exports.updateAbout = async (req, res) => {
         res.status(200).json({
             success: true,
             messgae: 'about updated successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            messgae: error.message
+        });
+    }
+}
+
+exports.updateFirstName = async (req, res) => {
+    try {
+        const { firstName } = req.body;
+        const { id } = req.user;
+        if (!firstName) {
+            throw new Error('firstName not found');
+        }
+        await Profile.findOneAndUpdate({ user: id }, { firstName });
+        res.status(200).json({
+            success: true,
+            messgae: 'firstName updated successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            messgae: error.message
+        });
+    }
+}
+
+exports.updateLastName = async (req, res) => {
+    try {
+        const { lastName } = req.body;
+        const { id } = req.user;
+        if (!lastName) {
+            throw new Error('lastName not found');
+        }
+        await Profile.findOneAndUpdate({ user: id }, { lastName });
+        res.status(200).json({
+            success: true,
+            messgae: 'about lastName successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            messgae: error.message
+        });
+    }
+}
+
+exports.updateDob = async (req, res) => {
+    try {
+        const { bday } = req.body;
+        const { id } = req.user;
+        if (!bday) {
+            throw new Error('bDay not found');
+        }
+        const dob = new Date(bday);
+        const age = new Date().getFullYear() - dob.getFullYear();
+        await Profile.findOneAndUpdate({ user: id }, { dob, age });
+        res.status(200).json({
+            success: true,
+            messgae: 'dob and age updated successfully'
         });
     } catch (error) {
         res.status(500).json({
