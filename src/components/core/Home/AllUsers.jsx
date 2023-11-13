@@ -76,7 +76,7 @@ const AllUsers = () => {
                                 <tr key={index}>
                                     <td>
                                         <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
-                                            <img src={user.profileDetails.pfp} alt="user_image" className='w-full' />
+                                            <img src={user?.profileDetails?.pfp} alt="user_image" className='w-full' />
                                         </div>
                                     </td>
                                     <td>

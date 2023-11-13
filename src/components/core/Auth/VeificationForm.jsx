@@ -7,7 +7,6 @@ import axios from 'axios';
 const VeificationForm = ({ setTab }) => {
 
     const { signupData } = useSelector(state => state.auth);
-    const { token } = useSelector(state => state.auth);
     const [otp, setOtp] = useState('');
 
     const connectHandler = async () => {
@@ -19,12 +18,10 @@ const VeificationForm = ({ setTab }) => {
                 otp: otp
             });
             // profile creation 
-            const profileRes = await axios.post(`${import.meta.env.VITE_BASE_URL}/profile/createProfile`, {
-                gender: signupData.gender
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+            const id = response.data.data._id;
+            const profileRes = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/createProfile`, {
+                gender: signupData.gender,
+                id
             });
             if (!response || !profileRes) {
                 throw new Error(`Could not create profile`);

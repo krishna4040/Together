@@ -85,7 +85,7 @@ const { deleteUser, getUserDetails, createProfile, updateAbout, updatePfp, updat
  *                   type: string
  *                   description: An error message describing the internal server error.
  */
-router.post('/createProfile', auth, createProfile);
+router.post('/createProfile', createProfile);
 
 /**
  * @swagger

@@ -10,8 +10,7 @@ const cloudinary = require('cloudinary').v2;
 
 exports.createProfile = async (req, res) => {
     try {
-        const { id } = req.user;
-        const { gender } = req.body;
+        const { gender, id } = req.body;
         let pfp;
         if (gender === 'Male') {
             pfp = cloudinary.url('Together/Firefly_user_icon_45739_yj31wj');
