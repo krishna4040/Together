@@ -37,6 +37,19 @@ const VeificationForm = ({ setTab }) => {
         }
     }
 
+    const resendHandler = async () => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, {
+                email: signupData.email
+            });
+            if (response.data.success) {
+                toast.success("otp resent successfully");
+            }
+        } catch ({ response }) {
+            toast.error(response.data.message);
+        }
+    }
+
     return (
         <div className='flex flex-col justify-center gap-5'>
             <p className='text-white capitalize'>An OTP has been sent to your email account {signupData.email}</p>
@@ -70,8 +83,8 @@ const VeificationForm = ({ setTab }) => {
                         fontSize: '30px'
                     }}
                 />
-                {/* <input type="text" value={otp} onChange={(event) => { setOtp(event.target.value) }} /> */}
             </div>
+            <button className='text-white' onClick={resendHandler}>Resend otp</button>
             <button className='w-24 btn solid success' onClick={connectHandler}>Connect</button>
         </div>
     )
