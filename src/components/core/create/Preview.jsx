@@ -9,7 +9,7 @@ const Preview = ({ setStep }) => {
 
     const post = useSelector(state => state.post);
     const user = useSelector(state => state.user);
-    const { token } = useSelector(state => state.user);
+    const { token } = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     const clcikHandler = async () => {
@@ -17,9 +17,10 @@ const Preview = ({ setStep }) => {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/post/createPost`, {
                 title: post.title,
                 desc: post.caption,
-                image: post.image
+                image: post.image.uploadImage
             }, {
                 headers: {
+                    "Content-Type": 'multipart/form-data',
                     Authorization: `Bearer ${token}`
                 }
             });
@@ -51,7 +52,7 @@ const Preview = ({ setStep }) => {
                         <h1 className='text-xl text-white capitalize'>{user.userName}</h1>
                     </div>
                     <div className='relative lg:w-[400px] w-full mx-auto'>
-                        <img src={post.image} alt="post_here" />
+                        <img src={post.image.displayImage} alt="post_here" />
                     </div>
                     <div className='flex items-center gap-3'>
                         <AiOutlineHeart className='text-3xl text-white' />

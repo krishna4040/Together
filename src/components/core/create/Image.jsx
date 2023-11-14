@@ -1,19 +1,21 @@
 import React, { useRef, useState } from 'react'
-import { setImage } from '../../../store/slices/post'
+import { setDisplayImage, setUploadImage } from '../../../store/slices/post'
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 
 const Image = ({ setStep }) => {
 
-    const [postImage, setPostImage] = useState(null);
+    const [uploadPostImage, setUploadPostImage] = useState(null);
+    const [displayPostImage, setDisplayPostImage] = useState(null);
     const dispacth = useDispatch();
 
     const clickHandler = () => {
-        if (!postImage) {
+        if (!uploadPostImage || !displayPostImage) {
             toast.error("please provide a post image");
             return;
         }
-        dispacth(setImage(postImage));
+        dispacth(setUploadImage(uploadPostImage));
+        dispacth(setDisplayImage(displayPostImage));
         setStep("caption");
     }
 
@@ -25,9 +27,10 @@ const Image = ({ setStep }) => {
 
     const changeHandler = (event) => {
         const selectedImage = event.target.files[0];
+        setUploadPostImage(selectedImage);
         const reader = new FileReader();
         reader.onload = () => {
-            setPostImage(reader.result);
+            setDisplayPostImage(reader.result);
         };
         reader.readAsDataURL(selectedImage);
     }
@@ -38,7 +41,7 @@ const Image = ({ setStep }) => {
                 <h1 className='text-3xl font-semibold text-white'>Set Image For The Post</h1>
                 <input type='file' className='hidden' ref={fileInputRef} onChange={changeHandler} />
                 <div className=''>
-                    <img src={postImage} alt="preview_Image" />
+                    <img src={displayPostImage} alt="preview_Image" className={`${displayPostImage ? 'block' : 'hidden'}`} />
                 </div>
                 <div className='flex items-center justify-start gap-5'>
                     <button className='bn29' onClick={chooseHandler}>Choose</button>

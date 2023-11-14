@@ -4,7 +4,10 @@ const postSlice = createSlice({
     name: 'post',
     initialState: {
         title: null,
-        image: null,
+        image: {
+            displayImage: null,
+            uploadImage: null
+        },
         caption: null,
     },
     reducers: {
@@ -14,8 +17,11 @@ const postSlice = createSlice({
         setCation: (state, action) => {
             state.caption = action.payload;
         },
-        setImage: (state, action) => {
-            state.image = action.payload;
+        setDisplayImage: (state, action) => {
+            state.image.displayImage = action.payload;
+        },
+        setUploadImage: (state, action) => {
+            state.image.uploadImage = action.payload;
         },
         resetAll: (state, action) => {
             state.title = null;
@@ -25,5 +31,5 @@ const postSlice = createSlice({
     }
 });
 
-export const { setTitle, setCation, setImage, resetAll } = postSlice.actions;
+export const { setTitle, setCation, setDisplayImage, setUploadImage, resetAll } = postSlice.actions;
 export default postSlice.reducer;

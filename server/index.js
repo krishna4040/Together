@@ -2,7 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const { dbConnect } = require('./config/dbConnect');
 const { cdConnect } = require('./config/cdConnect');
-const expressFileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
@@ -60,13 +60,13 @@ app.use(cors({
 }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json({
-    limit: '1mb'
+    limit: '50mb'
+}));
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
 }));
 app.use(cookieParser());
-app.use(expressFileUpload({
-    useTempFiles: true,
-    tempFileDir: '/temp/'
-}));
 
 app.use('/api/v1/all-users', allUserRouter);
 app.use('/api/v1/user', userRouter);
