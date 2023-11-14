@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { getAllUsers, search } = require('../controllers/allUsers');
+const { getAllUsers, search, getUserNameSuggestions } = require('../controllers/allUsers');
 
 // AllUsers
 /**
@@ -86,5 +86,7 @@ router.get('/getAllUsers', auth, getAllUsers);
  *               description: An error message describing the internal server error.
  */
 router.get('/search', search);
+
+router.get('/suggestion', getUserNameSuggestions);
 
 module.exports = router;

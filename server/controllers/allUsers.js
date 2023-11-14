@@ -42,3 +42,26 @@ exports.search = async (req, res) => {
         });
     }
 }
+
+exports.getUserNameSuggestions = async (req, res) => {
+    try {
+        const { q } = req.query;
+        const regex = new RegExp(q, i);
+        const suggestions = await User.find({ userName: regex })
+            .select('userName')
+            .populate({
+                path: 'profileDetails',
+                select: 'pfp'
+            });
+        res.status(200).json({
+            success: true,
+            message: 'suggestions fecthed',
+            data: suggestions
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
