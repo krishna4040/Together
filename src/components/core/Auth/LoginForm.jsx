@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
@@ -21,8 +21,9 @@ const LoginForm = () => {
         }
     }, [isSubmitSuccessful])
 
-    const sumbitHandler = async (data) => {
+    const sumbitHandler = useCallback(async (data) => {
         try {
+            console.log("login");
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, data);
             if (!response.data.success) {
                 throw new Error(response.data.message);
@@ -35,7 +36,7 @@ const LoginForm = () => {
             console.log(error.message);
             toast.error("unable to sign in");
         }
-    }
+    }, [])
 
     return (
         <form onSubmit={handleSubmit(sumbitHandler)} className='flex flex-col justify-center gap-5'>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { setSignupData } from '../../../store/slices/auth'
@@ -18,8 +18,9 @@ const SignupForm = ({ setTab }) => {
         }
     }, [isSubmitSuccessful]);
 
-    const sumbitHandler = async (data) => {
+    const sumbitHandler = useCallback(async (data) => {
         try {
+            console.log("singup");
             dispacth(setSignupData(data));
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, {
                 email: data.email
@@ -30,7 +31,7 @@ const SignupForm = ({ setTab }) => {
         } catch (error) {
             toast.error(error.response.data.message);
         }
-    }
+    }, []);
 
     return (
         <form onSubmit={handleSubmit(sumbitHandler)} className='flex flex-col justify-center gap-5'>
@@ -46,7 +47,14 @@ const SignupForm = ({ setTab }) => {
                     </tr>
                     <tr>
                         <td><label htmlFor="gender" className='text-xs text-white uppercase w-fit'>Gender</label></td>
-                        <td><input type="text" {...register('gender', { required: true })} className='text-white input success lg' placeholder='Select Your Gender' autoComplete='off' /></td>
+                        {/* <td><input type="text" {...register('gender', { required: true })} className='text-white input success lg' placeholder='Select Your Gender' autoComplete='off' /></td> */}
+                        <td>
+                            <select {...register("gender")} className='text-[rgba(180,223,196)] input success lg bg-slate-950'>
+                                <option value="DEFAULT">Select Your Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <td><label htmlFor="password" className='text-xs text-white uppercase w-fit'>Password:</label></td>
@@ -59,7 +67,7 @@ const SignupForm = ({ setTab }) => {
                 </tbody>
             </table>
 
-            <button className='w-24 btn solid success'>Verify Email</button>
+            <button className='w-32 btn solid success'>Verify Email</button>
 
         </form>
     )
