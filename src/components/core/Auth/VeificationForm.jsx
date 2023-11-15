@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import OTPInput from 'react-otp-input';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { setUserId } from '../../../store/slices/auth'
 
 const VeificationForm = ({ setTab }) => {
 
@@ -12,22 +13,16 @@ const VeificationForm = ({ setTab }) => {
     const connectHandler = async () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/signup`, {
-                userName: signupData.userName,
                 email: signupData.email,
                 password: signupData.password,
                 otp: otp
             });
-            // profile creation 
-            const id = response.data.data._id;
-            const profileRes = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/createProfile`, {
-                gender: signupData.gender,
-                id
-            });
-            if (!response || !profileRes) {
-                throw new Error(`Could not create profile`);
+            if (!response.data.success) {
+                toast.error(response.data.message);
             }
+            setUserId(response.data.data._id);
             toast.success('signed up succesfully');
-            setTab('login');
+            setTab('profile');
         } catch (error) {
             toast.error(error.message);
             console.log(error);

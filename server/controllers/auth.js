@@ -7,15 +7,14 @@ const OTP = require('../models/OTP');
 
 exports.signup = async (req, res) => {
     try {
-        const { userName, email, password, otp } = req.body;
-        if (!userName || !email || !password || !otp) {
+        const { email, password, otp } = req.body;
+        if (!email || !password || !otp) {
             throw new Error('All fields are required');
         }
         const check = await User.findOne({ email });
         if (check) {
             throw new Error('user already signed up');
         }
-
         // Email-verification
         const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
         if (!response.length) {
@@ -24,11 +23,10 @@ exports.signup = async (req, res) => {
         if (otp != response[0].otp) {
             throw new Error('Invalid OTP');
         }
-
         const hash = await bcrypt.hash(password, 10);
-        const user = await User.create({ userName, email, password: hash });
+        const user = await User.create({ email, password: hash });
         if (!user) {
-            throw new Error('smth went wring while signing up');
+            throw new Error('smth went wrong while signing up');
         }
         res.status(200).json({
             success: true,

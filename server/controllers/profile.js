@@ -10,7 +10,7 @@ const cloudinary = require('cloudinary').v2;
 
 exports.createProfile = async (req, res) => {
     try {
-        const { gender, id } = req.body;
+        const { gender, id, userName } = req.body;
         let pfp;
         if (gender === 'Male') {
             pfp = cloudinary.url('Together/Firefly_user_icon_45739_yj31wj');
@@ -25,9 +25,7 @@ exports.createProfile = async (req, res) => {
         if (!data) {
             throw new Error('unable to update profile');
         }
-        const user = await User.findById(id);
-        user.profileDetails = data._id;
-        user.save();
+        const user = await User.findByIdAndUpdate(id, { userName, profileDetails: data._id });
         res.status(200).json({
             success: true,
             message: 'Profile updated successfully'
@@ -37,6 +35,7 @@ exports.createProfile = async (req, res) => {
             success: false,
             message: error.message,
         });
+        console.log(error);
     }
 }
 
