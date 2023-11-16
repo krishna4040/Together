@@ -21,7 +21,7 @@ const FriendProfile = () => {
 
     useEffect(() => {
         fecthFriend();
-    }, []);
+    }, [friend]);
 
     return (
         <div className='min-h-screen text-white bg-black'>
@@ -30,7 +30,7 @@ const FriendProfile = () => {
                 <>
                     <div className='flex items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400'>
                         <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
-                            <img src={friend.profileDetails.pfp} alt="friend" className='w-full' />
+                            <img src={friend?.profileDetails?.pfp} alt="friend" className='w-full' />
                         </div>
                         <div className='flex flex-col justify-center gap-5 p-4'>
                             <div className='flex items-center justify-center gap-3'>
@@ -56,7 +56,7 @@ const FriendProfile = () => {
                             </div>
                         </div>
                         {step === 'posts' && <Posts friend={friend} />}
-                        {step === 'friends' && <Friends friend={friend} />}
+                        {step === 'friends' && <Friends friend={friend} setStep={setStep} />}
                     </div>
                 </>
             }

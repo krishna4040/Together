@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Friends = ({ friend }) => {
+const Friends = ({ friend, setStep }) => {
 
     const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
@@ -10,7 +10,6 @@ const Friends = ({ friend }) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/friends/getFriends?id=${friend._id}`);
             setFriends(response.data.data);
-            console.log(response.data.data);
         } catch (error) {
             console.log(error);
         }
@@ -41,11 +40,11 @@ const Friends = ({ friend }) => {
                                 <tr key={index}>
                                     <td>
                                         <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
-                                            <img src={friend.profileDetails.pfp} alt="pfp" />
+                                            <img src={friend?.profileDetails?.pfp} alt="pfp" />
                                         </div>
                                     </td>
                                     <td>{friend.userName}</td>
-                                    <td><button onClick={() => { navigate(`/view-profile/${friend.userName}`) }} className='btn light info'>Visit</button></td>
+                                    <td><button onClick={() => { navigate(`/view-profile/${friend.userName}`); setStep("posts") }} className='btn light info'>Visit</button></td>
                                 </tr>
                             )
                         })
