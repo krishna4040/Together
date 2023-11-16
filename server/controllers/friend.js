@@ -67,31 +67,6 @@ exports.removeFriend = async (req, res) => {
     }
 }
 
-exports.getFriendsPost = async (req, res) => {
-    try {
-        const { id } = req.user;
-        const user = await User.findById(id);
-        const friends = user.friends;
-
-        const allPost = [];
-        for (let i = 0; i < friends.length; i++) {
-            const friendsPost = await Post.find({ user: friends[i] }).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).exec();
-            allPost.push(friendsPost);
-        }
-
-        res.status(200).json({
-            success: true,
-            message: 'fecthed friends posts successfully',
-            data: allPost
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-}
-
 exports.getFriends = async (req, res) => {
     try {
         const { id } = req.query;
