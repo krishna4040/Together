@@ -20,7 +20,6 @@ const SignupForm = ({ setTab }) => {
 
     const sumbitHandler = useCallback(async (data) => {
         try {
-            console.log("singup");
             dispacth(setSignupData(data));
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, {
                 email: data.email
@@ -29,7 +28,7 @@ const SignupForm = ({ setTab }) => {
                 setTab("verification");
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error);
         }
     }, []);
 

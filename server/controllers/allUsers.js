@@ -46,7 +46,7 @@ exports.search = async (req, res) => {
 exports.getUserNameSuggestions = async (req, res) => {
     try {
         const { q } = req.query;
-        const regex = new RegExp(q, i);
+        const regex = new RegExp(q, 'i');
         const suggestions = await User.find({ userName: regex })
             .select('userName')
             .populate({

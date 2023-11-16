@@ -10,23 +10,61 @@ const Friends = ({ user }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="grid grid-cols-1 gap-4 p-4 text-black sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center">
-            {
-                user.friends.map((friend, index) => (
-                    <div key={index} className="p-4 bg-white rounded-lg shadow">
-                        <img
-                            src={friend.profileDetails.pfp}
-                            alt={friend.userName}
-                            className="object-cover w-full h-40 mb-4 rounded-lg"
-                        />
-                        <p className="text-xl font-semibold">{friend.userName}</p>
-                        <button className="px-4 py-2 mt-2 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
-                            onClick={() => { navigate(`/view-profile/${friend.userName}`) }}
-                        >
-                            View Profile
-                        </button>
-                    </div>
-                ))}
+        <div className='flex items-center justify-center ml-[200px] gap-28'>
+            <table className='border border-separate border-spacing-4'>
+                <thead>
+                    <tr>
+                        <th>Profile</th>
+                        <th>Username</th>
+                        <th>Visit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        user.friends.map((friend, index) => {
+                            return (
+                                index < Math.ceil(user.friends.length / 2) &&
+                                <tr key={index}>
+                                    <td>
+                                        <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
+                                            <img src={friend.profileDetails.pfp} alt="pfp" />
+                                        </div>
+                                    </td>
+                                    <td>{friend.userName}</td>
+                                    <td><button onClick={() => { navigate(`/view-profile/${friend.userName}`) }} className='btn light info'>Visit</button></td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
+            <table className='border border-separate border-spacing-4'>
+                <thead>
+                    <tr>
+                        <th>Profile</th>
+                        <th>Username</th>
+                        <th>Visit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        user.friends.map((friend, index) => {
+                            return (
+                                index >= Math.ceil(user.friends.length / 2) &&
+                                <tr key={index}>
+                                    <td>
+                                        <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
+                                            <img src={friend.profileDetails.pfp} alt="pfp" />
+                                        </div>
+                                    </td>
+                                    <td>{friend.userName}</td>
+                                    <td><button onClick={() => { navigate(`/view-profile/${friend.userName}`) }} className='btn light info'>Visit</button></td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
         </div>
     )
 }

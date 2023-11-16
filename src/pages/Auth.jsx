@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import insta from '../assets/insta.png'
+import bg from '../assets/bg.svg'
 import LoginForm from '../components/core/Auth/LoginForm'
 import SignupForm from '../components/core/Auth/SignupForm'
 import VerificationForm from '../components/core/Auth/VeificationForm'
@@ -10,7 +11,9 @@ const Auth = () => {
     const [tab, setTab] = useState('signup');
 
     return (
-        <section className='flex flex-col justify-center h-screen gap-10 p-2 lg:gap-5 lg:overflow-hidden bg-gray-950'>
+        <section className='flex flex-col justify-center h-screen gap-10 p-2 bg-cover lg:gap-5 lg:overflow-hidden' style={{
+            backgroundImage: `url(${bg})`,
+        }}>
             <h1 className='p-2 text-5xl font-bold text-center text-white font-Confortaa'>Together</h1>
             <div className='flex flex-col items-center justify-center gap-20 p-2 lg:flex-row'>
                 <div className='items-center justify-center hidden overflow-hidden lg:flex'>

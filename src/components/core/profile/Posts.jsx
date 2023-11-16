@@ -8,7 +8,7 @@ const Posts = ({ user }) => {
     }
 
     return (
-        <div className='text-5xl text-white ml-[200px]'>
+        <div className='text-5xl text-white ml-[200px] flex items-center justify-start flex-wrap gap-5'>
             {
                 user.posts.map(post => {
                     return (
