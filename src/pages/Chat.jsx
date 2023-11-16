@@ -17,7 +17,7 @@ const Chat = () => {
                                 <tr key={index}>
                                     <td>
                                         <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
-                                            <img src={friend.profileDetails.pfp} alt="user_image" className='w-full' />
+                                            <img src={friend?.profileDetails?.pfp} alt="user_image" className='w-full' />
                                         </div>
                                     </td>
                                     <td>
