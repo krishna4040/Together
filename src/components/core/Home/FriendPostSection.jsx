@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
 import toast from 'react-hot-toast';
 import { AiOutlineHeart, AiTwotoneHeart, AiOutlineComment } from 'react-icons/ai'
 
@@ -18,14 +17,12 @@ const FriendPostSection = () => {
         }
     }
 
-    console.log(posts);
-
     useEffect(() => {
         fecthFriendsPosts();
     }, []);
 
     return (
-        <div className='flex flex-col items-center justify-center w-full gap-10 lg:mt-28'>
+        <div className='flex flex-col items-center justify-center w-full gap-10 p-4'>
             {
                 posts.map((post, index) => {
                     return (

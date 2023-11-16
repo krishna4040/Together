@@ -24,7 +24,7 @@ const Friends = ({ friend, setStep }) => {
     }
 
     return (
-        <div className='flex items-start justify-start ml-[200px] gap-28 overflow-y-auto overflow-x-hidden h-[400px]'>
+        <div className='flex lg:flex-row flex-col items-start justify-start lg:ml-[200px] gap-28 overflow-y-auto lg:h-[400px] mb-20 lg:mb-0'>
             <table className='border-separate border-spacing-4'>
                 <thead>
                     <tr>

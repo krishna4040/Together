@@ -18,7 +18,7 @@ const Title = ({ setStep }) => {
     }
 
     return (
-        <div className='w-[500px] p-5 flex flex-col items-start justify-center gap-10'>
+        <div className='lg:w-[500px] w-full p-5 flex flex-col items-start justify-center gap-10'>
             <div className='flex flex-col items-start justify-center gap-5'>
                 <h1 className='text-3xl font-semibold text-white'>Set Title For The Post</h1>
                 <input className='input success xl' placeholder='Enter Title of Your Post' onChange={(event) => { setPostTitle(event.target.value) }} />
@@ -36,7 +36,7 @@ const Title = ({ setStep }) => {
                     <li>Start a Discussion</li>
                     <li>Tell Your Story</li>
                 </ul>
-                <ul className='text-lg text-white list-disc'>
+                <ul className='hidden text-lg text-white list-disc lg:block'>
                     <li>Create a New Post</li>
                     <li>Share Your Thoughts</li>
                     <li>Craft Your Post</li>

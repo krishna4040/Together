@@ -20,11 +20,11 @@ const Posts = ({ friend }) => {
     }, []);
 
     if (!posts.length) {
-        return <p className='relative text-xl text-center text-white capitalize translate-x-24'>No Post Posted Yet</p>
+        return <p className='relative text-xl text-center text-white capitalize lg:translate-x-24'>No Post Posted Yet</p>
     }
 
     return (
-        <div className='text-5xl text-white ml-[200px] flex items-center justify-start flex-wrap gap-5'>
+        <div className='text-5xl text-white lg:ml-[200px] flex items-center justify-start flex-wrap gap-5 mb-20 lg:mb-0'>
             {
                 posts.map(post => {
                     return (

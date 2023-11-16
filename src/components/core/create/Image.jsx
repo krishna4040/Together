@@ -36,7 +36,7 @@ const Image = ({ setStep }) => {
     }
 
     return (
-        <div className='w-[500px] p-5 flex flex-col items-start justify-center gap-10'>
+        <div className='lg:w-[500px] w-full p-5 flex flex-col items-start justify-center gap-10'>
             <div className='flex flex-col items-start justify-center gap-5'>
                 <h1 className='text-3xl font-semibold text-white'>Set Image For The Post</h1>
                 <input type='file' className='hidden' ref={fileInputRef} onChange={changeHandler} />

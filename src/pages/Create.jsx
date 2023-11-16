@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Title from '../components/core/create/Title'
 import Image from '../components/core/create/Image'
@@ -10,7 +10,7 @@ function Create() {
     const [step, setStep] = useState('title');
 
     return (
-        <div className="min-w-screen ml-[200px] min-h-screen bg-black p-10 flex flex-col items-center justify-start gap-20">
+        <div className="min-w-screen lg:ml-[200px] min-h-screen bg-black p-10 flex flex-col items-center justify-start gap-20">
             <div className='steps success top'>
                 <div className={`step text-white active`}>
                     Title

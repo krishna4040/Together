@@ -28,7 +28,7 @@ const FriendProfile = () => {
             {
                 Object.keys(friend).length &&
                 <>
-                    <div className='flex items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400'>
+                    <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400 lg:flex-row'>
                         <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
                             <img src={friend?.profileDetails?.pfp} alt="friend" className='w-full' />
                         </div>
@@ -40,14 +40,14 @@ const FriendProfile = () => {
                                 <p>{friend.posts.length} Posts</p>
                                 <p>{friend.friends.length} Friends</p>
                             </div>
-                            <div>
+                            <div className='flex flex-row items-center justify-start gap-2 lg:flex-col lg:justify-start lg:items-start'>
                                 <p className='text-xs uppercase'>About:</p>
                                 <p>{friend.profileDetails.about}</p>
                             </div>
                         </div>
                     </div>
-                    <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto'>
-                        <div className='text-white tabs bordered success bottom ml-[200px]'>
+                    <div className='flex flex-col items-center justify-center w-full gap-5 p-8 lg:w-11/12 lg:ml-auto'>
+                        <div className='text-white tabs bordered success bottom lg:ml-[200px]'>
                             <div className={`p-4 tab ${step === 'posts' ? 'active' : null}`} onClick={() => { setStep('posts') }}>
                                 Posts
                             </div>
