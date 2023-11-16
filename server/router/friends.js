@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { makeFriend, removeFriend, getFriendsPost } = require('../controllers/friend');
+const { makeFriend, removeFriend, getFriendsPost, getFriends } = require('../controllers/friend');
 
 // Friends Routes
 /**
@@ -151,5 +151,7 @@ router.put('/removeFriend', auth, removeFriend);
  *               description: An error message describing the internal server error.
  */
 router.get('/getFriendsPost', auth, getFriendsPost);
+
+router.get('/getFriends', getFriends);
 
 module.exports = router;

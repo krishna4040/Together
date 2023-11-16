@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Posts from '../components/core/friendsProfile/Posts'
+import Friends from '../components/core/friendsProfile/Friends'
 
 const FriendProfile = () => {
 
     const { userName } = useParams();
     const [friend, setFriend] = useState({});
+    const [step, setStep] = useState('posts');
 
     const fecthFriend = async () => {
         try {
@@ -42,6 +45,18 @@ const FriendProfile = () => {
                                 <p>{friend.profileDetails.about}</p>
                             </div>
                         </div>
+                    </div>
+                    <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto'>
+                        <div className='text-white tabs bordered success bottom ml-[200px]'>
+                            <div className={`p-4 tab ${step === 'posts' ? 'active' : null}`} onClick={() => { setStep('posts') }}>
+                                Posts
+                            </div>
+                            <div className={`p-4 tab ${step === 'friends' ? 'active' : null}`} onClick={() => { setStep('friends') }}>
+                                Friends
+                            </div>
+                        </div>
+                        {step === 'posts' && <Posts friend={friend} />}
+                        {step === 'friends' && <Friends friend={friend} />}
                     </div>
                 </>
             }
