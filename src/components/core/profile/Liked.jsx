@@ -8,7 +8,7 @@ const Liked = ({ user }) => {
 
     const fecthLikedPosts = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/likePostByaUser/${user._id}`);
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/likedPostByaUser/${user._id}`);
             setLiked(response.data.data);
         } catch (error) {
             console.log(error);

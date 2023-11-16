@@ -23,7 +23,6 @@ const LoginForm = () => {
 
     const sumbitHandler = useCallback(async (data) => {
         try {
-            console.log("login");
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, data);
             if (!response.data.success) {
                 throw new Error(response.data.message);
@@ -33,7 +32,7 @@ const LoginForm = () => {
             dispacth(setToken(response.data.token));
             navigate('/');
         } catch (error) {
-            console.log(error.message);
+            console.log(error);
             toast.error("unable to sign in");
         }
     }, [])

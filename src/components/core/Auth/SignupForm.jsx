@@ -9,7 +9,7 @@ const SignupForm = ({ setTab }) => {
 
     const form = useForm();
     const { register, handleSubmit, formState, reset } = form;
-    const { isSubmitSuccessful } = formState;
+    const { isSubmitSuccessful, errors } = formState;
     const dispacth = useDispatch();
 
     useEffect(() => {
@@ -20,7 +20,6 @@ const SignupForm = ({ setTab }) => {
 
     const sumbitHandler = useCallback(async (data) => {
         try {
-            console.log("singup");
             dispacth(setSignupData(data));
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, {
                 email: data.email
@@ -29,7 +28,7 @@ const SignupForm = ({ setTab }) => {
                 setTab("verification");
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error);
         }
     }, []);
 
@@ -38,27 +37,23 @@ const SignupForm = ({ setTab }) => {
             <table className='border-separate table-fixed border-spacing-5'>
                 <tbody>
                     <tr>
-                        <td><label htmlFor="userName" className='text-xs text-white uppercase w-fit'>User Name:</label></td>
-                        <td><input type="text" {...register('userName', { required: true })} className='text-white input success lg' placeholder='Enter your User Name' autoComplete='off' /></td>
-                    </tr>
-                    <tr>
                         <td><label htmlFor="email" className='text-xs text-white uppercase w-fit'>Email:</label></td>
                         <td><input type="email" {...register('email', { required: true })} className='text-white input success lg' placeholder='Enter your Email' autoComplete='off' /></td>
                     </tr>
                     <tr>
-                        <td><label htmlFor="gender" className='text-xs text-white uppercase w-fit'>Gender</label></td>
-                        {/* <td><input type="text" {...register('gender', { required: true })} className='text-white input success lg' placeholder='Select Your Gender' autoComplete='off' /></td> */}
-                        <td>
-                            <select {...register("gender")} className='text-[rgba(180,223,196)] input success lg bg-slate-950'>
-                                <option value="DEFAULT">Select Your Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
                         <td><label htmlFor="password" className='text-xs text-white uppercase w-fit'>Password:</label></td>
-                        <td><input type="password" {...register('password', { required: true })} className='text-white input success lg' placeholder='Enter Password' autoComplete='off' /></td>
+                        <td><input type="password" {...register('password', {
+                            minLength: {
+                                value: 8,
+                                message: 'Password should be at least 8 characters long',
+                            },
+                            pattern: {
+                                value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/,
+                                message: 'Password should contain at least one uppercase, lowercase, number, and special character',
+                            },
+                        })} className='text-white input success lg' placeholder='Enter Password' autoComplete='off' />
+                            {errors.password && <p className='text-red-400'>{errors.password.message}</p>}
+                        </td>
                     </tr>
                     <tr>
                         <td><label htmlFor="confirmPassword" className='text-xs text-white uppercase w-fit'>Confirm Password:</label></td>

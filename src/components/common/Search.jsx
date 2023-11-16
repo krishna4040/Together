@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { setFriend, removeFriend } from '../../store/slices/user'
@@ -13,7 +13,37 @@ const Search = ({ setSearch }) => {
     const [user, setUser] = useState({});
     const navigate = useNavigate();
     const dispacth = useDispatch();
+    const [suggestions, setSuggestions] = useState([]);
 
+    const changeSuggestions = async (key) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
+            setSuggestions(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const changeHandler = async (event) => {
+        setUser({});
+        setUserName(event.target.value);
+        changeSuggestions(event.target.value);
+    }
+
+    useEffect(() => {
+        changeSuggestions(" ");
+    }, []);
+
+    const suggestionClickHandler = async (userName) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
+            if (response.data.success) {
+                setUser(response.data.data[0]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const fecthUser = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
@@ -24,7 +54,6 @@ const Search = ({ setSearch }) => {
             console.log(error);
         }
     }
-
     const connectHandler = async (friend) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/makeFriend`, {
@@ -43,7 +72,6 @@ const Search = ({ setSearch }) => {
             console.log(error);
         }
     }
-
     const removeHandler = async (friend) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
@@ -62,7 +90,6 @@ const Search = ({ setSearch }) => {
             console.log(error);
         }
     }
-
     const visitHandler = (userName) => {
         navigate(`/view-profile/${userName}`);
     }
@@ -75,10 +102,10 @@ const Search = ({ setSearch }) => {
                     <h2 className="text-xl">Search</h2>
                     <div className='flex items-center gap-1'>
                         <div className='is-divider' />
-                        <input placeholder='Enter Username to search' value={userName} onChange={(event) => { setUserName(event.target.value) }} className='input success' />
+                        <input placeholder='Enter Username to search' value={userName} onChange={changeHandler} className='input success' />
                     </div>
                     {
-                        Object.keys(user).length ?
+                        user?.userName ?
                             <div className='flex flex-col items-center gap-5'>
                                 <div className='flex flex-col items-center justify-center'>
                                     <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
@@ -96,7 +123,13 @@ const Search = ({ setSearch }) => {
                                 </div>
                             </div>
                             :
-                            null
+                            <div className='flex flex-col items-start justify-start gap-3 h-[250px] overflow-y-auto overflow-x-hidden p-2'>
+                                {
+                                    suggestions.map((suggestion, index) => {
+                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { suggestionClickHandler(suggestion.userName) }}>{suggestion.userName}</button>
+                                    })
+                                }
+                            </div>
                     }
                     <div className="flex gap-3">
                         <button className="flex-1 btn solid danger" onClick={() => { fecthUser() }}>Search</button>

@@ -91,3 +91,27 @@ exports.getFriendsPost = async (req, res) => {
         });
     }
 }
+
+exports.getFriends = async (req, res) => {
+    try {
+        const { id } = req.query;
+        if (!id) {
+            throw new Error('id not found');
+        }
+        const user = await User.findById(id).populate({ path: 'friends', populate: 'profileDetails' }).select('friends').exec();
+        if (!user) {
+            throw new Error('user with current id not found');
+        }
+        const friends = user.friends;
+        res.status(200).json({
+            success: true,
+            message: 'frinends details fecthed successfully',
+            data: friends
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}

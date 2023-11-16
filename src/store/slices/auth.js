@@ -5,11 +5,10 @@ const authSlice = createSlice({
     initialState: {
         token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : null,
         signupData: {
-            userName: null,
             email: null,
             password: null,
-            gender: null
-        }
+        },
+        userId: null
     },
     reducers: {
         setToken: (state, action) => {
@@ -18,8 +17,11 @@ const authSlice = createSlice({
         setSignupData: (state, action) => {
             state.signupData = action.payload;
         },
+        setUserId: (state, action) => {
+            state.userId = action.payload;
+        }
     }
 });
 
-export const { setToken, setSignupData } = authSlice.actions;
+export const { setToken, setSignupData, setUserId } = authSlice.actions;
 export default authSlice.reducer;
