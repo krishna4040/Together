@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const Like = require('../models/Like');
 const Comment = require('../models/Comment');
+const { shuffleArray } = require('../utils/shuffle');
 
 const { cdupload } = require('../utils/cloudinary')
 require('dotenv').config();
@@ -184,6 +185,23 @@ exports.getPostForUser = async (req, res) => {
             success: true,
             message: 'fecthed user posts',
             data: post
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+exports.getAllPosts = async (req, res) => {
+    try {
+        const allPosts = await Post.find({}).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).exec();
+        const shufflePosts = shuffleArray(allPosts);
+        res.status(200).json({
+            success: true,
+            message: 'all posts fecthed successfully',
+            data: shufflePosts
         });
     } catch (error) {
         res.status(500).json({

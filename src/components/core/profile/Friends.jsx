@@ -32,11 +32,11 @@ const Friends = ({ user }) => {
     }
 
     if (!user.friends.length) {
-        return <p className='relative text-xl text-center text-white capitalize translate-x-24'>No Friends Yet. Connect Now!</p>
+        return <p className='relative text-xl text-center text-white capitalize lg:translate-x-24'>No Friends Yet. Connect Now!</p>
     }
 
     return (
-        <div className='flex items-start justify-start ml-[200px] gap-28 overflow-y-auto h-[400px]'>
+        <div className='flex lg:flex-row flex-col items-start justify-start lg:ml-[200px] gap-28 overflow-y-auto lg:h-[400px] mb-20 lg:mb-0'>
             <table className='border-separate border-spacing-4'>
                 <thead>
                     <tr>

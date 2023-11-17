@@ -84,12 +84,12 @@ const EditPage = () => {
     const [modal, setModal] = useState(false);
 
     return (
-        <form className='ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-center' onSubmit={handleSubmit(sumbitHandler)}>
+        <form className='lg:ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-start lg:justify-center' onSubmit={handleSubmit(sumbitHandler)}>
             {
                 Object.keys(user).length &&
                 (
                     <>
-                        <div className='flex items-center justify-center w-1/2 gap-5'>
+                        <div className='flex flex-col items-center justify-center w-1/2 gap-5 mt-10 lg:flex-row lg:mt-0'>
                             <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
                                 <img src={user.profileDetails.pfp} alt="user" />
                             </div>
@@ -106,8 +106,8 @@ const EditPage = () => {
                                 />
                             </div>
                         </div>
-                        <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>User Name:</label>
+                        <div className='flex items-center justify-center w-[400px] p- mt-10 lg:mt-0'>
+                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Username:</label>
                             <input
                                 type="text"
                                 placeholder={user.userName}
@@ -153,7 +153,7 @@ const EditPage = () => {
                                 className='input success pill'
                             />
                         </div>
-                        <div className='flex items-center justify-center gap-10'>
+                        <div className='flex items-center justify-start gap-5 mt-10 lg:mt-5 w-[400px]'>
                             <button type='submit' className='btn solid warn'>Update Changes</button>
                             <button type='button' className='btn solid danger' onClick={() => { setModal(true) }}>Delete Profile</button>
                         </div>

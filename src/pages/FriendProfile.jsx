@@ -21,16 +21,16 @@ const FriendProfile = () => {
 
     useEffect(() => {
         fecthFriend();
-    }, []);
+    }, [friend]);
 
     return (
         <div className='min-h-screen text-white bg-black'>
             {
                 Object.keys(friend).length &&
                 <>
-                    <div className='flex items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400'>
+                    <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400 lg:flex-row'>
                         <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
-                            <img src={friend.profileDetails.pfp} alt="friend" className='w-full' />
+                            <img src={friend?.profileDetails?.pfp} alt="friend" className='w-full' />
                         </div>
                         <div className='flex flex-col justify-center gap-5 p-4'>
                             <div className='flex items-center justify-center gap-3'>
@@ -40,14 +40,14 @@ const FriendProfile = () => {
                                 <p>{friend.posts.length} Posts</p>
                                 <p>{friend.friends.length} Friends</p>
                             </div>
-                            <div>
+                            <div className='flex flex-row items-center justify-start gap-2 lg:flex-col lg:justify-start lg:items-start'>
                                 <p className='text-xs uppercase'>About:</p>
                                 <p>{friend.profileDetails.about}</p>
                             </div>
                         </div>
                     </div>
-                    <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto'>
-                        <div className='text-white tabs bordered success bottom ml-[200px]'>
+                    <div className='flex flex-col items-center justify-center w-full gap-5 p-8 lg:w-11/12 lg:ml-auto'>
+                        <div className='text-white tabs bordered success bottom lg:ml-[200px]'>
                             <div className={`p-4 tab ${step === 'posts' ? 'active' : null}`} onClick={() => { setStep('posts') }}>
                                 Posts
                             </div>
@@ -56,7 +56,7 @@ const FriendProfile = () => {
                             </div>
                         </div>
                         {step === 'posts' && <Posts friend={friend} />}
-                        {step === 'friends' && <Friends friend={friend} />}
+                        {step === 'friends' && <Friends friend={friend} setStep={setStep} />}
                     </div>
                 </>
             }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { makeFriend, removeFriend, getFriendsPost, getFriends } = require('../controllers/friend');
+const { makeFriend, removeFriend, getFriends } = require('../controllers/friend');
 
 // Friends Routes
 /**
@@ -108,49 +108,6 @@ router.put('/makeFriend', auth, makeFriend);
  *                   description: An error message describing the internal server error.
  */
 router.put('/removeFriend', auth, removeFriend);
-
-/**
- * @swagger
- * /friends/getFriendsPost/{id}:
- *   get:
- *     summary: Get All posts of all the friends for a user
- *     description: Retrieves posts from the friends of a user by providing the user's ID.
- *     tags:
- *       - Friends
- *     parameters:
- *       - name: id
- *         in: path
- *         description: The ID of the user to fetch posts from friends.
- *         required: true
- *         type: string
- *     responses:
- *       200:
- *         description: Friends' posts fetched successfully.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation was successful (true for success).
- *             message:
- *               type: string
- *               description: A success message.
- *             data:
- *               type: array
- *               description: An array of posts from friends.
- *       500:
- *         description: Internal server error.
- *         schema:
- *           type: object
- *           properties:
- *             success:
- *               type: boolean
- *               description: Indicates if the operation failed (false for failure).
- *             message:
- *               type: string
- *               description: An error message describing the internal server error.
- */
-router.get('/getFriendsPost', auth, getFriendsPost);
 
 router.get('/getFriends', getFriends);
 

@@ -41,7 +41,7 @@ const Preview = ({ setStep }) => {
     }
 
     return (
-        <div className='flex flex-col justify-center w-[500px] gap-5'>
+        <div className='flex flex-col justify-center lg:w-[500px] w-full gap-5'>
             {
                 Object.keys(user).length &&
                 <>
