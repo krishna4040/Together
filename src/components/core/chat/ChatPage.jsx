@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux'
 import { BsFillCameraVideoFill } from 'react-icons/bs'
 import { BiSolidPhoneCall } from 'react-icons/bi'
 import { io } from 'socket.io-client'
+import { IoMdArrowRoundBack } from "react-icons/io";
 
-const ChatPage = ({ friend }) => {
+const ChatPage = ({ friend, setFriend }) => {
 
     const { token } = useSelector(state => state.auth);
     const [chats, setChats] = useState({});
@@ -56,9 +57,14 @@ const ChatPage = ({ friend }) => {
         setSendText('');
     }
 
+    const goBackHandler = () => {
+        setFriend({});
+    }
+
     return (
         <div className='flex flex-col items-center justify-between w-[700px] h-[600px] rounded-md chat-gradient mx-auto p-5'>
             <div className='flex items-center w-full gap-5'>
+                <IoMdArrowRoundBack className='block text-lg text-white lg:hidden' onClick={goBackHandler} />
                 <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
                     <img src={friend.profileDetails.pfp} alt="user_image" className='w-full' />
                 </div>

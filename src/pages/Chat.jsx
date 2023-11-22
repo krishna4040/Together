@@ -9,7 +9,7 @@ const Chat = () => {
 
     return (
         <div className='flex items-center justify-between lg:ml-[230px] min-h-screen'>
-            <table className='border-r border-separate border-gray-500 border-spacing-3'>
+            <table className={`lg:border-r border-separate border-gray-500 border-spacing-3 lg:block ${Object.keys(selectedFriend).length ? 'hidden' : 'block'}`}>
                 <tbody>
                     {
                         user.friends.map((friend, index) => {
@@ -32,7 +32,7 @@ const Chat = () => {
                     }
                 </tbody>
             </table>
-            {Object.keys(selectedFriend).length ? <ChatPage friend={selectedFriend} /> : null}
+            {Object.keys(selectedFriend).length ? <ChatPage friend={selectedFriend} setFriend={setSelectedFriend} /> : null}
         </div>
     )
 }
