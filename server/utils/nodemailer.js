@@ -1,10 +1,10 @@
-const {ndConnect} = require('../config/ndConnect')
+const { ndConnect } = require('../config/ndConnect')
 require('dotenv').config();
 
-exports.sendMail = async (to,subject,template) => {  // t-s-t
+exports.sendMail = async (to, subject, template) => {  // t-s-t
     try {
-        const transporter = ndConnect();
-        const info = (await transporter).sendMail({
+        const transporter = await ndConnect();
+        const info = await transporter.sendMail({
             from: process.env.MAIL_USER,
             to: to,
             subject: subject,
@@ -13,7 +13,7 @@ exports.sendMail = async (to,subject,template) => {  // t-s-t
         if (!info || !transporter) {
             throw new Error('smth went wrong while sending email')
         } else {
-            console.log("Mail sent successfully =>" , info)
+            console.log("Mail sent successfully =>", info)
         }
     } catch (error) {
         console.log(error);
