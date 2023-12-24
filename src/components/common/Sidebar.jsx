@@ -13,7 +13,7 @@ const Sidebar = ({ setLogout, setSearch, setNotifications }) => {
     const arr = [
         { title: 'Home', icon: AiFillHome, link: '/' },
         { title: 'Search', icon: BiSearch, clickHandler: setSearch },
-        { title: 'Messages', icon: BiMessageSquareDots, link: '/chat' },
+        { title: 'Messages', icon: BiMessageSquareDots, link: '/messages' },
         { title: 'Notification', icon: AiOutlineHeart, clickHandler: setNotifications },
         { title: 'Create', icon: IoCreateOutline, link: '/create' },
         { title: 'Profile', icon: AiFillHome, link: '/profile' },

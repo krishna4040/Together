@@ -11,7 +11,7 @@ const BottomNavigation = ({ setSearch, setLogout }) => {
     const arr = [
         { title: 'Home', icon: AiFillHome, link: '/' },
         { title: 'Search', icon: BiSearch, clickHandler: setSearch },
-        { title: 'Messages', icon: BiMessageSquareDots, link: '/chat' },
+        { title: 'Messages', icon: BiMessageSquareDots, link: '/messages' },
         { title: 'Create', icon: IoCreateOutline, link: '/create' },
         { title: 'Profile', icon: AiFillHome, link: '/profile' },
         { title: 'Logout', icon: FiLogOut, clickHandler: setLogout },

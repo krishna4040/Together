@@ -16,6 +16,7 @@ const chatRouter = require('./router/chat');
 const friendsRouter = require('./router/friends');
 const postRouter = require('./router/post');
 const userRouter = require('./router/user');
+const messageRouter = require('./router/message');
 
 const specs = swaggerJsdoc({
     definition: {
@@ -73,6 +74,7 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/friends', friendsRouter);
 app.use('/api/v1/post', postRouter);
 app.use('/api/v1/chat', chatRouter);
+app.use('/api/v1/message', messageRouter);
 app.use('/api/v1/auth', authRouter);
 
 httpServer.listen(process.env.PORT, () => console.log("app listning succsesfully"));

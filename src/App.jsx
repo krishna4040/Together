@@ -9,7 +9,6 @@ import Notifications from './components/common/Notifications'
 import Home from './pages/Home'
 import Error from './pages/Error'
 import Profile from './pages/Profile'
-import Chat from './pages/Chat'
 import Create from './pages/Create'
 import EditPage from './components/core/profile/EditPage'
 
@@ -19,6 +18,7 @@ import FriendProfile from './pages/FriendProfile'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './store/slices/user'
+import Message from './pages/Message'
 
 const App = () => {
 
@@ -52,7 +52,7 @@ const App = () => {
     <div className='w-screen bg-black'>
       <Routes>
         <Route path='/' element={token ? <Home /> : <Auth />} />
-        <Route path='/chat' element={<Chat />} />
+        <Route path='/messages' element={<Message />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/view-profile/:userName' element={<FriendProfile />} />
         <Route path='/edit-profile' element={<EditPage />} />
