@@ -16,8 +16,7 @@ const userSlice = createSlice({
             pfp: null
         },
         friends: [],
-        posts: [],
-        chat: []
+        posts: []
     },
     reducers: {
         setUser: (state, action) => {

@@ -86,7 +86,6 @@ exports.getUserDetails = async (req, res) => {
             .populate({ path: 'friends', populate: 'profileDetails' })
             .populate({ path: 'posts', populate: { path: 'likes', populate: { path: 'user', populate: 'profileDetails' } } })
             .populate({ path: 'posts', populate: { path: 'comments', populate: { path: 'user', populate: 'profileDetails' } } })
-            .populate('chat')
             .exec();
         if (!user) {
             throw new Error('Unable to get user details');

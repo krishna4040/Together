@@ -87,6 +87,53 @@ router.get('/getAllUsers', auth, getAllUsers);
  */
 router.get('/search', search);
 
+/**
+ * @swagger
+ * /all-users/suggestion:
+ *   get:
+ *     summary: Get username suggestions based on a query.
+ *     description: Retrieves username suggestions that match a provided query string.
+ *     tags:
+ *       - All-users
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         description: Query string to search for username suggestions.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response with username suggestions.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the request was successful.
+ *                 message:
+ *                   type: string
+ *                   description: Informational message regarding the status.
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the request failed.
+ *                 message:
+ *                   type: string
+ *                   description: Error message describing the failure.
+ */
 router.get('/suggestion', getUserNameSuggestions);
 
 module.exports = router;

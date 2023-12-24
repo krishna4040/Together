@@ -7,7 +7,7 @@ const { accessChat, fecthChat, createGroupChat, renameGroup, addToGroup, removeF
 // Chat Routes
 /**
  * @swagger
- * /chat/accessChat:
+ * /chat/createChat:
  *   post:
  *     summary: Access a chat with another user
  *     description: Access an existing chat or create a new chat with another user by providing their user ID.

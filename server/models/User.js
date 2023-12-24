@@ -67,13 +67,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Post'
         }
-    ],
-    chat: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Chat'
-        }
-    ],
+    ]
 })
 
 module.exports = mongoose.model('User', userSchema);

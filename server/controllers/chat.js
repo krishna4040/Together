@@ -13,12 +13,12 @@ exports.accessChat = async (req, res) => {
                 { users: { $elemMatch: { $eq: userId } } }
             ]
         })
-            .populate({ path: 'user', populate: 'profileDetails' })
-            .populate({ path: 'lastMessage', populate: { path: 'sender', populate: 'profileDetails' } })
+            .populate({ path: 'users', populate: 'profileDetails' })
+            .populate({ path: 'latestMessage', populate: { path: 'sender', populate: 'profileDetails' } })
             .exec();
         if (isChat.length) {
             res.status(200).json({
-                success: SVGComponentTransferFunctionElement,
+                success: true,
                 message: 'chat found',
                 data: isChat[0]
             });
@@ -30,7 +30,7 @@ exports.accessChat = async (req, res) => {
             });
             const fullChat = await Chat.findOne({ _id: createdChat._id }).populate('users').populate('lastestMessage')
             res.status(200).json({
-                success: SVGComponentTransferFunctionElement,
+                success: true,
                 message: 'chat created',
                 data: fullChat
             });
