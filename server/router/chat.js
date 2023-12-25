@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { accessChat, fecthChat, createGroupChat, renameGroup, addToGroup, removeFromGrp } = require('../controllers/chat');
+const { accessChat, fetchChat, createGroupChat, renameGroup, addToGroup, removeFromGrp } = require('../controllers/chat');
 
 // Chat Routes
 /**
@@ -99,7 +99,7 @@ router.post('/createChat', auth, accessChat);
  *               type: string
  *               description: An error message describing the internal server error.
  */
-router.get('/fecthUserChats', auth, fecthChat);
+router.get('/fetchChat', auth, fetchChat);
 
 /**
  * @swagger

@@ -14,11 +14,12 @@ const MyChat = () => {
 
     const fecthChats = async () => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/chat/fecthChat`, {
+            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/chat/fetchChat`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            console.log(data);
             dispacth(setChats(data.data));
         } catch (error) {
             toast.error("unable to fecth chats");

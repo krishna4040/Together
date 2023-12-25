@@ -43,7 +43,7 @@ exports.accessChat = async (req, res) => {
     }
 }
 
-exports.fecthChat = async (req, res) => {
+exports.fetchChat = async (req, res) => {
     try {
         const userChat = await Chat.find({ users: { $elemMatch: { $eq: req.user.id } } })
             .populate({ path: 'users', populate: 'profileDetails' })

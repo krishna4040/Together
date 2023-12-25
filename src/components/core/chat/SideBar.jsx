@@ -74,7 +74,7 @@ const SideBar = () => {
             </div>
             <div>
                 <div className="dropdown success">
-                    <label className="btn solid" tabindex="0"><FaBell className='m-1 text-2xl' /></label>
+                    <label className="btn solid"><FaBell className='m-1 text-2xl' /></label>
                     <div className="menu bottom">
                         <a className="text-sm item">Profile</a>
                         <a className="text-sm item">Account settings</a>
