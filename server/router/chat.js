@@ -159,7 +159,7 @@ router.get('/fetchChat', auth, fetchChat);
  *                   type: string
  *                   description: An error message describing the internal server error.
  */
-router.post('/group', auth, createGroupChat);
+router.post('/createGroupChat', auth, createGroupChat);
 
 /**
  * @swagger
@@ -217,7 +217,7 @@ router.post('/group', auth, createGroupChat);
  *                   type: string
  *                   description: An error message describing the internal server error.
  */
-router.put('/rename', auth, renameGroup);
+router.put('/renameGroup', auth, renameGroup);
 
 /**
  * @swagger
@@ -275,7 +275,7 @@ router.put('/rename', auth, renameGroup);
  *                   type: string
  *                   description: An error message describing the internal server error.
  */
-router.put('/groupRemove', auth, removeFromGrp);
+router.put('/removeFromGrp', auth, removeFromGrp);
 
 /**
  * @swagger
@@ -333,6 +333,6 @@ router.put('/groupRemove', auth, removeFromGrp);
  *                   type: string
  *                   description: An error message describing the internal server error.
  */
-router.put('/groupAdd', auth, addToGroup);
+router.put('/addToGroup', auth, addToGroup);
 
 module.exports = router;

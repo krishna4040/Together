@@ -11,7 +11,7 @@ const Message = () => {
     const user = useSelector(state => state.user);
     const chat = useSelector(state => state.chat);
     const { token } = useSelector(state => state.auth);
-
+    const [fecthAgain, setFecthAgain] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const accessChat = async (userId) => {
@@ -33,11 +33,11 @@ const Message = () => {
     }
 
     return (
-        <div className='w-full ml-[200px]'>
+        <div className='w-full lg:ml-[200px]'>
             <SideBar />
             <div className='flex justify-between w-screen h-[91.5vh]'>
-                {Object.keys(user).length && <MyChat />}
-                {Object.keys(user).length && <ChatBox />}
+                {Object.keys(user).length && <MyChat fecthAgain={fecthAgain} />}
+                {Object.keys(user).length && <ChatBox fecthAgain={fecthAgain} setFecthAgain={setFecthAgain} />}
             </div>
         </div>
     )

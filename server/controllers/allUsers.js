@@ -48,7 +48,7 @@ exports.getUserNameSuggestions = async (req, res) => {
         const { q } = req.query;
         const regex = new RegExp(q, 'i');
         const suggestions = await User.find({ userName: regex })
-            .select('userName email')
+            .select('userName email _id')
             .populate({
                 path: 'profileDetails',
                 select: 'pfp'

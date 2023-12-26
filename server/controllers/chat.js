@@ -72,6 +72,7 @@ exports.createGroupChat = async (req, res) => {
         if (users.length < 2) {
             throw new Error('users must be greater than 2');
         }
+        users.push(id);
         const groupChat = await Chat.create({
             chatName,
             users,

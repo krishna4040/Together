@@ -2,8 +2,9 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedChat } from '../../../store/slices/chat'
 import { FaArrowLeft } from "react-icons/fa";
+import UpdateGroupChatModal from './UpdatGroupChatModal'
 
-const ChatBox = () => {
+const ChatBox = (fecthAgain, setFecthAgain) => {
     const dispacth = useDispatch();
     const { selectedChat } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
@@ -17,13 +18,18 @@ const ChatBox = () => {
                     <>
                         <div className='text-[28px] md:text-[30px] pb-3 px-2 w-full flex justify-between items-center'>
                             <FaArrowLeft className='flex lg:hidden md:hidden' onClick={() => { dispacth(setSelectedChat(null)) }} />
-                            <h1>
+                            <div className='flex items-center justify-between w-[820px]'>
+                                <p>
+                                    {
+                                        selectedChat.isGroupChat ?
+                                            selectedChat.chatName.toUpperCase() :
+                                            getSender(user, selectedChat.users)
+                                    }
+                                </p>
                                 {
-                                    !selectedChat.isGroupChat ?
-                                        getSender(user, selectedChat.users) :
-                                        selectedChat.chatName.toUpperCase()
+                                    selectedChat.isGroupChat && <UpdateGroupChatModal />
                                 }
-                            </h1>
+                            </div>
                         </div>
                         <div className='flex flex-col justify-end p-3 bg-[#e8e8e8] w-full h-full rounded-lg overflow-y-hidden'>
                             {/* Messages here */}

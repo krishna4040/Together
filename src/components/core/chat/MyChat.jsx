@@ -5,7 +5,7 @@ import { setChats, setSelectedChat } from '../../../store/slices/chat'
 import toast from 'react-hot-toast';
 import GroupChatModel from './GroupChatModel'
 
-const MyChat = () => {
+const MyChat = ({ fecthAgain }) => {
 
     const dispacth = useDispatch();
     const { token } = useSelector(state => state.auth);
@@ -28,11 +28,14 @@ const MyChat = () => {
 
     useEffect(() => {
         fecthChats();
-    }, []);
+    }, [fecthAgain]);
 
-    const getSender = (users) => {
-        console.log(users);
+    const getSenderUserName = (users) => {
         return users[0]._id === user._id ? users[1].userName : users[0].userName;
+    }
+
+    const getSenderPfp = (users) => {
+        return users[0]._id === user._id ? users[1].profileDetails.pfp : users[1].profileDetails.pfp;
     }
 
     return (
@@ -46,7 +49,17 @@ const MyChat = () => {
                     chats.map(chat => {
                         return (
                             <div key={chat._id} onClick={() => { dispacth(setSelectedChat(chat)) }} className={`cursor-pointer ${selectedChat === chat ? 'bg-[#38b2ac] text-white' : 'bg-[#e8e8e8] text-black'} px-3 py-2 rounded-lg`}>
-                                {getSender(chat.users)}
+                                {
+                                    chat.isGroupChat ?
+                                        <div className='flex items-center justify-start gap-4 p-2'>
+                                            <div className='avatar'><img src="https://picsum.photos/id/{group-logo}/237/200/300" alt="avatar" /></div>
+                                            <p>{chat.chatName}</p>
+                                        </div> :
+                                        <div className='flex items-center justify-start gap-4 p-2'>
+                                            <div className='avatar'><img src={getSenderPfp(chat.users)} alt="avatar" /></div>
+                                            <p>{getSenderUserName(chat.users)}</p>
+                                        </div>
+                                }
                             </div>
                         )
                     })
