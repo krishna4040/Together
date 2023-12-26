@@ -11,15 +11,16 @@ const Search = ({ setSearch }) => {
     const { token } = useSelector(state => state.auth);
     const [userName, setUserName] = useState('');
     const [user, setUser] = useState({});
+    const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
     const dispacth = useDispatch();
-    const [suggestions, setSuggestions] = useState([]);
 
     const changeSuggestions = async (key) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
             setSuggestions(response.data.data);
         } catch (error) {
+            toast.error("unable to fecth suggestions");
             console.log(error);
         }
     }
@@ -30,27 +31,14 @@ const Search = ({ setSearch }) => {
         changeSuggestions(event.target.value);
     }
 
-    useEffect(() => {
-        changeSuggestions(" ");
-    }, []);
-
-    const suggestionClickHandler = async (userName) => {
+    const fecthUser = async (userName) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
             if (response.data.success) {
-                setUser(response.data.data[0]);
+                setUser(response.data.data);
             }
         } catch (error) {
-            console.log(error);
-        }
-    }
-    const fecthUser = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
-            if (response.data.success) {
-                setUser(response.data.data[0]);
-            }
-        } catch (error) {
+            toast.error("unable to fecth user from userName");
             console.log(error);
         }
     }
@@ -123,16 +111,16 @@ const Search = ({ setSearch }) => {
                                 </div>
                             </div>
                             :
-                            <div className='flex flex-col items-start justify-start gap-3 h-[250px] overflow-y-auto overflow-x-hidden p-2'>
+                            <div className='flex flex-col items-start justify-start gap-3 p-2 overflow-x-hidden overflow-y-auto h-fit'>
                                 {
-                                    suggestions.map((suggestion, index) => {
-                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { suggestionClickHandler(suggestion.userName) }}>{suggestion.userName}</button>
+                                    suggestions.slice(0, 4).map((suggestion, index) => {
+                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { fecthUser(suggestion.userName) }}>{suggestion.userName}</button>
                                     })
                                 }
                             </div>
                     }
                     <div className="flex gap-3">
-                        <button className="flex-1 btn solid danger" onClick={() => { fecthUser() }}>Search</button>
+                        <button className="flex-1 btn solid danger" onClick={() => { fecthUser(userName) }}>Search</button>
                     </div>
                 </div>
             </label>
