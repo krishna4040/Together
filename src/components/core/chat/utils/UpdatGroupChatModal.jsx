@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedChat } from '../../../store/slices/chat'
+import { setSelectedChat } from '../../../../store/slices/chat'
 import UserBadgeItem from './UserBadgeItem'
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -12,7 +12,7 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
     const dispacth = useDispatch();
 
     const [isOpen, setIsOpen] = useState(false);
-    const [groupChatName, setGroupChatName] = useState(null);
+    const [groupChatName, setGroupChatName] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [userName, setUserName] = useState("");
     const { selectedChat } = useSelector(state => state.chat);
@@ -29,7 +29,8 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
         }
     }
 
-    const handleGroupRename = async () => {
+    const handleGroupRename = async (e) => {
+        e.preventDefault();
         if (!groupChatName) {
             toast.error("Please enter a valid chat name");
             return;
@@ -65,7 +66,7 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
             toast.error("user already in group");
             return;
         }
-        if (selectedChat.groupAdmin._id !== currentUser._id) {
+        if (selectedChat.groupAdmin !== currentUser._id) {
             toast.error("only group admin can add to group");
             return;
         }
@@ -97,7 +98,7 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
             <div className={`flex flex-col gap-5 modal ${isOpen ? 'show' : null}`}>
                 <button className="absolute right-4 top-3" onClick={() => { setIsOpen(false) }}>✕</button>
                 <h2 className="text-xl">{selectedChat.chatName}</h2>
-                <div>
+                <div className='flex flex-col items-start justify-center'>
                     <div className='flex flex-wrap items-center justify-start gap-2'>
                         {
                             selectedChat.users.map(user => {
@@ -109,17 +110,19 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
                         <input type="text" placeholder='Chat Name' value={groupChatName} onChange={(e) => { setGroupChatName(e.target.value) }} className='input success lg' />
                         <button className='text-white bg-teal-700 btn'>Update</button>
                     </form>
-                    <form onSubmit={handleAddToGroup} className=''>
+                    <form onSubmit={handleAddToGroup} className='w-full'>
                         <input type="text" className='w-full input success lg' placeholder='Add User to Group' value={userName} onChange={changeHandler} />
                     </form>
-                    {
-                        suggestions.slice(0, 4).map(user => {
-                            return <UserListItems key={user._id} user={user} handleFunction={() => { handleAddToGroup(user) }} />
-                        })
-                    }
+                    <div className='w-full mt-3'>
+                        {
+                            suggestions.slice(0, 4).map(user => {
+                                return <UserListItems key={user._id} user={user} handleFunction={() => { handleAddToGroup(user) }} />
+                            })
+                        }
+                    </div>
                 </div>
                 <div>
-                    <button className='btn danger solid' onClick={handleRemoveFromGroup(user)}>Leave Group</button>
+                    <button className='float-right btn danger solid' onClick={() => { handleRemoveFromGroup(currentUser) }}>Leave Group</button>
                 </div>
             </div>
         </div>

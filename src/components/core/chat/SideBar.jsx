@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { CiSearch } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import UserListItem from './UserListItems'
+import UserListItem from './utils/UserListItems'
 import { pushChat, setSelectedChat } from '../../../store/slices/chat'
 
 const SideBar = () => {

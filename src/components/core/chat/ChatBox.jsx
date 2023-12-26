@@ -1,16 +1,71 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedChat } from '../../../store/slices/chat'
 import { FaArrowLeft } from "react-icons/fa";
-import UpdateGroupChatModal from './UpdatGroupChatModal'
+import UpdateGroupChatModal from './utils/UpdatGroupChatModal'
+import ScrollableChat from './utils/ScrollableChat'
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const ChatBox = (fecthAgain, setFecthAgain) => {
+const ChatBox = ({ fecthAgain, setFecthAgain }) => {
     const dispacth = useDispatch();
     const { selectedChat } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
+    const { token } = useSelector(state => state.auth);
     const getSender = (loggedUser, users) => {
         return users[0]._id === loggedUser._id ? users[1].userName : users[0].userName
     }
+
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+
+    const fecthMessages = async () => {
+        if (!selectedChat) {
+            return;
+        }
+        try {
+            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/message/fecthMessages/${selectedChat._id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setMessages(data.data);
+        } catch (error) {
+            toast.error("unable to fecth messages for the chat");
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        fecthMessages();
+    }, [selectedChat]);
+
+    const sendMessage = async (e) => {
+        e.preventDefault();
+        if (e.key === "Enter" && newMessage) {
+            try {
+                setNewMessage('');
+                const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/message/sendMessage`, {
+                    content: newMessage,
+                    chatId: selectedChat._id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setMessages(prev => {
+                    return [...prev, data.data]
+                });
+            } catch (error) {
+                toast.error("unable to send message");
+                console.log(error);
+            }
+        }
+    }
+    const typingHandler = (e) => {
+        setNewMessage(e.target.value);
+    }
+
     return (
         <div className={`${selectedChat ? null : 'hidden'} md:flex lg:flex items-center flex-col bg-white w-full md:w-[68%] rounded-lg border`}>
             {
@@ -27,12 +82,17 @@ const ChatBox = (fecthAgain, setFecthAgain) => {
                                     }
                                 </p>
                                 {
-                                    selectedChat.isGroupChat && <UpdateGroupChatModal />
+                                    selectedChat.isGroupChat && <UpdateGroupChatModal fecthAgain={fecthAgain} setFecthAgain={setFecthAgain} />
                                 }
                             </div>
                         </div>
                         <div className='flex flex-col justify-end p-3 bg-[#e8e8e8] w-full h-full rounded-lg overflow-y-hidden'>
-                            {/* Messages here */}
+                            <div className='messages'>
+                                <ScrollableChat messages={messages} setMessages={setMessages} />
+                            </div>
+                            <form onKeyDown={sendMessage} className='mt-3'>
+                                <input type="text" onChange={typingHandler} value={newMessage} placeholder='Enter a message...' className='input bg-[#e0e0e0]' />
+                            </form>
                         </div>
                     </>
                     :

@@ -8,7 +8,7 @@ const UserListItems = ({ handleFunction, user }) => {
                 <img alt='avatar' src={user.profileDetails.pfp} />
             </div>
             <div>
-                <p>{user.userName}</p>
+                <p className='text-sm'>{user.userName}</p>
                 <p className='text-xs'>
                     <b>Email: </b>
                     {user.email}

@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setChats, setSelectedChat } from '../../../store/slices/chat'
 import toast from 'react-hot-toast';
-import GroupChatModel from './GroupChatModel'
+import GroupChatModel from './utils/GroupChatModel'
+import { FaUsers } from "react-icons/fa6";
 
 const MyChat = ({ fecthAgain }) => {
 
@@ -52,7 +53,7 @@ const MyChat = ({ fecthAgain }) => {
                                 {
                                     chat.isGroupChat ?
                                         <div className='flex items-center justify-start gap-4 p-2'>
-                                            <div className='avatar'><img src="https://picsum.photos/id/{group-logo}/237/200/300" alt="avatar" /></div>
+                                            <div className='border border-black rounded-full avatar'><FaUsers /></div>
                                             <p>{chat.chatName}</p>
                                         </div> :
                                         <div className='flex items-center justify-start gap-4 p-2'>

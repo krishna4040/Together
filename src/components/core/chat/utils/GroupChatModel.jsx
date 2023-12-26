@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { pushChat, setSelectedChat } from '../../../store/slices/chat'
+import { pushChat, setSelectedChat } from '../../../../store/slices/chat'
 import UserBadgeItem from './UserBadgeItem'
 import UserListItems from './UserListItems';
 import toast from 'react-hot-toast';
