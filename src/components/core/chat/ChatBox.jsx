@@ -40,8 +40,11 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
         fecthMessages();
     }, [selectedChat]);
 
+    const typingHandler = (e) => {
+        setNewMessage(e.target.value)
+    }
+
     const sendMessage = async (e) => {
-        e.preventDefault();
         if (e.key === "Enter" && newMessage) {
             try {
                 setNewMessage('');
@@ -61,9 +64,6 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                 console.log(error);
             }
         }
-    }
-    const typingHandler = (e) => {
-        setNewMessage(e.target.value);
     }
 
     return (
@@ -90,9 +90,7 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                             <div className='messages'>
                                 <ScrollableChat messages={messages} setMessages={setMessages} />
                             </div>
-                            <form onKeyDown={sendMessage} className='mt-3'>
-                                <input type="text" onChange={typingHandler} value={newMessage} placeholder='Enter a message...' className='input bg-[#e0e0e0]' />
-                            </form>
+                            <input type="text" onChange={typingHandler} onKeyDown={sendMessage} value={newMessage} placeholder='Enter a message...' className='input bg-[#e0e0e0] mt-3' />
                         </div>
                     </>
                     :
