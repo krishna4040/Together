@@ -5,7 +5,7 @@ import { CiSearch } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import UserListItem from './UserListItems'
-import { setChats, setSelectedChat } from '../../../store/slices/chat'
+import { pushChat, setSelectedChat } from '../../../store/slices/chat'
 
 const SideBar = () => {
 
@@ -48,7 +48,7 @@ const SideBar = () => {
                 }
             });
             if (!chats.find((c) => c._id === data.data._id)) {
-                dispacth(setChats(data.data));
+                dispacth(pushChat(data.data));
             }
             dispacth(setSelectedChat(data.data));
             setLoadingChat(false);

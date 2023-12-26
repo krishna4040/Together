@@ -8,10 +8,10 @@ import axios from 'axios';
 
 const GroupChatModel = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [groupChatName, setGroupChatName] = useState();
     const [selectedUsers, setSelectedUsers] = useState([]);
-    const [search, setSearch] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
+    const [userName, setUserName] = useState("");
+    const [groupChatName, setGroupChatName] = useState();
+    const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const dispacth = useDispatch();
@@ -19,18 +19,17 @@ const GroupChatModel = () => {
     const { chats } = useSelector(state => state.chat);
     const { token } = useSelector(state => state.auth);
 
-    // const handleSearch = axios (q) => {
-    //     setSearch(q);
-    //     if (!q) {
-    //         return;
-    //     }
-    //     try {
-    //         setLoading(true);
-    //         const {data} = await
-    //     } catch (error) {
-
-    //     }
-    // }
+    const fecthSuggestions = async (q) => {
+        try {
+            setLoading(true);
+            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${q}`);
+            setSuggestions(data.data);
+            setLoading(false);
+        } catch (error) {
+            toast.error("unable to fecth suggestion");
+            console.log(error);
+        }
+    }
     const handleSumbit = async () => {
         if (!groupChatName || !selectedUsers) {
             toast.error("Both Inputs are requiered");
@@ -50,6 +49,10 @@ const GroupChatModel = () => {
     const handleDelete = (delUser) => {
         setSelectedUsers(selectedUsers.filter(sel => sel._id !== delUser._id))
     }
+    const changeHandler = (event) => {
+        setUserName(event.target.value);
+        fecthSuggestions(event.target.value);
+    }
 
     return (
         <div>
@@ -61,7 +64,7 @@ const GroupChatModel = () => {
                 <div className='flex flex-col items-center'>
                     <form onSubmit={handleSumbit}>
                         <input type="text" className='input' placeholder='Chat Name' value={groupChatName} onChange={(e) => { setGroupChatName(e.target.value) }} />
-                        <input type="text" className='input' placeholder='Chat Name' value={groupChatName} onChange={(e) => { setGroupChatName(e.target.value) }} />
+                        <input type="text" className='input' placeholder='Add Users' value={userName} onChange={changeHandler} />
                         <button>Create Chat</button>
                     </form>
                     {
@@ -71,9 +74,8 @@ const GroupChatModel = () => {
                     }
                     {
                         loading ?
-                            <div>loading...</div>
-                            :
-                            searchResults.slice(0, 4).map(user => <UserListItems key={user._id} user={user} handleFunction={() => { handleGroup() }} />)
+                            <div>loading...</div> :
+                            suggestions.slice(0, 4).map(user => <UserListItems key={user._id} user={user} handleFunction={() => { handleGroup() }} />)
                     }
                 </div>
             </div>

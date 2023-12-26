@@ -19,7 +19,6 @@ const MyChat = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(data);
             dispacth(setChats(data.data));
         } catch (error) {
             toast.error("unable to fecth chats");
@@ -31,35 +30,26 @@ const MyChat = () => {
         fecthChats();
     }, []);
 
-    const getSender = (loggedUser, users) => {
-        return users[0]._id === loggedUser._id ? users[1].userName : users[0].userName
+    const getSender = (users) => {
+        console.log(users);
+        return users[0]._id === user._id ? users[1].userName : users[0].userName;
     }
 
     return (
-        <div className={`${selectedChat ? "sm:hidden" : "sm:flex"} md:flex flex-col items-center p-3 bg-white w-full md:w-[31%] rounded-lg border`}>
+        <div className={`${selectedChat ? "hidden" : "flex"} md:flex lg:flex flex-col items-center p-3 bg-white w-full md:w-[31%] rounded-lg border`}>
             <div className='flex items-center justify-between w-full p-3'>
                 My Chats
                 <GroupChatModel />
             </div>
-            <div className='flex flex-col p-3 bg-[#f8f8f8] w-full rounded-lg overflow-y-hidden'>
+            <div className='flex flex-col p-3 bg-[#f8f8f8] w-full rounded-lg overflow-y-hidden gap-2'>
                 {
-                    <div>
-                        {
-                            chats.map((chat) => {
-                                return (
-                                    <div onClick={() => { dispacth(setSelectedChat(chat)) }} className={`cursor-pointer ${selectedChat === chat ? 'bg-[#38b2ac] text-white' : 'bg-[#e8e8e8] text-black'} px-3 py-2 rounded-lg`} key={chat._id}>
-                                        <p>
-                                            {
-                                                !chat.isGroupChat ?
-                                                    getSender(user, chat.users) :
-                                                    chat.chatName
-                                            }
-                                        </p>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+                    chats.map(chat => {
+                        return (
+                            <div key={chat._id} onClick={() => { dispacth(setSelectedChat(chat)) }} className={`cursor-pointer ${selectedChat === chat ? 'bg-[#38b2ac] text-white' : 'bg-[#e8e8e8] text-black'} px-3 py-2 rounded-lg`}>
+                                {getSender(chat.users)}
+                            </div>
+                        )
+                    })
                 }
             </div>
         </div>
