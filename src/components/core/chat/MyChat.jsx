@@ -40,9 +40,9 @@ const MyChat = ({ fecthAgain }) => {
     }
 
     return (
-        <div className={`${selectedChat ? "hidden" : "flex"} md:flex lg:flex flex-col items-center p-3 bg-white w-full md:w-[31%] rounded-lg border`}>
+        <div className={`${selectedChat ? "hidden" : "flex"} lg:flex flex-col items-center p-3 bg-white w-full lg:w-[31%] rounded-lg border overflow-y-scroll`}>
             <div className='flex items-center justify-between w-full p-3'>
-                My Chats
+                <p className='text-2xl font-bold'>My Chats</p>
                 <GroupChatModel />
             </div>
             <div className='flex flex-col p-3 bg-[#f8f8f8] w-full rounded-lg overflow-y-hidden gap-2'>

@@ -60,18 +60,18 @@ const SideBar = () => {
     }
 
     return (
-        <div className='flex items-center justify-between w-full px-2 py-1 bg-white border-4'>
+        <div className='flex items-center justify-between p-2 bg-black w-[calc(100vw-200px)]'>
             <span className="tooltip bw bottom" data-tooltip="search users to chat">
-                <button className="btn solid ghost" onClick={toggleDrawer}>
+                <button className="text-white solid bw btn" onClick={toggleDrawer}>
                     <CiSearch />
                     <div className='px-4 sm:hidden md:flex'>
                         Search User
                     </div>
                 </button>
             </span>
-            <div>
-                Talk-A-Tive
-            </div>
+            <h2 className='text-xl font-bold text-white'>
+                Talk-Together
+            </h2>
             <div>
                 <div className="dropdown success">
                     <label className="btn solid"><FaBell className='m-1 text-2xl' /></label>

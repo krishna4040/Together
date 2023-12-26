@@ -56,9 +56,7 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setMessages(prev => {
-                    return [...prev, data.data]
-                });
+                setMessages([...messages, data.data]);
             } catch (error) {
                 toast.error("unable to send message");
                 console.log(error);
@@ -67,7 +65,7 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
     }
 
     return (
-        <div className={`${selectedChat ? null : 'hidden'} md:flex lg:flex items-center flex-col bg-white w-full md:w-[68%] rounded-lg border`}>
+        <div className={`${selectedChat ? null : 'hidden'} lg:flex items-center flex-col bg-white rounded-lg w-[55%]`}>
             {
                 selectedChat ?
                     <>

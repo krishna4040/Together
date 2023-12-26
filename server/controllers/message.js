@@ -7,11 +7,12 @@ exports.sendMessage = async (req, res) => {
         if (!content || !chatId) {
             throw new Error('all fields are required');
         }
-        const message = await Message.create({
+        let message = await Message.create({
             sender: req.user.id,
             content: content,
             chat: chatId
         });
+        message = await message.populate('sender');
         await Chat.findByIdAndUpdate(chatId, { latestMessage: message });
         res.status(200).json({
             success: true,
@@ -28,7 +29,7 @@ exports.sendMessage = async (req, res) => {
 
 exports.allMessages = async (req, res) => {
     try {
-        const messages = await Message.find({ chat: req.params.chatId }).populate("sender").populate("chat");
+        const messages = await Message.find({ chat: req.params.chatId }).populate({ path: 'sender', populate: 'profileDetails' }).populate("chat");
         res.status(200).json({
             success: true,
             data: messages
