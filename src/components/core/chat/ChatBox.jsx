@@ -6,8 +6,16 @@ import UpdateGroupChatModal from './utils/UpdatGroupChatModal'
 import ScrollableChat from './utils/ScrollableChat'
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { io } from 'socket.io-client'
+
+let socket, selectedChatCompare;
 
 const ChatBox = ({ fecthAgain, setFecthAgain }) => {
+
+    useEffect(() => {
+        socket = io('http://localhost:4000');
+    }, [])
+
     const dispacth = useDispatch();
     const { selectedChat } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
@@ -30,6 +38,7 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                 }
             });
             setMessages(data.data);
+            socket.emit('joinChat', selectedChat._id);
         } catch (error) {
             toast.error("unable to fecth messages for the chat");
             console.log(error);
@@ -38,7 +47,19 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
 
     useEffect(() => {
         fecthMessages();
+        selectedChatCompare = selectedChat;
+
     }, [selectedChat]);
+
+    useEffect(() => {
+        socket.on('msgRecieved', (msg) => {
+            if (!selectedChatCompare || selectedChatCompare._id !== msg.chat) {
+                // give notification
+            } else {
+                setMessages([...messages, msg]);
+            }
+        })
+    });
 
     const typingHandler = (e) => {
         setNewMessage(e.target.value)
@@ -56,6 +77,7 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                         Authorization: `Bearer ${token}`
                     }
                 });
+                socket.emit('newMsg', data.data);
                 setMessages([...messages, data.data]);
             } catch (error) {
                 toast.error("unable to send message");

@@ -6,7 +6,7 @@ exports.accessChat = async (req, res) => {
         if (!userId) {
             throw new Error('userId not provided');
         }
-        const isChat = await Chat.find({
+        const isChat = await Chat.findOne({
             isGroupChat: false,
             $and: [
                 { users: { $elemMatch: { $eq: req.user.id } } },
@@ -14,21 +14,21 @@ exports.accessChat = async (req, res) => {
             ]
         })
             .populate({ path: 'users', populate: 'profileDetails' })
-            .populate({ path: 'latestMessage', populate: { path: 'sender', populate: 'profileDetails' } })
+            .populate('latestMessage')
             .exec();
         if (isChat.length) {
             res.status(200).json({
                 success: true,
                 message: 'chat found',
-                data: isChat[0]
+                data: isChat
             });
         } else {
             const createdChat = await Chat.create({
-                chatName: 'sender',
+                chatName: 'one-on-one',
                 isGroupChat: false,
                 users: [req.user.id, userId]
             });
-            const fullChat = await Chat.findOne({ _id: createdChat._id }).populate('users').populate('lastestMessage')
+            const fullChat = await Chat.findOne({ _id: createdChat._id }).populate('users').populate('lastestMessage');
             res.status(200).json({
                 success: true,
                 message: 'chat created',

@@ -42,14 +42,20 @@ const specs = swaggerJsdoc({
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
+    pingTimeout: 6000,
     cors: {
-        origin: '*',
+        origin: 'http://localhost:5173',
         credentials: true
     }
 });
 
 io.on('connection', (socket) => {
-
+    socket.on('joinChat', (room) => {
+        socket.join(room);
+    });
+    socket.on('newMsg', (msg) => {
+        io.to(msg.chat).emit('msgRecieved', msg);
+    })
 });
 
 dbConnect();

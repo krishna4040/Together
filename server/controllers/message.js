@@ -12,7 +12,7 @@ exports.sendMessage = async (req, res) => {
             content: content,
             chat: chatId
         });
-        message = await message.populate('sender');
+        message = await message.populate({ path: 'sender', populate: 'profileDetails' });
         await Chat.findByIdAndUpdate(chatId, { latestMessage: message });
         res.status(200).json({
             success: true,
