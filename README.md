@@ -25,36 +25,43 @@ Welcome to our Social Media App Together! This application is designed to connec
 
 ## Features
 
-### Profile Creation
-Users can create their profiles with personal information, avatars, and other details.
-
 ### Authentication and Authorization
 Secure login and registration system with authentication mechanisms.
 Different user roles and permissions for authorization control.
+![](readmeAssets/authentication.png)
+
+### Profile Creation
+Users can create their profiles with personal information, avatars, and other details.
 
 ### Making Friends
 Users can send and accept friend requests, building connections within the platform.
 
+### Stories (Visible for 24 hours)
+Users can post temporary stories that are visible to friends for 24 hours.
+![](readmeAssets/home.png)
+
 ### Creating and Sharing Posts
 Ability to create text, image, or video posts.
 Share posts publicly or with selected friends.
-
-### Stories (Visible for 24 hours)
-Users can post temporary stories that are visible to friends for 24 hours.
+![](readmeAssets/post%20creation.png)
 
 ### Viewing and Searching Users
 Explore and search for other users registered on the platform.
+![](readmeAssets/profile-view.png)
 
 ### Profile Management
 Users can update their profile details, including personal information and avatars.
 Manage login credentials and security settings.
+![](readmeAssets/profile-edit.png)
 
 ### Real-Time Communication in Chats
 Real-time messaging with individual users.
-Group chatting functionality with real-time updates.
+![](readmeAssets/chat.png)
 
-### Group Admin Functionality
+### Group Chatting Functionality
+Group chatting functionality with real-time updates.
 Admin privileges for managing and moderating group chats.
+![](readmeAssets/groupChat.png)
 
 ## Getting Started
 
