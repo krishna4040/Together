@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
         socket.join(room);
     });
     socket.on('newMsg', (msg) => {
-        io.to(msg.chat).emit('msgRecieved', msg);
+        io.in(msg.chat).emit('msgRecieved', msg);
     })
 });
 

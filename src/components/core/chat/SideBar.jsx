@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { CiSearch } from "react-icons/ci";
-import { FaBell } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import UserListItem from './utils/UserListItems'
 import { pushChat, setSelectedChat } from '../../../store/slices/chat'
@@ -73,33 +72,23 @@ const SideBar = () => {
                 Talk-Together
             </h2>
             <div>
-                <div className="dropdown success">
-                    <label className="btn solid"><FaBell className='m-1 text-2xl' /></label>
-                    <div className="menu bottom">
-                        <a className="text-sm item">Profile</a>
-                        <a className="text-sm item">Account settings</a>
-                        <a className="text-sm item">Subscriptions</a>
-                    </div>
-                </div>
-                <div>
-                    <label className="drawer-overlay" onClick={toggleDrawer}></label>
-                    <div className={`drawer right ${isDrawerOpen ? 'show' : null}`}>
-                        <div className="flex flex-col h-full content">
-                            <button className="absolute btn sm circle ghost right-2 top-2" onClick={toggleDrawer}>✕</button>
-                            <h2 className="m-3 text-xl">Search Users</h2>
-                            <hr />
-                            <div className='flex items-center justify-start m-3'>
-                                <input className='mr-2 input success' placeholder='search by name or email' value={userName} onChange={changeHandler} />
-                                <button className='btn solid bw'>Go</button>
-                            </div>
-                            {
-                                suggestions.map(user => {
-                                    return <UserListItem key={user._id} user={user} handleFunction={() => { accessChat(user._id) }} />
-                                })
-                            }
+                <label className="drawer-overlay" onClick={toggleDrawer}></label>
+                <div className={`drawer right ${isDrawerOpen ? 'show' : null}`}>
+                    <div className="flex flex-col h-full content">
+                        <button className="absolute btn sm circle ghost right-2 top-2" onClick={toggleDrawer}>✕</button>
+                        <h2 className="m-3 text-xl">Search Users</h2>
+                        <hr />
+                        <div className='flex items-center justify-start m-3'>
+                            <input className='mr-2 input success' placeholder='search by name or email' value={userName} onChange={changeHandler} />
+                            <button className='btn solid bw'>Go</button>
                         </div>
-                        {loadingChat && <div className='spinner'></div>}
+                        {
+                            suggestions.map(user => {
+                                return <UserListItem key={user._id} user={user} handleFunction={() => { accessChat(user._id) }} />
+                            })
+                        }
                     </div>
+                    {loadingChat && <div className='spinner'></div>}
                 </div>
             </div>
         </div>
