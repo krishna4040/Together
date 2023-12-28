@@ -56,7 +56,7 @@ Welcome to our **Social Media App** Together! This application is designed to co
 
 
 ## API Reference
-Visit https://together-3i3j.onrender.com/api-docs to Read the RESTFUL api swagger documentation for the app
+Visit http://localhost:4000/api-docs/ to Read the RESTFUL api swagger documentation for the app After setting up app locally
 ## Run Locally
 
 Clone the project
