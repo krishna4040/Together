@@ -32,7 +32,7 @@ const specs = swaggerJsdoc({
         },
         servers: [
             {
-                url: 'http://localhost:4000/api/v1'
+                url: 'https://together-3i3j.onrender.com/api/v1'
             }
         ]
     },
@@ -44,7 +44,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
     pingTimeout: 6000,
     cors: {
-        origin: 'http://localhost:5173',
+        origin: 'https://together-social-media.netlify.app',
         credentials: true
     }
 });
