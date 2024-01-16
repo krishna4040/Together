@@ -13,7 +13,7 @@ let socket, selectedChatCompare;
 const ChatBox = ({ fecthAgain, setFecthAgain }) => {
 
     useEffect(() => {
-        socket = io('http://localhost:4000');
+        socket = io('https://together-3i3j.onrender.com');
     }, [])
 
     const dispacth = useDispatch();
