@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
+const { shuffleArray } = require('../utils/shuffle');
 
 exports.makeFriend = async (req, res) => {
     try {
@@ -88,5 +89,38 @@ exports.getFriends = async (req, res) => {
             success: false,
             message: error.message
         });
+    }
+}
+
+exports.getFriendsPosts = async (req, res) => {
+    try {
+        const { id } = req.user
+        if (!id) {
+            throw new Error('id not found')
+        }
+        const user = await User.findById(id).populate({ path: 'friends' }).select('friends').exec();
+        const friendIds = user.friends.map(friend => friend._id)
+
+        if (!friendIds.length) {
+            return res.status(200).json({
+                success: true,
+                message: 'No Friends Found',
+                data: []
+            });
+        }
+
+        const posts = await Post.find({ user: { $in: friendIds } }).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).exec();
+        const shuffledPosts = shuffleArray(posts)
+
+        res.status(200).json({
+            success: true,
+            message: 'posts fecthed successfully',
+            data: shuffledPosts
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
     }
 }
