@@ -9,7 +9,7 @@ const FriendPostSection = () => {
     const user = useSelector(state => state.user)
     const { token } = useSelector(state => state.auth)
 
-    const fecthFriendsPosts = async () => {
+    const fetchFriendsPosts = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/friends/getFriendsPosts`, {
                 headers: {
@@ -24,7 +24,7 @@ const FriendPostSection = () => {
     }
 
     useEffect(() => {
-        fecthFriendsPosts();
+        fetchFriendsPosts();
     }, [user.friends.length]);
 
     return (

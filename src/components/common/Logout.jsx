@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 const Logout = ({ setLogout }) => {
 
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const btn1Handler = () => {
-        dispacth(setToken(null));
+        dispatch(setToken(null));
         toast.success('Logged out');
         setLogout(false);
         navigate('/');

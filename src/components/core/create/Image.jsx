@@ -7,15 +7,15 @@ const Image = ({ setStep }) => {
 
     const [uploadPostImage, setUploadPostImage] = useState(null);
     const [displayPostImage, setDisplayPostImage] = useState(null);
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     const clickHandler = () => {
         if (!uploadPostImage || !displayPostImage) {
             toast.error("please provide a post image");
             return;
         }
-        dispacth(setUploadImage(uploadPostImage));
-        dispacth(setDisplayImage(displayPostImage));
+        dispatch(setUploadImage(uploadPostImage));
+        dispatch(setDisplayImage(displayPostImage));
         setStep("caption");
     }
 

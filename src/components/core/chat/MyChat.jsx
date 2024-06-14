@@ -6,30 +6,30 @@ import toast from 'react-hot-toast';
 import GroupChatModel from './utils/GroupChatModel'
 import { FaUsers } from "react-icons/fa6";
 
-const MyChat = ({ fecthAgain }) => {
+const MyChat = ({ fetchAgain }) => {
 
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const { token } = useSelector(state => state.auth);
     const { selectedChat, chats } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
 
-    const fecthChats = async () => {
+    const fetchChats = async () => {
         try {
             const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/chat/fetchChat`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            dispacth(setChats(data.data));
+            dispatch(setChats(data.data));
         } catch (error) {
-            toast.error("unable to fecth chats");
+            toast.error("unable to fetch chats");
             console.log(error);
         }
     }
 
     useEffect(() => {
-        fecthChats();
-    }, [fecthAgain]);
+        fetchChats();
+    }, [fetchAgain]);
 
     const getSenderUserName = (users) => {
         return users[0]._id === user._id ? users[1].userName : users[0].userName;
@@ -49,7 +49,7 @@ const MyChat = ({ fecthAgain }) => {
                 {
                     chats.map(chat => {
                         return (
-                            <div key={chat._id} onClick={() => { dispacth(setSelectedChat(chat)) }} className={`cursor-pointer ${selectedChat === chat ? 'bg-[#38b2ac] text-white' : 'bg-[#e8e8e8] text-black'} px-3 py-2 rounded-lg`}>
+                            <div key={chat._id} onClick={() => { dispatch(setSelectedChat(chat)) }} className={`cursor-pointer ${selectedChat === chat ? 'bg-[#38b2ac] text-white' : 'bg-[#e8e8e8] text-black'} px-3 py-2 rounded-lg`}>
                                 {
                                     chat.isGroupChat ?
                                         <div className='flex items-center justify-start gap-4 p-2'>

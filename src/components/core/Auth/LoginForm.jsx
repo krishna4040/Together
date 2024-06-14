@@ -13,7 +13,7 @@ const LoginForm = () => {
     const { isSubmitSuccessful } = formState;
 
     const navigate = useNavigate();
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isSubmitSuccessful) {
@@ -29,7 +29,7 @@ const LoginForm = () => {
             }
             toast.success("signed up successfully");
             sessionStorage.setItem("token", response.data.token);
-            dispacth(setToken(response.data.token));
+            dispatch(setToken(response.data.token));
             navigate('/');
         } catch (error) {
             console.log(error);

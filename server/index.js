@@ -50,12 +50,8 @@ const io = new Server(httpServer, {
 });
 
 io.on('connection', (socket) => {
-    socket.on('joinChat', (room) => {
-        socket.join(room);
-    });
-    socket.on('newMsg', (msg) => {
-        io.in(msg.chat).emit('msgRecieved', msg);
-    })
+    socket.on('joinChat', room => socket.join(room))
+    socket.on('newMsg', msg => io.in(msg.chat).emit('msgReceived', msg))
 });
 
 dbConnect();

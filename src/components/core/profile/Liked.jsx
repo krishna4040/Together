@@ -6,7 +6,7 @@ const Liked = ({ user }) => {
 
     const [liked, setLiked] = useState([]);
 
-    const fecthLikedPosts = async () => {
+    const fetchLikedPosts = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/likedPostByaUser/${user._id}`);
             setLiked(response.data.data);
@@ -16,7 +16,7 @@ const Liked = ({ user }) => {
     }
 
     useEffect(() => {
-        fecthLikedPosts();
+        fetchLikedPosts();
     }, []);
 
     if (!liked.length) {

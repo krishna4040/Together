@@ -7,9 +7,9 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import UserListItems from './UserListItems';
 
-const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
+const UpdatGroupChatModal = ({ fetchAgain, setfetchAgain }) => {
 
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     const [isOpen, setIsOpen] = useState(false);
     const [groupChatName, setGroupChatName] = useState('');
@@ -19,12 +19,12 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
     const currentUser = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
 
-    const fecthSuggestions = async (q) => {
+    const fetchSuggestions = async (q) => {
         try {
             const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${q}`);
             setSuggestions(data.data);
         } catch (error) {
-            toast.error("unable tofecth suggestions");
+            toast.error("unable tofetch suggestions");
             console.log(error);
         }
     }
@@ -44,9 +44,9 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            dispacth(setSelectedChat(data.data));
+            dispatch(setSelectedChat(data.data));
             setGroupChatName('');
-            setFecthAgain(!fecthAgain);
+            setfetchAgain(!fetchAgain);
         } catch (error) {
             toast.error("unable to rename group");
             console.log(error);
@@ -87,7 +87,7 @@ const UpdatGroupChatModal = ({ fecthAgain, setFecthAgain }) => {
 
 
     const changeHandler = (event) => {
-        fecthSuggestions(event.target.value);
+        fetchSuggestions(event.target.value);
         setUserName(event.target.value);
     }
 

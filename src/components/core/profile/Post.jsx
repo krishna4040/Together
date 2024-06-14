@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 
 function Post({ title, imageSrc, likes, comments, _id }) {
 
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const { token } = useSelector(state => state.auth);
 
     const handleDelete = async (_id) => {
@@ -19,7 +19,7 @@ function Post({ title, imageSrc, likes, comments, _id }) {
                 }
             });
             toast.error("post deleted");
-            dispacth(removePost(_id));
+            dispatch(removePost(_id));
         } catch (error) {
             console.log(error);
         }

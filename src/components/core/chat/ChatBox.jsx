@@ -10,11 +10,11 @@ import { useSocket } from '../../../context/SocketContext';
 
 let selectedChatCompare;
 
-const ChatBox = ({ fecthAgain, setFecthAgain }) => {
+const ChatBox = ({ fetchAgain, setFetchAgain }) => {
 
     const socket = useSocket();
 
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const { selectedChat } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
@@ -25,12 +25,12 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
-    const fecthMessages = async () => {
+    const fetchMessages = async () => {
         if (!selectedChat) {
             return;
         }
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/message/fecthMessages/${selectedChat._id}`, {
+            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/message/fetchMessages/${selectedChat._id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -38,19 +38,19 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
             setMessages(data.data);
             socket.emit('joinChat', selectedChat._id);
         } catch (error) {
-            toast.error("unable to fecth messages for the chat");
+            toast.error("unable to fetch messages for the chat");
             console.log(error);
         }
     }
 
     useEffect(() => {
-        fecthMessages();
+        fetchMessages();
         selectedChatCompare = selectedChat;
 
     }, [selectedChat]);
 
     useEffect(() => {
-        socket.on('msgRecieved', (msg) => {
+        socket.on('msgReceived', (msg) => {
             if (!selectedChatCompare || selectedChatCompare._id !== msg.chat) {
                 // give notification
             } else {
@@ -94,7 +94,7 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                 selectedChat ?
                     <>
                         <div className='text-[28px] md:text-[30px] pb-3 px-2 w-full flex justify-between items-center'>
-                            <FaArrowLeft className='flex lg:hidden md:hidden' onClick={() => { dispacth(setSelectedChat(null)) }} />
+                            <FaArrowLeft className='flex lg:hidden md:hidden' onClick={() => { dispatch(setSelectedChat(null)) }} />
                             <div className='flex items-center justify-between w-[820px]'>
                                 <p>
                                     {
@@ -104,7 +104,7 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                                     }
                                 </p>
                                 {
-                                    selectedChat.isGroupChat && <UpdateGroupChatModal fecthAgain={fecthAgain} setFecthAgain={setFecthAgain} />
+                                    selectedChat.isGroupChat && <UpdateGroupChatModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
                                 }
                             </div>
                         </div>

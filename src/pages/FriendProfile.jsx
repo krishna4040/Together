@@ -10,7 +10,7 @@ const FriendProfile = () => {
     const [friend, setFriend] = useState({});
     const [step, setStep] = useState('posts');
 
-    const fecthFriend = async () => {
+    const fetchFriend = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
             setFriend(response.data.data[0]);
@@ -20,7 +20,7 @@ const FriendProfile = () => {
     }
 
     useEffect(() => {
-        fecthFriend();
+        fetchFriend();
     }, [friend]);
 
     return (

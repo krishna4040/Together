@@ -6,7 +6,7 @@ const Friends = ({ friend, setStep }) => {
 
     const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
-    const fecthFriends = async () => {
+    const fetchFriends = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/friends/getFriends?id=${friend._id}`);
             setFriends(response.data.data);
@@ -16,7 +16,7 @@ const Friends = ({ friend, setStep }) => {
     }
 
     useEffect(() => {
-        fecthFriends();
+        fetchFriends();
     }, []);
 
     if (!friends.length) {

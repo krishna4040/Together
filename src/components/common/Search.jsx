@@ -13,14 +13,14 @@ const Search = ({ setSearch }) => {
     const [user, setUser] = useState({});
     const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     const changeSuggestions = async (key) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
             setSuggestions(response.data.data);
         } catch (error) {
-            toast.error("unable to fecth suggestions");
+            toast.error("unable to fetch suggestions");
             console.log(error);
         }
     }
@@ -31,14 +31,14 @@ const Search = ({ setSearch }) => {
         changeSuggestions(event.target.value);
     }
 
-    const fecthUser = async (userName) => {
+    const fetchUser = async (userName) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
             if (response.data.success) {
                 setUser(response.data.data);
             }
         } catch (error) {
-            toast.error("unable to fecth user from userName");
+            toast.error("unable to fetch user from userName");
             console.log(error);
         }
     }
@@ -55,7 +55,7 @@ const Search = ({ setSearch }) => {
                 throw new Error(response.data.message);
             }
             toast.success("friend connected");
-            dispacth(setFriend(friend));
+            dispatch(setFriend(friend));
         } catch (error) {
             console.log(error);
         }
@@ -73,7 +73,7 @@ const Search = ({ setSearch }) => {
                 throw new Error(response.data.message);
             }
             toast.error("Friend removed");
-            dispacth(removeFriend(friend._id));
+            dispatch(removeFriend(friend._id));
         } catch (error) {
             console.log(error);
         }
@@ -114,13 +114,13 @@ const Search = ({ setSearch }) => {
                             <div className='flex flex-col items-start justify-start gap-3 p-2 overflow-x-hidden overflow-y-auto h-fit'>
                                 {
                                     suggestions.slice(0, 4).map((suggestion, index) => {
-                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { fecthUser(suggestion.userName) }}>{suggestion.userName}</button>
+                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { fetchUser(suggestion.userName) }}>{suggestion.userName}</button>
                                     })
                                 }
                             </div>
                     }
                     <div className="flex gap-3">
-                        <button className="flex-1 btn solid danger" onClick={() => { fecthUser(userName) }}>Search</button>
+                        <button className="flex-1 btn solid danger" onClick={() => { fetchUser(userName) }}>Search</button>
                     </div>
                 </div>
             </label>

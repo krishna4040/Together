@@ -13,7 +13,7 @@ const SideBar = () => {
     const [suggestions, setSuggestions] = useState([]);
     const [userName, setUserName] = useState("");
 
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const { chats } = useSelector(state => state.chat);
     const { token } = useSelector(state => state.auth);
 
@@ -26,7 +26,7 @@ const SideBar = () => {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
             setSuggestions(response.data.data);
         } catch (error) {
-            toast.error("unable fecth suggetions");
+            toast.error("unable fetch suggetions");
         }
     }
 
@@ -47,9 +47,9 @@ const SideBar = () => {
                 }
             });
             if (!chats.find((c) => c._id === data.data._id)) {
-                dispacth(pushChat(data.data));
+                dispatch(pushChat(data.data));
             }
-            dispacth(setSelectedChat(data.data));
+            dispatch(setSelectedChat(data.data));
             setLoadingChat(false);
             toggleDrawer();
         } catch (error) {

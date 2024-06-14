@@ -5,7 +5,7 @@ exports.getAllUsers = async (req, res) => {
         const { id } = req.user;
         const users = await User.find({ _id: { $ne: id } }).populate('profileDetails').exec();
         if (!users) {
-            throw new Error('unable to fecth users');
+            throw new Error('unable to fetch users');
         }
         res.status(200).json({
             success: true,
@@ -55,7 +55,7 @@ exports.getUserNameSuggestions = async (req, res) => {
             });
         res.status(200).json({
             success: true,
-            message: 'suggestions fecthed',
+            message: 'suggestions fetched',
             data: suggestions
         });
     } catch (error) {

@@ -81,7 +81,7 @@ exports.getFriends = async (req, res) => {
         const friends = user.friends;
         res.status(200).json({
             success: true,
-            message: 'frinends details fecthed successfully',
+            message: 'frinends details fetched successfully',
             data: friends
         });
     } catch (error) {
@@ -114,7 +114,7 @@ exports.getFriendsPosts = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'posts fecthed successfully',
+            message: 'posts fetched successfully',
             data: shuffledPosts
         });
     } catch (error) {

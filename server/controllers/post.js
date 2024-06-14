@@ -139,7 +139,7 @@ exports.likedPostByaUser = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'fecthed all liked post by the user',
+            message: 'fetched all liked post by the user',
             data: allLikedPost
         })
     } catch (error) {
@@ -160,7 +160,7 @@ exports.getPostComment = async (req, res) => {
         const comments = post.comments;
         res.status(200).json({
             success: true,
-            message: 'Comments for a Post fecthed',
+            message: 'Comments for a Post fetched',
             data: comments
         });
     } catch (error) {
@@ -183,7 +183,7 @@ exports.getPostForUser = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'fecthed user posts',
+            message: 'fetched user posts',
             data: post
         });
     } catch (error) {
@@ -200,7 +200,7 @@ exports.getAllPosts = async (req, res) => {
         const shufflePosts = shuffleArray(allPosts);
         res.status(200).json({
             success: true,
-            message: 'all posts fecthed successfully',
+            message: 'all posts fetched successfully',
             data: shufflePosts
         });
     } catch (error) {

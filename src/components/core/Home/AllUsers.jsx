@@ -9,9 +9,9 @@ const AllUsers = () => {
     const { token } = useSelector(state => state.auth);
     const currentUser = useSelector(state => state.user);
     const [users, setUsers] = useState([]);
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
-    const fecthAllUsers = async () => {
+    const fetchAllUsers = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/getAllUsers`, {
                 headers: {
@@ -25,7 +25,7 @@ const AllUsers = () => {
     }
 
     useEffect(() => {
-        fecthAllUsers();
+        fetchAllUsers();
     }, []);
 
     const connectHandler = async (friend) => {
@@ -41,7 +41,7 @@ const AllUsers = () => {
                 throw new Error(response.data.message);
             }
             toast.success("Friend connected");
-            dispacth(setFriend(friend));
+            dispatch(setFriend(friend));
         } catch (error) {
             console.log(error);
         }
@@ -60,7 +60,7 @@ const AllUsers = () => {
                 throw new Error(response.data.message);
             }
             toast.error("Friend removed");
-            dispacth(removeFriend(friend._id));
+            dispatch(removeFriend(friend._id));
         } catch (error) {
             console.log(error);
         }

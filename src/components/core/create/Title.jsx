@@ -6,14 +6,14 @@ import toast from 'react-hot-toast';
 const Title = ({ setStep }) => {
 
     const [postTitle, setPostTitle] = useState('');
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     const clickHandler = () => {
         if (!postTitle) {
             toast.error("Please select a title");
             return;
         }
-        dispacth(setTitle(postTitle));
+        dispatch(setTitle(postTitle));
         setStep("image");
     }
 
