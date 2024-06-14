@@ -2,30 +2,43 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const { shuffleArray } = require('../utils/shuffle');
 
-exports.makeFriend = async (req, res) => {
+exports.sendFriendRequest = async (req, res) => {
     try {
         const { friendId } = req.body;
         const { id } = req.user;
         if (!friendId) {
             throw new Error('friend id is requiered');
         }
-        const friend = await User.findById(friendId);
+        const friend = await User.findByIdAndUpdate(friendId, { $push: { requests: { id } } })
         if (!friend) {
             throw new Error('Friend id do not exist');
         }
-        const user = await User.findById(id);
-        const alReadyFriended = user.friends.includes(friend._id);
-        if (alReadyFriended) {
-            throw new Error('alReady friended');
+        res.status(200).json({
+            success: true,
+            message: 'friend request sent successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+exports.acceptFriendRequest = async (req, res) => {
+    try {
+        const { id } = req.user;
+        const { friendId } = req.body;
+        if (!friendId) {
+            throw new Error('friend id is required');
         }
-        const userAddFriend = await User.findByIdAndUpdate(id, { $push: { friends: friend._id } });
-        const friendAddUser = await User.findByIdAndUpdate(friend._id, { $push: { friends: id } });
-        if (!userAddFriend || !friendAddUser) {
-            throw new Error('unable to make friend');
+        const user = await User.findByIdAndUpdate(id, { $pull: { requests: { friendId } }, $push: { friends: { friendId } } })
+        if (!user) {
+            throw new Error('could not accept Fr')
         }
         res.status(200).json({
             success: true,
-            message: 'friend added succesfully'
+            message: 'friend accepted successfully'
         });
     } catch (error) {
         res.status(500).json({
