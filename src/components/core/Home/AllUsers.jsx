@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { sendFriendRequest, removeFriend } from '../../../store/slices/user'
+import { removeFriend } from '../../../store/slices/user'
 
 const AllUsers = () => {
-
     const { token } = useSelector(state => state.auth);
     const currentUser = useSelector(state => state.user);
     const [users, setUsers] = useState([]);
@@ -26,7 +25,7 @@ const AllUsers = () => {
 
     useEffect(() => {
         fetchAllUsers();
-    }, [currentUser.requests.length]);
+    }, []);
 
     const connectHandler = async (friend) => {
         try {
@@ -41,7 +40,7 @@ const AllUsers = () => {
                 throw new Error(response.data.message);
             }
             toast.success("Friend connected");
-            dispatch(sendFriendRequest(friend));
+            fetchAllUsers();
         } catch (error) {
             console.log(error);
         }
@@ -66,9 +65,28 @@ const AllUsers = () => {
         }
     }
 
+    const withDrawHandler = async (friend) => {
+        try {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/withdrawFriendRequest`, {
+                friendId: friend._id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+            fetchAllUsers();
+            toast.error("Request withdrawn!!")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
-        <>
-            <h1 className=''>Suggestions</h1>
+        <div className='flex flex-col items-center justify-center'>
+            <h1 className='text-2xl text-white italic'>Suggestions</h1>
             <table className='border-separate border-spacing-3'>
                 <tbody>
                     {
@@ -89,7 +107,7 @@ const AllUsers = () => {
                                                 currentUser.friends.find(friend => friend._id === user._id) ?
                                                     <button className='btn outline danger' onClick={() => { removeHandler(user) }}>Remove</button> :
                                                     user.requests.find(req => req._id === currentUser._id) ?
-                                                        <button className='btn outline info' disabled>Requested</button> :
+                                                        <button className='btn outline info' onClick={() => withDrawHandler(user)} >Requested</button> :
                                                         <button className='btn solid success' onClick={() => { connectHandler(user) }}>Connect</button>
                                             }
                                         </td>
@@ -103,7 +121,7 @@ const AllUsers = () => {
                     }
                 </tbody>
             </table>
-        </>
+        </div>
     )
 }
 

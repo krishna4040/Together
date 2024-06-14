@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { removeFriend } from '../../store/slices/user'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { sendFriendRequest } from '../../store/slices/user';
 
 const Search = ({ setSearch }) => {
 
@@ -56,10 +55,29 @@ const Search = ({ setSearch }) => {
             if (!response.data.success) {
                 throw new Error(response.data.message);
             }
+            fetchUser(userName)
             toast.success("friend request sent!");
-            dispatch(sendFriendRequest(friend));
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const withDrawHandler = async (friend) => {
+        try {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/withdrawFriendRequest`, {
+                friendId: friend._id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+            fetchUser(userName)
+            toast.error("Request withdrawn!!")
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -110,7 +128,7 @@ const Search = ({ setSearch }) => {
                                         currentUser.friends.find(friend => friend._id === user._id) ?
                                             <button className='btn outline danger' onClick={() => { removeHandler(user) }}>Remove</button> :
                                             user.requests.find(req => req._id === currentUser._id) ?
-                                                <button className='btn outline info' disabled>Requested</button> :
+                                                <button className='btn outline info' onClick={() => { withDrawHandler(user) }}>Requested</button> :
                                                 <button className='btn solid success' onClick={() => { connectHandler(user) }}>Connect</button>
                                     }
                                     <button className='btn outline danger' onClick={() => { visitHandler(user.userName) }}>Visit</button>

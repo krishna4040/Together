@@ -36,11 +36,8 @@ const userSlice = createSlice({
             state.posts = posts;
             state.chat = chat;
         },
-        sendFriendRequest: (state, action) => {
-            state.requests.push(action.payload);
-        },
         acceptFriendRequest: (state, action) => {
-            state.requests = state.requests.filter(request => request._id !== action.payload);
+            state.requests = state.requests.filter(request => request._id !== action.payload._id);
             state.friends.push(action.payload);
         },
         rejectFriendRequest: (state, action) => {
@@ -73,5 +70,5 @@ const userSlice = createSlice({
     }
 });
 
-export const { setUser, setFriend, removeFriend, addPost, addChat, removePost, acceptFriendRequest, rejectFriendRequest, sendFriendRequest } = userSlice.actions;
+export const { setUser, setFriend, removeFriend, addPost, addChat, removePost, acceptFriendRequest, rejectFriendRequest } = userSlice.actions;
 export default userSlice.reducer;

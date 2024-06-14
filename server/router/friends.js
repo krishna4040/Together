@@ -61,7 +61,7 @@ router.put('/acceptFriendRequest', auth, acceptFriendRequest);
 
 router.put('/rejectFriendRequest', auth, rejectFriendRequest);
 
-router.put('/withDrawFriendRequest', auth, withDrawFriendRequest);
+router.put('/withdrawFriendRequest', auth, withDrawFriendRequest);
 
 /**
  * @swagger
