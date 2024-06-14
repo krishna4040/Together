@@ -6,15 +6,13 @@ import UpdateGroupChatModal from './utils/UpdatGroupChatModal'
 import ScrollableChat from './utils/ScrollableChat'
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { io } from 'socket.io-client'
+import { useSocket } from '../../../context/SocketContext';
 
-let socket, selectedChatCompare;
+let selectedChatCompare;
 
 const ChatBox = ({ fecthAgain, setFecthAgain }) => {
 
-    useEffect(() => {
-        socket = io('https://together-3i3j.onrender.com');
-    }, [])
+    const socket = useSocket();
 
     const dispacth = useDispatch();
     const { selectedChat } = useSelector(state => state.chat);
@@ -59,7 +57,11 @@ const ChatBox = ({ fecthAgain, setFecthAgain }) => {
                 setMessages([...messages, msg]);
             }
         })
-    });
+
+        return () => {
+            socket.off("msgRecieved")
+        }
+    }, []);
 
     const typingHandler = (e) => {
         setNewMessage(e.target.value)
