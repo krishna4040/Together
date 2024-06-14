@@ -7,12 +7,22 @@ exports.sendFriendRequest = async (req, res) => {
         const { friendId } = req.body;
         const { id } = req.user;
         if (!friendId) {
-            throw new Error('friend id is requiered');
+            throw new Error('friend id is required');
         }
-        const friend = await User.findByIdAndUpdate(friendId, { $push: { requests: { id } } })
+
+        const friend = await User.findById(friendId)
         if (!friend) {
             throw new Error('Friend id do not exist');
         }
+
+        const idx = friend.requests.findIndex(req => req == id)
+        if (idx != -1) {
+            throw new Error('Friend request already sent');
+        }
+
+        await friend.updateOne({ $push: { requests: id } })
+        await friend.save();
+
         res.status(200).json({
             success: true,
             message: 'friend request sent successfully'

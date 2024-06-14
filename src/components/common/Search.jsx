@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-import { setFriend, removeFriend } from '../../store/slices/user'
+import { removeFriend } from '../../store/slices/user'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import { sendFriendRequest } from '../../store/slices/user';
 
 const Search = ({ setSearch }) => {
 
@@ -42,9 +43,10 @@ const Search = ({ setSearch }) => {
             console.log(error);
         }
     }
+
     const connectHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/makeFriend`, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
                 friendId: friend._id
             }, {
                 headers: {
@@ -54,12 +56,13 @@ const Search = ({ setSearch }) => {
             if (!response.data.success) {
                 throw new Error(response.data.message);
             }
-            toast.success("friend connected");
-            dispatch(setFriend(friend));
+            toast.success("friend request sent!");
+            dispatch(sendFriendRequest(friend));
         } catch (error) {
             console.log(error);
         }
     }
+
     const removeHandler = async (friend) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
@@ -78,6 +81,7 @@ const Search = ({ setSearch }) => {
             console.log(error);
         }
     }
+
     const visitHandler = (userName) => {
         navigate(`/view-profile/${userName}`);
     }
@@ -105,7 +109,9 @@ const Search = ({ setSearch }) => {
                                     {
                                         currentUser.friends.find(friend => friend._id === user._id) ?
                                             <button className='btn outline danger' onClick={() => { removeHandler(user) }}>Remove</button> :
-                                            <button className='btn outline success' onClick={() => { connectHandler(user) }}>Connect</button>
+                                            user.requests.find(req => req._id === currentUser._id) ?
+                                                <button className='btn outline info' disabled>Requested</button> :
+                                                <button className='btn solid success' onClick={() => { connectHandler(user) }}>Connect</button>
                                     }
                                     <button className='btn outline danger' onClick={() => { visitHandler(user.userName) }}>Visit</button>
                                 </div>

@@ -44,7 +44,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
     pingTimeout: 6000,
     cors: {
-        origin: 'https://together-social-media.netlify.app',
+        origin: '*',
         credentials: true
     }
 });
