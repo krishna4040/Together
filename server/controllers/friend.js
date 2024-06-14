@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
 const { shuffleArray } = require('../utils/shuffle');
+const Notification = require('../models/Notification');
 
 exports.sendFriendRequest = async (req, res) => {
     try {
@@ -20,8 +21,16 @@ exports.sendFriendRequest = async (req, res) => {
             throw new Error('Friend request already sent');
         }
 
+        const user = await User.findById(id)
+
         await friend.updateOne({ $push: { requests: id } })
         await friend.save();
+        await Notification.create({
+            for: friendId,
+            by: id,
+            content: `${user.userName} has requested to connect`,
+            notificationType: 'friend-request',
+        })
 
         res.status(200).json({
             success: true,
@@ -75,14 +84,25 @@ exports.acceptFriendRequest = async (req, res) => {
         if (!friendId) {
             throw new Error('friend id is required');
         }
-        const friend = await User.findByIdAndUpdate(friendId, { $push: { friends: { id } } })
+        const friend = await User.findById(friendId)
+        const user = await User.findById(id)
         if (!friend) {
             throw new Error('Friend do not exist');
         }
-        const user = await User.findByIdAndUpdate(id, { $pull: { requests: { friendId } }, $push: { friends: { friendId } } })
-        if (!user) {
-            throw new Error('could not accept Fr')
-        }
+
+        await friend.updateOne({ $push: { friends: id } })
+        await user.updateOne({ $pull: { requests: friendId }, $push: { friends: friendId } })
+
+        await friend.save();
+        await user.save();
+
+        await Notification.create({
+            for: friendId,
+            by: id,
+            content: `${user.userName} have accepted your connection`,
+            notificationType: 'friend-request',
+        })
+
         res.status(200).json({
             success: true,
             message: 'friend accepted successfully'
@@ -102,10 +122,11 @@ exports.rejectFriendRequest = async (req, res) => {
         if (!friendId) {
             throw new Error('friend id is required');
         }
-        const user = await User.findByIdAndUpdate(id, { $pull: { requests: { friendId } } })
-        if (!user) {
-            throw new Error('could not reject Fr')
-        }
+        const user = await User.findById(id)
+
+        await user.updateOne({ $pull: { requests: { friendId } } })
+        await user.save()
+
         res.status(200).json({
             success: true,
             message: 'friend accepted successfully'
