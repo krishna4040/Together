@@ -32,6 +32,10 @@ exports.acceptFriendRequest = async (req, res) => {
         if (!friendId) {
             throw new Error('friend id is required');
         }
+        const friend = await User.findByIdAndUpdate(friendId, { $push: { friends: { id } } })
+        if (!friend) {
+            throw new Error('Friend do not exist');
+        }
         const user = await User.findByIdAndUpdate(id, { $pull: { requests: { friendId } }, $push: { friends: { friendId } } })
         if (!user) {
             throw new Error('could not accept Fr')
@@ -76,7 +80,7 @@ exports.removeFriend = async (req, res) => {
         const { friendId } = req.body;
         const { id } = req.user;
         if (!friendId) {
-            throw new Error('friend id is requiered');
+            throw new Error('friend id is required');
         }
         const friend = await User.findById(friendId);
         if (!friend) {
@@ -94,7 +98,7 @@ exports.removeFriend = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'friend removed succesfully'
+            message: 'friend removed successfully'
         });
     } catch (error) {
         res.status(500).json({
@@ -117,7 +121,7 @@ exports.getFriends = async (req, res) => {
         const friends = user.friends;
         res.status(200).json({
             success: true,
-            message: 'frinends details fetched successfully',
+            message: 'friends details fetched successfully',
             data: friends
         });
     } catch (error) {
