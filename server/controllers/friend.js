@@ -35,6 +35,39 @@ exports.sendFriendRequest = async (req, res) => {
     }
 }
 
+exports.withDrawFriendRequest = async (req, res) => {
+    try {
+        const { friendId } = req.body;
+        const { id } = req.user;
+        if (!friendId) {
+            throw new Error('friend id is required');
+        }
+
+        const friend = await User.findById(friendId)
+        if (!friend) {
+            throw new Error('Friend id do not exist');
+        }
+
+        const idx = friend.requests.findIndex(req => req == id)
+        if (idx == -1) {
+            throw new Error('Friend request not sent');
+        }
+
+        await friend.updateOne({ $pull: { requests: id } })
+        await friend.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'friend request withdrawn'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
 exports.acceptFriendRequest = async (req, res) => {
     try {
         const { id } = req.user;
