@@ -48,6 +48,29 @@ exports.acceptFriendRequest = async (req, res) => {
     }
 }
 
+exports.rejectFriendRequest = async (req, res) => {
+    try {
+        const { id } = req.user;
+        const { friendId } = req.body;
+        if (!friendId) {
+            throw new Error('friend id is required');
+        }
+        const user = await User.findByIdAndUpdate(id, { $pull: { requests: { friendId } } })
+        if (!user) {
+            throw new Error('could not reject Fr')
+        }
+        res.status(200).json({
+            success: true,
+            message: 'friend accepted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
 exports.removeFriend = async (req, res) => {
     try {
         const { friendId } = req.body;
