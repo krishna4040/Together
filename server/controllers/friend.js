@@ -210,8 +210,8 @@ exports.getFriendsPosts = async (req, res) => {
         if (!id) {
             throw new Error('id not found')
         }
-        const user = await User.findById(id).populate({ path: 'friends' }).select('friends').exec();
-        const friendIds = user.friends.map(friend => friend._id)
+        const user = await User.findById(id).select('friends').exec();
+        const friendIds = user.friends
 
         if (!friendIds.length) {
             return res.status(200).json({
@@ -221,7 +221,12 @@ exports.getFriendsPosts = async (req, res) => {
             });
         }
 
-        const posts = await Post.find({ user: { $in: friendIds } }).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).exec();
+        const posts = await Post
+            .find({ user: { $in: friendIds } })
+            .populate('likes')
+            .populate({ path: 'user', populate: 'profileDetails' })
+            .exec();
+
         const shuffledPosts = shuffleArray(posts)
 
         res.status(200).json({

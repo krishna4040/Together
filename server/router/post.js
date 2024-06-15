@@ -200,7 +200,7 @@ router.delete('/deletePost', auth, deletePost);
  *                   type: string
  *                   description: An error message describing the internal server error.
  */
-router.post('/likePost', auth, likePost);
+router.put('/likePost', auth, likePost);
 
 /**
  * @swagger
@@ -240,7 +240,7 @@ router.post('/likePost', auth, likePost);
  *               type: string
  *               description: An error message describing the internal server error.
  */
-router.delete('/unlikePost', unlikePost);
+router.put('/unlikePost', auth, unlikePost);
 
 /**
  * @swagger
@@ -392,7 +392,7 @@ router.get('/getPostComments/:postId', getPostComment);
  *                   type: string
  *                   description: An error message describing the internal server error.
  */
-router.post('/commentPost', auth, commentPost);
+router.put('/commentPost', auth, commentPost);
 
 /**
  * @swagger

@@ -66,6 +66,10 @@ exports.likePost = async (req, res) => {
         if (!postId) {
             throw new Error('Post id is required');
         }
+        const alReadyLiked = await Like.findOne({ user: id, post: postId })
+        if (alReadyLiked) {
+            throw new Error('You have already liked this post')
+        }
         const likedPost = await Like.create({
             post: postId,
             user: id
@@ -83,7 +87,8 @@ exports.likePost = async (req, res) => {
         })
         res.status(200).json({
             success: true,
-            message: "post liked successfully"
+            message: "post liked successfully",
+            data: likedPost
         });
     } catch (error) {
         res.status(500).json({
@@ -95,18 +100,22 @@ exports.likePost = async (req, res) => {
 
 exports.unlikePost = async (req, res) => {
     try {
-        const { postId } = req.query;
+        const { id } = req.user;
+        const { postId } = req.body;
         if (!postId) {
-            throw new Error('Post id is requiered');
+            throw new Error('Post id is required');
         }
-        const unlikePost = await Like.findByIdAndDelete(postId);
-        if (!unlikePost) {
-            throw new Error('unable to like post');
+        const likedPost = await Like.findOne({ user: id, post: postId })
+        if (!likedPost) {
+            throw new Error('You have not liked this post')
         }
-        await Post.findByIdAndUpdate(postId, { $pull: { likes: unlikePost._id } });
+
+        await likedPost.deleteOne();
+        await Post.findByIdAndUpdate(postId, { $pull: { likes: likedPost._id } });
+
         res.status(200).json({
             success: true,
-            message: 'post unliked successfully'
+            message: 'post unLiked successfully'
         });
     } catch (error) {
         res.status(500).json({
@@ -121,7 +130,7 @@ exports.commentPost = async (req, res) => {
         const { postId, comment } = req.body;
         const { id } = req.user;
         if (!postId || !comment) {
-            throw new Error('All feilds are requiered');
+            throw new Error('All fields are required');
         }
         const commentPost = await Comment.create({
             post: postId,
@@ -143,7 +152,8 @@ exports.commentPost = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "post commented successfully"
+            message: "post commented successfully",
+            data: commentPost
         });
     } catch (error) {
         res.status(500).json({
@@ -179,8 +189,7 @@ exports.getPostComment = async (req, res) => {
         if (!postId) {
             throw new Error('post Id not found');
         }
-        const post = await Post.findById(postId);
-        const comments = post.comments;
+        const comments = await Comment.find({ post: postId }).populate({path: 'user', populate: 'profileDetails'}).exec();
         res.status(200).json({
             success: true,
             message: 'Comments for a Post fetched',
