@@ -14,7 +14,7 @@ const notificationSchema = new mongoose.Schema({
     content: String,
     notificationType: {
         type: String,
-        enum: ['post','friend-request', 'chat'],
+        enum: ['action', 'readOnly'],
         required: true,
     },
     createdAt: {

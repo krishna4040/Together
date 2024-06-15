@@ -29,7 +29,7 @@ exports.sendFriendRequest = async (req, res) => {
             for: friendId,
             by: id,
             content: `${user.userName} has requested to connect`,
-            notificationType: 'friend-request',
+            notificationType: 'action',
         })
 
         res.status(200).json({
@@ -105,7 +105,7 @@ exports.acceptFriendRequest = async (req, res) => {
             for: friendId,
             by: id,
             content: `${user.userName} have accepted your connection`,
-            notificationType: 'friend-request',
+            notificationType: 'readOnly',
         })
 
         res.status(200).json({

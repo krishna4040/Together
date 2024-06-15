@@ -98,7 +98,7 @@ const Notifications = ({ setNotification }) => {
                                                 <span>{notification.content}</span>
                                                 <span>{notification.createdAt.time}</span>
                                                 {
-                                                    notification.notificationType === 'friend-request' &&
+                                                    notification.notificationType === 'action' &&
                                                     <div className='flex gap-3 items-center justify-center'>
                                                         <FaCheck onClick={() => acceptRequestHandler(notification.by, notification.createdAt.date)} className='text-xl hover:text-green-400 hover:scale-110 duration-200 transition-all' />
                                                         <ImCross onClick={() => rejectRequestHandler(notification.by, notification.createdAt.date)} className='text-xl hover:text-red-600 hover:scale-110 duration-200 transition-all' />
