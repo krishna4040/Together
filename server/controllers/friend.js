@@ -26,7 +26,7 @@ exports.sendFriendRequest = async (req, res) => {
         await friend.updateOne({ $push: { requests: id } })
         await friend.save();
         await Notification.create({
-            for: friendId,
+            for: [friendId],
             by: id,
             content: `${user.userName} has requested to connect`,
             notificationType: 'action',
@@ -65,7 +65,7 @@ exports.withDrawFriendRequest = async (req, res) => {
         await friend.updateOne({ $pull: { requests: id } })
         await friend.save();
 
-        await Notification.findOneAndDelete({ for: friendId, by: id })
+        await Notification.findOneAndDelete({ for: friendId, by: id, notificationType: 'action' })
 
         res.status(200).json({
             success: true,
@@ -99,10 +99,10 @@ exports.acceptFriendRequest = async (req, res) => {
         await friend.save();
         await user.save();
 
-        await Notification.findOneAndDelete({ for: id, by: friendId })
+        await Notification.findOneAndDelete({ for: id, by: friendId, notificationType: 'action' })
 
         await Notification.create({
-            for: friendId,
+            for: [friendId],
             by: id,
             content: `${user.userName} have accepted your connection`,
             notificationType: 'readOnly',
@@ -133,7 +133,7 @@ exports.rejectFriendRequest = async (req, res) => {
         await user.updateOne({ $pull: { requests: { friendId } } })
         await user.save()
 
-        await Notification.findOneAndDelete({ for: id, by: friendId })
+        await Notification.findOneAndDelete({ for: id, by: friendId, notificationType: 'action' })
 
         res.status(200).json({
             success: true,

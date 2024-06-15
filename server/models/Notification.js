@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema({
-    for: {
+    for: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    },
+    }],
     by: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
