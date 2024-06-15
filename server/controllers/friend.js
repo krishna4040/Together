@@ -65,6 +65,8 @@ exports.withDrawFriendRequest = async (req, res) => {
         await friend.updateOne({ $pull: { requests: id } })
         await friend.save();
 
+        await Notification.findOneAndDelete({ for: friendId, by: id })
+
         res.status(200).json({
             success: true,
             message: 'friend request withdrawn'
@@ -79,6 +81,7 @@ exports.withDrawFriendRequest = async (req, res) => {
 
 exports.acceptFriendRequest = async (req, res) => {
     try {
+        console.log("Hello")
         const { id } = req.user;
         const { friendId } = req.body;
         if (!friendId) {
@@ -95,6 +98,8 @@ exports.acceptFriendRequest = async (req, res) => {
 
         await friend.save();
         await user.save();
+
+        await Notification.findOneAndDelete({ for: id, by: friendId })
 
         await Notification.create({
             for: friendId,
@@ -117,6 +122,7 @@ exports.acceptFriendRequest = async (req, res) => {
 
 exports.rejectFriendRequest = async (req, res) => {
     try {
+        console.log("Hit")
         const { id } = req.user;
         const { friendId } = req.body;
         if (!friendId) {
@@ -126,6 +132,8 @@ exports.rejectFriendRequest = async (req, res) => {
 
         await user.updateOne({ $pull: { requests: { friendId } } })
         await user.save()
+
+        await Notification.findOneAndDelete({ for: id, by: friendId })
 
         res.status(200).json({
             success: true,

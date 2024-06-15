@@ -25,6 +25,10 @@ const AllUsers = () => {
 
     useEffect(() => {
         fetchAllUsers();
+
+        return () => {
+            setUsers([]);
+        }
     }, []);
 
     const connectHandler = async (friend) => {
@@ -39,7 +43,7 @@ const AllUsers = () => {
             if (!response.data.success) {
                 throw new Error(response.data.message);
             }
-            toast.success("Friend connected");
+            toast.success("Friend request sent");
             fetchAllUsers();
         } catch (error) {
             console.log(error);

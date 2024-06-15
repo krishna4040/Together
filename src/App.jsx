@@ -27,7 +27,7 @@ const App = () => {
 
   const [logout, setLogout] = useState(false);
   const [search, setSearch] = useState(false);
-  const [notifications, setNotifications] = useState(false);
+  const [notification, setNotification] = useState(false);
 
   const fetchUser = async () => {
     try {
@@ -59,11 +59,11 @@ const App = () => {
         <Route path='*' element={<Error />} />
         <Route path='/create' element={<Create />} />
       </Routes>
-      {token && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotifications={setNotifications} />}
+      {token && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotification={setNotification} />}
       {token && <BottomNavigation setLogout={setLogout} setSearch={setSearch} />}
       {logout && <Logout setLogout={setLogout} />}
       {search && <Search setSearch={setSearch} />}
-      {notifications && <Notifications setNotifications={setNotifications} />}
+      {notification && <Notifications setNotification={setNotification} />}
     </div>
   )
 }
