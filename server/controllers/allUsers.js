@@ -9,7 +9,7 @@ exports.getAllUsers = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'search database succesfull',
+            message: 'search database successful',
             data: users
         });
     } catch (error) {

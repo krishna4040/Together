@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { AiOutlineHeart, AiOutlineComment, AiFillHeart } from 'react-icons/ai'
+import { AiOutlineComment, AiFillHeart } from 'react-icons/ai'
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
@@ -111,16 +111,9 @@ const FriendPostSection = () => {
                 throw new Error(data.message);
             }
             setPosts(prev => {
-                const updatedPost = prev.filter(post => post._id === postId)
+                const updatedPost = data.data
                 const remainingPosts = prev.filter(post => post._id !== postId)
-                const newComment = data.data
-                return [...remainingPosts, {
-                    ...updatedPost[0],
-                    comments: [
-                        ...updatedPost[0].comments,
-                        newComment
-                    ]
-                }]
+                return [...remainingPosts, { ...updatedPost }]
             })
             fetchPostsComments(postId)
             setComment('')

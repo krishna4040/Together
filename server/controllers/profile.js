@@ -118,12 +118,12 @@ exports.updatePfp = async (req, res) => {
         await Profile.findByIdAndUpdate(user.profileDetails, { image: uploaded });
         res.status(200).json({
             success: true,
-            messgae: 'pfp updated successfully'
+            message: 'pfp updated successfully'
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            messgae: error.message
+            message: error.message
         });
     }
 }
@@ -139,12 +139,12 @@ exports.updateAbout = async (req, res) => {
         await Profile.findByIdAndUpdate(user.profileDetails, { about });
         res.status(200).json({
             success: true,
-            messgae: 'about updated successfully'
+            message: 'about updated successfully'
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            messgae: error.message
+            message: error.message
         });
     }
 }
@@ -159,12 +159,12 @@ exports.updateFirstName = async (req, res) => {
         await Profile.findOneAndUpdate({ user: id }, { firstName });
         res.status(200).json({
             success: true,
-            messgae: 'firstName updated successfully'
+            message: 'firstName updated successfully'
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            messgae: error.message
+            message: error.message
         });
     }
 }
@@ -179,12 +179,12 @@ exports.updateLastName = async (req, res) => {
         await Profile.findOneAndUpdate({ user: id }, { lastName });
         res.status(200).json({
             success: true,
-            messgae: 'about lastName successfully'
+            message: 'about lastName successfully'
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            messgae: error.message
+            message: error.message
         });
     }
 }
@@ -201,12 +201,12 @@ exports.updateDob = async (req, res) => {
         await Profile.findOneAndUpdate({ user: id }, { dob, age });
         res.status(200).json({
             success: true,
-            messgae: 'dob and age updated successfully'
+            message: 'dob and age updated successfully'
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            messgae: error.message
+            message: error.message
         });
     }
 }

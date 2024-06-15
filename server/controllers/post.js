@@ -153,7 +153,7 @@ exports.commentPost = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "post commented successfully",
-            data: commentPost
+            data: post
         });
     } catch (error) {
         res.status(500).json({
