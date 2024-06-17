@@ -50,7 +50,7 @@ exports.fetchChat = async (req, res) => {
             .exec()
         res.status(200).json({
             success: true,
-            message: 'chat for the user fecthed',
+            message: 'chat for the user fetched',
             data: userChat
         })
     } catch (error) {

@@ -3,9 +3,9 @@ const User = require('../models/User');
 exports.getAllUsers = async (req, res) => {
     try {
         const { id } = req.user;
-        const users = await User.find({ _id: { $ne: id } }).populate('profileDetails').exec();
+        const users = await User.find({ _id: { $ne: id } }).populate('profileDetails').populate('requests').exec();
         if (!users) {
-            throw new Error('unable to fecth users');
+            throw new Error('unable to fetch users');
         }
         res.status(200).json({
             success: true,
@@ -26,7 +26,7 @@ exports.search = async (req, res) => {
         if (!userName) {
             throw new Error('userName not found');
         }
-        const user = await User.findOne({ userName }).populate('profileDetails').exec();
+        const user = await User.findOne({ userName }).populate('profileDetails').populate('requests').exec();
         if (!user) {
             throw new Error('No user with given userName exist');
         }
@@ -55,7 +55,7 @@ exports.getUserNameSuggestions = async (req, res) => {
             });
         res.status(200).json({
             success: true,
-            message: 'suggestions fecthed',
+            message: 'suggestions fetched',
             data: suggestions
         });
     } catch (error) {

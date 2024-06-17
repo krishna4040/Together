@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-import { setFriend, removeFriend } from '../../store/slices/user'
+import { removeFriend } from '../../store/slices/user'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
@@ -13,14 +13,14 @@ const Search = ({ setSearch }) => {
     const [user, setUser] = useState({});
     const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     const changeSuggestions = async (key) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
             setSuggestions(response.data.data);
         } catch (error) {
-            toast.error("unable to fecth suggestions");
+            toast.error("unable to fetch suggestions");
             console.log(error);
         }
     }
@@ -31,20 +31,21 @@ const Search = ({ setSearch }) => {
         changeSuggestions(event.target.value);
     }
 
-    const fecthUser = async (userName) => {
+    const fetchUser = async (userName) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
             if (response.data.success) {
                 setUser(response.data.data);
             }
         } catch (error) {
-            toast.error("unable to fecth user from userName");
+            toast.error("unable to fetch user from userName");
             console.log(error);
         }
     }
+
     const connectHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/makeFriend`, {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
                 friendId: friend._id
             }, {
                 headers: {
@@ -54,12 +55,32 @@ const Search = ({ setSearch }) => {
             if (!response.data.success) {
                 throw new Error(response.data.message);
             }
-            toast.success("friend connected");
-            dispacth(setFriend(friend));
+            fetchUser(userName)
+            toast.success("friend request sent!");
         } catch (error) {
             console.log(error);
         }
     }
+
+    const withDrawHandler = async (friend) => {
+        try {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/withdrawFriendRequest`, {
+                friendId: friend._id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+            fetchUser(userName)
+            toast.error("Request withdrawn!!")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const removeHandler = async (friend) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
@@ -73,11 +94,12 @@ const Search = ({ setSearch }) => {
                 throw new Error(response.data.message);
             }
             toast.error("Friend removed");
-            dispacth(removeFriend(friend._id));
+            dispatch(removeFriend(friend._id));
         } catch (error) {
             console.log(error);
         }
     }
+
     const visitHandler = (userName) => {
         navigate(`/view-profile/${userName}`);
     }
@@ -105,7 +127,9 @@ const Search = ({ setSearch }) => {
                                     {
                                         currentUser.friends.find(friend => friend._id === user._id) ?
                                             <button className='btn outline danger' onClick={() => { removeHandler(user) }}>Remove</button> :
-                                            <button className='btn outline success' onClick={() => { connectHandler(user) }}>Connect</button>
+                                            user.requests.find(req => req._id === currentUser._id) ?
+                                                <button className='btn outline info' onClick={() => { withDrawHandler(user) }}>Requested</button> :
+                                                <button className='btn solid success' onClick={() => { connectHandler(user) }}>Connect</button>
                                     }
                                     <button className='btn outline danger' onClick={() => { visitHandler(user.userName) }}>Visit</button>
                                 </div>
@@ -114,13 +138,13 @@ const Search = ({ setSearch }) => {
                             <div className='flex flex-col items-start justify-start gap-3 p-2 overflow-x-hidden overflow-y-auto h-fit'>
                                 {
                                     suggestions.slice(0, 4).map((suggestion, index) => {
-                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { fecthUser(suggestion.userName) }}>{suggestion.userName}</button>
+                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { fetchUser(suggestion.userName) }}>{suggestion.userName}</button>
                                     })
                                 }
                             </div>
                     }
                     <div className="flex gap-3">
-                        <button className="flex-1 btn solid danger" onClick={() => { fecthUser(userName) }}>Search</button>
+                        <button className="flex-1 btn solid danger" onClick={() => { fetchUser(userName) }}>Search</button>
                     </div>
                 </div>
             </label>

@@ -6,7 +6,7 @@ const Posts = ({ friend }) => {
 
     const [posts, setPosts] = useState([]);
 
-    const fecthFriendPosts = async () => {
+    const fetchFriendPosts = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/getUserPost/${friend._id}`);
             setPosts(response.data.data);
@@ -16,7 +16,7 @@ const Posts = ({ friend }) => {
     }
 
     useEffect(() => {
-        fecthFriendPosts();
+        fetchFriendPosts();
     }, []);
 
     if (!posts.length) {

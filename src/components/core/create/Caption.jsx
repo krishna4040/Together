@@ -6,14 +6,14 @@ import toast from 'react-hot-toast';
 const Caption = ({ setStep }) => {
 
     const [postCaption, setPostCaption] = useState('');
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     const clickHandler = () => {
         if (!postCaption) {
             toast.error("please provide a caption");
             return;
         }
-        dispacth(setCation(postCaption));
+        dispatch(setCation(postCaption));
         setStep("preview");
     }
 

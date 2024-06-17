@@ -6,7 +6,7 @@ import { FiLogOut } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const Sidebar = ({ setLogout, setSearch, setNotifications }) => {
+const Sidebar = ({ setLogout, setSearch, setNotification }) => {
 
     const user = useSelector(state => state.user);
 
@@ -14,7 +14,7 @@ const Sidebar = ({ setLogout, setSearch, setNotifications }) => {
         { title: 'Home', icon: AiFillHome, link: '/' },
         { title: 'Search', icon: BiSearch, clickHandler: setSearch },
         { title: 'Messages', icon: BiMessageSquareDots, link: '/messages' },
-        { title: 'Notification', icon: AiOutlineHeart, clickHandler: setNotifications },
+        { title: 'Notification', icon: AiOutlineHeart, clickHandler: setNotification },
         { title: 'Create', icon: IoCreateOutline, link: '/create' },
         { title: 'Profile', icon: AiFillHome, link: '/profile' },
         { title: 'Settings', icon: IoSettings, link: '/edit-profile' },

@@ -23,20 +23,20 @@ import Message from './pages/Message'
 const App = () => {
 
   const { token } = useSelector(state => state.auth);
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
 
   const [logout, setLogout] = useState(false);
   const [search, setSearch] = useState(false);
-  const [notifications, setNotifications] = useState(false);
+  const [notification, setNotification] = useState(false);
 
-  const fecthUser = async () => {
+  const fetchUser = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/user/getUserDetails`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      dispacth(setUser(response.data.data));
+      dispatch(setUser(response.data.data));
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +44,7 @@ const App = () => {
 
   useEffect(() => {
     if (token) {
-      fecthUser();
+      fetchUser();
     }
   }, [token]);
 
@@ -59,11 +59,11 @@ const App = () => {
         <Route path='*' element={<Error />} />
         <Route path='/create' element={<Create />} />
       </Routes>
-      {token && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotifications={setNotifications} />}
+      {token && <Sidebar setLogout={setLogout} setSearch={setSearch} setNotification={setNotification} />}
       {token && <BottomNavigation setLogout={setLogout} setSearch={setSearch} />}
       {logout && <Logout setLogout={setLogout} />}
       {search && <Search setSearch={setSearch} />}
-      {notifications && <Notifications setNotifications={setNotifications} />}
+      {notification && <Notifications setNotification={setNotification} />}
     </div>
   )
 }

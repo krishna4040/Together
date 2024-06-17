@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const Friends = ({ user }) => {
 
     const { token } = useSelector(state => state.auth);
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const removeHandler = async (friend) => {
@@ -25,7 +25,7 @@ const Friends = ({ user }) => {
                 toast.error(response.data.message);
             }
             toast.error("Friend removed");
-            dispacth(removeFriend(friend._id));
+            dispatch(removeFriend(friend._id));
         } catch (error) {
             console.log(error);
         }

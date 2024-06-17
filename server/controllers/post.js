@@ -4,7 +4,8 @@ const Like = require('../models/Like');
 const Comment = require('../models/Comment');
 const { shuffleArray } = require('../utils/shuffle');
 
-const { cdupload } = require('../utils/cloudinary')
+const { cdupload } = require('../utils/cloudinary');
+const Notification = require('../models/Notification');
 require('dotenv').config();
 
 exports.createPost = async (req, res) => {
@@ -13,14 +14,20 @@ exports.createPost = async (req, res) => {
         const { image } = req.files;
         const { id } = req.user;
         if (!title || !desc || !image) {
-            throw new Error('All feilds are requiered');
+            throw new Error('All fields are required');
         }
         const uploaded = await cdupload(image, process.env.FOLDER);
         const post = await Post.create({ title: title, desc: desc, image: uploaded, user: id });
         if (!post) {
-            throw new Error('uable to create post');
+            throw new Error('unable to create post');
         }
-        await User.findByIdAndUpdate(id, { $push: { posts: post._id } });
+        const user = await User.findByIdAndUpdate(id, { $push: { posts: post._id } });
+        await Notification.create({
+            for: user.friends,
+            by: id,
+            notificationType: 'readOnly',
+            content: `${user.userName} has created a post, check it out!`
+        })
         res.status(200).json({
             success: true,
             message: 'Post created successfully',
@@ -38,7 +45,7 @@ exports.deletePost = async (req, res) => {
     try {
         const { postId } = req.query;
         const userId = req.user.id;
-        const deleted = await Post.findByIdAndDelete(postId);
+        await Post.findByIdAndDelete(postId);
         await User.findByIdAndUpdate(userId, { $pull: { posts: postId } });
         res.status(200).json({
             success: true,
@@ -57,7 +64,11 @@ exports.likePost = async (req, res) => {
         const { id } = req.user;
         const { postId } = req.body;
         if (!postId) {
-            throw new Error('Post id is requiered');
+            throw new Error('Post id is required');
+        }
+        const alReadyLiked = await Like.findOne({ user: id, post: postId })
+        if (alReadyLiked) {
+            throw new Error('You have already liked this post')
         }
         const likedPost = await Like.create({
             post: postId,
@@ -66,10 +77,18 @@ exports.likePost = async (req, res) => {
         if (!likedPost) {
             throw new Error('unable to like post');
         }
-        await Post.findByIdAndUpdate(postId, { $push: { likes: likedPost._id } });
+        const post = await Post.findByIdAndUpdate(postId, { $push: { likes: likedPost._id } });
+        const user = await User.findById(id)
+        await Notification.create({
+            for: [post.user],
+            by: id,
+            notificationType: 'readOnly',
+            content: `${user.userName} has liked your post`
+        })
         res.status(200).json({
             success: true,
-            message: "post liked successfully"
+            message: "post liked successfully",
+            data: likedPost
         });
     } catch (error) {
         res.status(500).json({
@@ -81,18 +100,22 @@ exports.likePost = async (req, res) => {
 
 exports.unlikePost = async (req, res) => {
     try {
-        const { postId } = req.query;
+        const { id } = req.user;
+        const { postId } = req.body;
         if (!postId) {
-            throw new Error('Post id is requiered');
+            throw new Error('Post id is required');
         }
-        const unlikePost = await Like.findByIdAndDelete(postId);
-        if (!unlikePost) {
-            throw new Error('unable to like post');
+        const likedPost = await Like.findOne({ user: id, post: postId })
+        if (!likedPost) {
+            throw new Error('You have not liked this post')
         }
-        await Post.findByIdAndUpdate(postId, { $pull: { likes: unlikePost._id } });
+
+        await likedPost.deleteOne();
+        await Post.findByIdAndUpdate(postId, { $pull: { likes: likedPost._id } });
+
         res.status(200).json({
             success: true,
-            message: 'post unliked successfully'
+            message: 'post unLiked successfully'
         });
     } catch (error) {
         res.status(500).json({
@@ -107,7 +130,7 @@ exports.commentPost = async (req, res) => {
         const { postId, comment } = req.body;
         const { id } = req.user;
         if (!postId || !comment) {
-            throw new Error('All feilds are requiered');
+            throw new Error('All fields are required');
         }
         const commentPost = await Comment.create({
             post: postId,
@@ -117,10 +140,20 @@ exports.commentPost = async (req, res) => {
         if (!commentPost) {
             throw new Error('unable to comment post');
         }
-        await Post.findByIdAndUpdate(postId, { $push: { comments: commentPost._id } });
+        const post = await Post.findByIdAndUpdate(postId, { $push: { comments: commentPost._id } });
+        const user = await User.findById(id)
+
+        await Notification.create({
+            for: [post.user],
+            by: id,
+            notificationType: 'readOnly',
+            content: `${user.userName}: ${comment} on the post ${post.title}`
+        })
+
         res.status(200).json({
             success: true,
-            message: "post commented successfully"
+            message: "post commented successfully",
+            data: commentPost
         });
     } catch (error) {
         res.status(500).json({
@@ -139,7 +172,7 @@ exports.likedPostByaUser = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'fecthed all liked post by the user',
+            message: 'fetched all liked post by the user',
             data: allLikedPost
         })
     } catch (error) {
@@ -156,11 +189,10 @@ exports.getPostComment = async (req, res) => {
         if (!postId) {
             throw new Error('post Id not found');
         }
-        const post = await Post.findById(postId);
-        const comments = post.comments;
+        const comments = await Comment.find({ post: postId }).populate({path: 'user', populate: 'profileDetails'}).exec();
         res.status(200).json({
             success: true,
-            message: 'Comments for a Post fecthed',
+            message: 'Comments for a Post fetched',
             data: comments
         });
     } catch (error) {
@@ -183,7 +215,7 @@ exports.getPostForUser = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'fecthed user posts',
+            message: 'fetched user posts',
             data: post
         });
     } catch (error) {
@@ -200,7 +232,7 @@ exports.getAllPosts = async (req, res) => {
         const shufflePosts = shuffleArray(allPosts);
         res.status(200).json({
             success: true,
-            message: 'all posts fecthed successfully',
+            message: 'all posts fetched successfully',
             data: shufflePosts
         });
     } catch (error) {

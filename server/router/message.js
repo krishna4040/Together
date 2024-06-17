@@ -59,7 +59,7 @@ router.post('/sendMessage', auth, sendMessage);
 
 /**
  * @swagger
- * /message/fecthMessages/{chatId}:
+ * /message/fetchMessages/{chatId}:
  *   get:
  *     summary: Get all messages in a specific chat.
  *     description: Retrieves all messages associated with a specific chat.
@@ -102,6 +102,6 @@ router.post('/sendMessage', auth, sendMessage);
  *                   type: string
  *                   description: Error message describing the failure.
  */
-router.get('/fecthMessages/:chatId', allMessages);
+router.get('/fetchMessages/:chatId', allMessages);
 
 module.exports = router;

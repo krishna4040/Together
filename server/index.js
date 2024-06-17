@@ -17,6 +17,7 @@ const friendsRouter = require('./router/friends');
 const postRouter = require('./router/post');
 const userRouter = require('./router/user');
 const messageRouter = require('./router/message');
+const notificationRouter = require('./router/notification');
 
 const specs = swaggerJsdoc({
     definition: {
@@ -44,18 +45,14 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
     pingTimeout: 6000,
     cors: {
-        origin: 'https://together-social-media.netlify.app',
+        origin: '*',
         credentials: true
     }
 });
 
 io.on('connection', (socket) => {
-    socket.on('joinChat', (room) => {
-        socket.join(room);
-    });
-    socket.on('newMsg', (msg) => {
-        io.in(msg.chat).emit('msgRecieved', msg);
-    })
+    socket.on('joinChat', room => socket.join(room))
+    socket.on('newMsg', msg => io.in(msg.chat).emit('msgReceived', msg))
 });
 
 dbConnect();
@@ -82,6 +79,7 @@ app.use('/api/v1/post', postRouter);
 app.use('/api/v1/chat', chatRouter);
 app.use('/api/v1/message', messageRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/notifications', notificationRouter)
 
 httpServer.listen(process.env.PORT, () => console.log("app listning succsesfully"));
 app.get('/', (req, res) => res.send('<h1>Home page for api</h1>'))

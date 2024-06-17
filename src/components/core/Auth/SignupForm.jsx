@@ -10,7 +10,7 @@ const SignupForm = ({ setTab }) => {
     const form = useForm();
     const { register, handleSubmit, formState, reset } = form;
     const { isSubmitSuccessful, errors } = formState;
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isSubmitSuccessful) {
@@ -20,7 +20,7 @@ const SignupForm = ({ setTab }) => {
 
     const sumbitHandler = useCallback(async (data) => {
         try {
-            dispacth(setSignupData(data));
+            dispatch(setSignupData(data));
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, {
                 email: data.email
             });

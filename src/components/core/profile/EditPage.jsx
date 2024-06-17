@@ -10,7 +10,7 @@ import DeleteModal from '../../common/DeleteModal'
 const EditPage = () => {
 
     const { register, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm();
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { token } = useSelector(state => state.auth);
     const user = useSelector(state => state.user);
@@ -73,7 +73,7 @@ const EditPage = () => {
             });
             if (response.data.success) {
                 toast.error("profile deleted");
-                dispacth(setToken(null));
+                dispatch(setToken(null));
                 navigate('/');
             }
         } catch (error) {

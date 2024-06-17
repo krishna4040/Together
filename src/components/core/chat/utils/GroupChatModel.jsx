@@ -14,19 +14,19 @@ const GroupChatModel = () => {
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     const { chats } = useSelector(state => state.chat);
     const { token } = useSelector(state => state.auth);
 
-    const fecthSuggestions = async (q) => {
+    const fetchSuggestions = async (q) => {
         try {
             setLoading(true);
             const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${q}`);
             setSuggestions(data.data);
             setLoading(false);
         } catch (error) {
-            toast.error("unable to fecth suggestion");
+            toast.error("unable to fetch suggestion");
             console.log(error);
         }
     }
@@ -45,8 +45,8 @@ const GroupChatModel = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            dispacth(pushChat(data.data));
-            dispacth(setSelectedChat(data.data));
+            dispatch(pushChat(data.data));
+            dispatch(setSelectedChat(data.data));
             setIsOpen(false);
             toast.success("group chat created");
         } catch (error) {
@@ -66,7 +66,7 @@ const GroupChatModel = () => {
     }
     const changeHandler = (event) => {
         setUserName(event.target.value);
-        fecthSuggestions(event.target.value);
+        fetchSuggestions(event.target.value);
     }
 
     return (
