@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import OTPInput from 'react-otp-input';
-import toast from 'react-hot-toast';
+import { Box } from "@mui/system";
+import { LightButton, DarkButton, BackButton } from '../../ui/Button';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { setUserId } from '../../../store/slices/auth'
+import toast from 'react-hot-toast';
+import { OTP } from "../../ui/OTPInput";
+import { useState } from "react";
 
-const VerificationForm = ({ setTab }) => {
-
-    const { signupData } = useSelector(state => state.auth);
+export default function Verification({ setIsOtpSent }) {
     const [otp, setOtp] = useState('');
+    const signupData = useSelector(state => state.auth)
 
     const connectHandler = async () => {
         try {
@@ -43,43 +43,18 @@ const VerificationForm = ({ setTab }) => {
     }
 
     return (
-        <div className='flex flex-col justify-center gap-5'>
-            <p className='text-white capitalize'>An OTP has been sent to your email account {signupData.email}</p>
-            <div className='flex flex-col justify-center gap-2'>
-                <p className='text-xl font-bold text-white'>Enter OTP</p>
-                <OTPInput
-                    value={otp}
-                    onChange={setOtp}
-                    numInputs={6}
-                    renderSeparator={<span>-</span>}
-                    renderInput={(props) => { return <input {...props} /> }}
-                    containerStyle={{
-                        width: '400px',
-                        height: '100px',
-                        backgroundColor: 'whitesmoke',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '5px',
-                        borderRadius: '10px',
-                        padding: '10px 10px'
-                    }}
-                    inputStyle={{
-                        width: '100%',
-                        height: '70px',
-                        border: '1px',
-                        borderRadius: '5px',
-                        borderColor: 'black',
-                        backgroundColor: 'rgb(2,6,23)',
-                        color: 'white',
-                        fontSize: '30px'
-                    }}
-                />
-            </div>
-            <button className='text-white' onClick={resendHandler}>Resend otp</button>
-            <button className='w-24 btn solid success' onClick={connectHandler}>Connect</button>
-        </div>
-    )
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                mt: '25px'
+            }}
+        >
+            <OTP separator={<span>-</span>} value={otp} onChange={setOtp} length={5} />
+            <DarkButton text={"Verify"} onClick={connectHandler} />
+            <LightButton text={"Resend OTP"} onClick={resendHandler} />
+            <BackButton onClick={() => setIsOtpSent(false)} />
+        </Box>
+    );
 }
-
-export default VerificationForm
