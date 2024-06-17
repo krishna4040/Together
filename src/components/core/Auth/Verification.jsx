@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { setUserId } from '../../../store/slices/auth'
 
-const VeificationForm = ({ setTab }) => {
+const VerificationForm = ({ setTab }) => {
 
     const { signupData } = useSelector(state => state.auth);
     const [otp, setOtp] = useState('');
@@ -21,7 +21,7 @@ const VeificationForm = ({ setTab }) => {
                 toast.error(response.data.message);
             }
             setUserId(response.data.data._id);
-            toast.success('signed up succesfully');
+            toast.success('signed up successfully');
             setTab('profile');
         } catch (error) {
             toast.error(error.message);
@@ -82,4 +82,4 @@ const VeificationForm = ({ setTab }) => {
     )
 }
 
-export default VeificationForm
+export default VerificationForm
