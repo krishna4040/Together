@@ -2,15 +2,18 @@ import React, { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from "@hookform/error-message"
 import { toast } from 'react-hot-toast'
-import { setSignupData } from '../../../store/slices/auth'
+import { setSignupData, setToken } from '../../../store/slices/auth'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { Label } from "../../ui/Label";
 import { Input } from "../../ui/Input";
 import { cn } from "../../../utils/cn";
 import { LightButton } from '../../ui/Button'
+import { useNavigate } from 'react-router-dom'
 
 export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
+    const navigate = useNavigate();
+
     const form = useForm({
         defaultValues: {
             userName: "",
@@ -50,7 +53,7 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
                 toast.success("signed up successfully");
                 sessionStorage.setItem("token", response.data.token);
                 dispatch(setToken(response.data.token));
-                navigate('/');
+                navigate('/home');
             }
         } catch (error) {
             console.log(error.message)
@@ -106,17 +109,7 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
                     <>
                         <LabelInputContainer className="mb-4">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" placeholder="••••••••" type="password" {...register("password", {
-                                minLength: {
-                                    value: 8,
-                                    message: "Password must be at least 8 characters long"
-                                },
-                                pattern: {
-                                    value: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
-                                    message: "Password must contain uppercase, lowercase, number, and special character",
-                                },
-                                required: "Password is required"
-                            })} />
+                            <Input id="password" placeholder="••••••••" type="password" {...register("password")} />
                         </LabelInputContainer>
                     </>
             }
