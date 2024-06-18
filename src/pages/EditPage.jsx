@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { useForm } from 'react-hook-form';
-import { setToken } from '../../../store/slices/auth'
+import { setToken } from '../store/slices/auth'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import DeleteModal from '../../common/DeleteModal'
-import { updateProfile } from '../../../store/slices/user';
+import DeleteModal from '../components/common/DeleteModal'
+import { updateProfile } from '../store/slices/user';
 
 const EditPage = () => {
 

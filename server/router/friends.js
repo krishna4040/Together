@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { removeFriend, getFriends, getFriendsPosts, acceptFriendRequest, sendFriendRequest, rejectFriendRequest, withDrawFriendRequest, followFriend } = require('../controllers/friend');
+const { removeFriend, getFriends, getFriendsPosts, acceptFriendRequest, sendFriendRequest, rejectFriendRequest, withDrawFriendRequest, followFriend, getMutualFriends } = require('../controllers/friend');
 
 // Friends Routes
 /**
@@ -118,5 +118,7 @@ router.put('/followFriend', auth, followFriend)
 router.put('/removeFriend', auth, removeFriend);
 
 router.get('/getFriends', getFriends);
+
+router.get('/getMutualFriends', auth, getMutualFriends);
 
 module.exports = router;

@@ -246,3 +246,28 @@ exports.getFriends = async (req, res) => {
         });
     }
 }
+
+exports.getMutualFriends = async (req, res) => {
+    try {
+        const { id } = req.user;
+        const { userId } = req.query;
+        if (!userId) {
+            throw new Error('friend id is required');
+        }
+
+        const user1 = await User.findById(id).populate({path: 'friends', populate: 'profileDetails'}).exec()
+        const user2 = await User.findById(userId)
+        const mutualFriends = user1.friends.filter(friend => user2.friends.includes(friend._id))
+
+        res.status(200).json({
+            success: true,
+            message: 'mutual friends fetched successfully',
+            data: mutualFriends
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}

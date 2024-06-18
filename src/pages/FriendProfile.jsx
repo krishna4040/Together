@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Posts from '../components/core/friendsProfile/Posts'
 import Friends from '../components/core/friendsProfile/Friends'
 import { useSelector } from 'react-redux';
+import Mutuals from '../components/core/friendsProfile/Mutuals';
 
 const FriendProfile = () => {
     const { userName } = useParams();
@@ -11,20 +12,98 @@ const FriendProfile = () => {
     const [step, setStep] = useState('posts');
     const user = useSelector(state => state.user)
     const friendIds = user.friends.map(friend => friend._id);
+    const navigate = useNavigate();
 
     const fetchFriend = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
             setFriend(response.data.data);
-            console.log("log")
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const connectHandler = async (friend) => {
+        try {
+            if (friend.profileDetails.visibility === 'public') {
+                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/followFriend`, {
+                    friendId: friend._id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (!response.data.success) {
+                    throw new Error(response.data.message);
+                }
+                fetchUser(userName)
+                toast.success("friend followed!");
+            } else {
+                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
+                    friendId: friend._id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (!response.data.success) {
+                    throw new Error(response.data.message);
+                }
+                fetchUser(userName)
+                toast.success("friend request sent!");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const withDrawHandler = async (friend) => {
+        try {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/withdrawFriendRequest`, {
+                friendId: friend._id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+            fetchUser(userName)
+            toast.error("Request withdrawn!!")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const removeHandler = async (friend) => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
+                friendId: friend._id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+            toast.error("Friend removed");
+            dispatch(removeFriend(friend._id));
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
+        if (window.location.pathname === `/view-profile/${user.userName}`) {
+            navigate('/home');
+        }
+    },[navigate])
+
+    useEffect(() => {
         fetchFriend();
-    }, [friend]);
+    }, [userName]);
 
     return (
         <div className='min-h-screen text-white bg-black'>
@@ -47,6 +126,22 @@ const FriendProfile = () => {
                                 <p className='text-xs uppercase'>About:</p>
                                 <p>{friend.profileDetails.about}</p>
                             </div>
+                            <div>
+                                {
+                                    user.friends.find(fr => fr._id === friend._id) ?
+                                        <button className='btn outline danger' onClick={() => { removeHandler(friend) }}>Remove</button> :
+                                        friend.requests.find(req => req._id === friend._id) ?
+                                            <button className='btn outline info' onClick={() => { withDrawHandler(friend) }}>Requested</button> :
+                                            <button className='btn solid success' onClick={() => { connectHandler(friend) }}>
+                                                {
+                                                    friend.profileDetails.visibility === 'public' ?
+                                                        "Follow" :
+                                                        "Request"
+                                                }
+                                            </button>
+                                }
+                            </div>
+                            <Mutuals userId={friend._id} />
                         </div>
                     </div>
                     {

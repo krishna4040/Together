@@ -4,7 +4,7 @@ import Home from './pages/Home'
 import Error from './pages/Error'
 import Profile from './pages/Profile'
 import Create from './pages/Create'
-import EditPage from './components/core/profile/EditPage'
+import EditPage from './pages/EditPage'
 
 import Auth from './pages/Auth'
 import FriendProfile from './pages/FriendProfile'
