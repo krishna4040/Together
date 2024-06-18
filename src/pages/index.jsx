@@ -8,9 +8,6 @@ import BottomNavigation from '../components/common/BottomNavigation';
 import Sidebar from '../components/common/Sidebar';
 
 export const DashBoard = () => {
-    useEffect(() => {
-        console.log("rendered")
-    }, [])
     const [logout, setLogout] = useState(false);
     const [search, setSearch] = useState(false);
     const [notification, setNotification] = useState(false);

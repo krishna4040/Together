@@ -3,6 +3,11 @@ import { AiOutlineComment, AiFillHeart } from 'react-icons/ai'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Scrollbar } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/scrollbar';
+import 'swiper/css/pagination'
 
 const Posts = ({ posts, setPosts }) => {
     const { token } = useSelector(state => state.auth)
@@ -118,7 +123,23 @@ const Posts = ({ posts, setPosts }) => {
                                     <h1 className='text-xl text-white capitalize text-red-500'>{post.user.userName}</h1>
                                 </div>
                                 <div className='relative lg:w-[600px] w-full mx-auto'>
-                                    <img src={post.image || ""} alt="post_here" />
+                                    <Swiper
+                                        scrollbar={{
+                                            hide: true,
+                                        }}
+                                        pagination={{
+                                            dynamicBullets: true,
+                                        }}
+                                        modules={[Scrollbar, Pagination]}
+                                    >
+                                        {
+                                            post.images.map((image, idx) => (
+                                                <SwiperSlide key={idx}>
+                                                    <img src={image || ""} alt="post_here" />
+                                                </SwiperSlide>
+                                            ))
+                                        }
+                                    </Swiper>
                                 </div>
                                 <div className='flex items-center gap-3'>
                                     {

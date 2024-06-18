@@ -39,7 +39,7 @@ const postSchema = new mongoose.Schema({
         ref: 'User'
     },
     title: String,
-    image: [String],
+    images: [String],
     desc: String,
     likes: [
         {

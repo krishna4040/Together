@@ -22,7 +22,7 @@ exports.createPost = async (req, res) => {
             const upload = await cdupload(image, process.env.FOLDER);
             uploaded.push(upload)
         }
-        const post = await Post.create({ title: title, desc: desc, image: uploaded, user: id });
+        const post = await Post.create({ title: title, desc: desc, images: uploaded, user: id });
         if (!post) {
             throw new Error('unable to create post');
         }
