@@ -11,12 +11,17 @@ require('dotenv').config();
 exports.createPost = async (req, res) => {
     try {
         const { title, desc } = req.body;
-        const { image } = req.files;
+        const { images } = req.files;
         const { id } = req.user;
-        if (!title || !desc || !image) {
+        if (!title || !desc || !images) {
             throw new Error('All fields are required');
         }
-        const uploaded = await cdupload(image, process.env.FOLDER);
+        const uploaded = []
+        for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            const upload = await cdupload(image, process.env.FOLDER);
+            uploaded.push(upload)
+        }
         const post = await Post.create({ title: title, desc: desc, image: uploaded, user: id });
         if (!post) {
             throw new Error('unable to create post');
