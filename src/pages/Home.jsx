@@ -1,6 +1,5 @@
 import React from 'react'
 import Friends from '../components/core/Home/Friends'
-import PersonalizedFeed from '../components/core/Home/PersonalizedFeed'
 import AllUsers from '../components/core/Home/AllUsers'
 import PersonalizedFeed from '../components/core/Home/PersonalizedFeed'
 

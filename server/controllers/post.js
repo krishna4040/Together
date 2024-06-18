@@ -229,16 +229,22 @@ exports.getPostForUser = async (req, res) => {
 exports.getPersonalizedFeed = async (req, res) => {
     try {
         const { id } = req.user;
-        const { skip, limit } = req.query;
+        const { page, limit } = req.query;
+
+        if (!page || !limit) {
+            throw new Error('page and limit are required');
+        }
+
+        const skip = (page - 1) * limit
         const user = await User.findById(id)
         const allPosts = await Post.find({}).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).skip(skip).limit(limit).exec();
-        const publicPosts = allPosts.filter(post => post.user.profileDetails.visibility === 'public' && !user.friends.includes(post.user))
-        const friendsPosts = allPosts.filter(post => user.friends.includes(post.user))
+        const publicPosts = allPosts.filter(post => post.user.profileDetails.visibility === 'public' && !user.friends.includes(post.user._id))
+        const friendsPosts = allPosts.filter(post => user.friends.includes(post.user._id))
 
         const shuffledPublicPosts = shuffleArray(publicPosts);
         const shuffledFriendsPosts = shuffleArray(friendsPosts);
 
-        const personalizedPosts = [].concat(shuffledPublicPosts, shuffledFriendsPosts)
+        const personalizedPosts = [...shuffledPublicPosts, ...shuffledFriendsPosts];
 
         res.status(200).json({
             success: true,

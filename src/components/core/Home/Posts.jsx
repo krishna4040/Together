@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AiOutlineComment, AiFillHeart } from 'react-icons/ai'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 

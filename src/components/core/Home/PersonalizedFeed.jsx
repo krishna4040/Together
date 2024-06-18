@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Vortex } from 'react-loader-spinner';
 import Posts from './Posts';
 
 const PersonalizedFeed = () => {
-    const [posts, setPosts] = useState();
+    const [posts, setPosts] = useState([]);
     const { token } = useSelector(state => state.auth)
+    const [pageNum, setPageNum] = useState(1)
 
-    const fetchPersonalizedFeed = async (skip = 3, limit = 3) => {
+    const fetchPersonalizedFeed = async (page, limit = 3) => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/getPersonalizedFeed?skip=${skip}&limit=${limit}`, {
+            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/getPersonalizedFeed?page=${page}&limit=${limit}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -25,13 +25,17 @@ const PersonalizedFeed = () => {
     }
 
     useEffect(() => {
-        fetchPersonalizedFeed(0,3);
+        fetchPersonalizedFeed(pageNum);
     }, []);
 
     return (
         <InfiniteScroll
             dataLength={posts.length}
-            next={fetchPersonalizedFeed}
+            next={() => {
+                const nextPage = pageNum + 1
+                fetchPersonalizedFeed(nextPage);
+                setPageNum(nextPage);
+            }}
             pullDownToRefresh
             pullDownToRefreshThreshold={50}
             pullDownToRefreshContent={
@@ -56,6 +60,11 @@ const PersonalizedFeed = () => {
                     <b>No More Posts Left!!</b>
                 </p>
             }
+            refreshFunction={() => {
+                const nextPage = pageNum + 1
+                fetchPersonalizedFeed(nextPage);
+                setPageNum(nextPage);
+            }}
         >
             <Posts posts={posts} setPosts={setPosts} />
         </InfiniteScroll>
