@@ -54,12 +54,12 @@ exports.deletePost = async (req, res) => {
         await User.findByIdAndUpdate(userId, { $pull: { posts: postId } });
         res.status(200).json({
             success: true,
-            message: 'Deleted succesfully'
+            message: 'Deleted successfully'
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'smth went wrong'
+            message: 'something went wrong'
         })
     }
 }

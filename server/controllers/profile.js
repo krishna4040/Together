@@ -3,20 +3,14 @@ const Profile = require('../models/Profile');
 const Post = require('../models/Post');
 const Like = require('../models/Like');
 const Comment = require('../models/Comment');
-const Chat = require('../models/Chat');
 const { cdupload } = require('../utils/cloudinary');
 require('dotenv').config();
-const cloudinary = require('cloudinary').v2;
 
 exports.createProfile = async (req, res) => {
     try {
         const { gender, id, userName } = req.body;
         let pfp;
-        if (gender === 'Male') {
-            pfp = cloudinary.url('Together/Firefly_user_icon_45739_yj31wj');
-        } else {
-            pfp = cloudinary.url('Together/Firefly_user_icon_72437_ne1d0o');
-        }
+        //TODO: use dice-bearer to generate avatar
         const data = await Profile.create({
             gender,
             pfp,
@@ -35,7 +29,6 @@ exports.createProfile = async (req, res) => {
             success: false,
             message: error.message,
         });
-        console.log(error);
     }
 }
 
@@ -67,7 +60,7 @@ exports.deleteUser = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'Acconut deleted suuccesfully'
+            message: 'Account deleted successfully'
         });
 
     } catch (error) {
@@ -92,7 +85,7 @@ exports.getUserDetails = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'fechted user details successfully',
+            message: 'fetched user details successfully',
             data: user
         });
     } catch (error) {

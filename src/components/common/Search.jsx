@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { removeFriend } from '../../store/slices/user'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import _ from 'loadash'
 
 const Search = ({ setSearch }) => {
     const currentUser = useSelector(state => state.user);
@@ -14,7 +15,7 @@ const Search = ({ setSearch }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const changeSuggestions = async (key) => {
+    const fetchSuggestions = async (key) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
             setSuggestions(response.data.data);
@@ -22,7 +23,18 @@ const Search = ({ setSearch }) => {
             toast.error("unable to fetch suggestions");
             console.log(error);
         }
-    }
+    };
+
+    const debouncedFetch = _.debounce(fetchSuggestions, 500);
+
+    useEffect(() => {
+        if (userName) {
+            debouncedFetch(userName);
+        }
+        return () => {
+            debouncedFetch.cancel();
+        };
+    }, [userName, debouncedFetch]);
 
     const changeHandler = async (event) => {
         setUser({});
@@ -126,7 +138,7 @@ const Search = ({ setSearch }) => {
                     <h2 className="text-xl">Search</h2>
                     <div className='flex items-center gap-1'>
                         <div className='is-divider' />
-                        <input placeholder='Enter Username to search' value={userName} onChange={changeHandler} className='input success' />
+                        <input placeholder='Enter Username to search' value={userName} onChange={e => setUserName(e.target.value)} className='input success' />
                     </div>
                     {
                         user?.userName ?

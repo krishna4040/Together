@@ -1,6 +1,4 @@
 const User = require('../models/User');
-const Post = require('../models/Post');
-const { shuffleArray } = require('../utils/shuffle');
 const Notification = require('../models/Notification');
 
 exports.sendFriendRequest = async (req, res) => {
