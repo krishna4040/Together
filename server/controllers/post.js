@@ -226,10 +226,11 @@ exports.getPostForUser = async (req, res) => {
     }
 }
 
-exports.getAllPosts = async (req, res) => {
+exports.getAllPublicPosts = async (req, res) => {
     try {
         const allPosts = await Post.find({}).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).exec();
-        const shufflePosts = shuffleArray(allPosts);
+        const publicPosts = allPosts.filter(post => post.user.profileDetails.visibility === 'public')
+        const shufflePosts = shuffleArray(publicPosts);
         res.status(200).json({
             success: true,
             message: 'all posts fetched successfully',

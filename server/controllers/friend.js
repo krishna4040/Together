@@ -147,6 +147,42 @@ exports.rejectFriendRequest = async (req, res) => {
     }
 }
 
+exports.followFriend = async (req, res) => {
+    try {
+        const { friendId } = req.body;
+        const { id } = req.user;
+        if (!friendId) {
+            throw new Error('friend id is required');
+        }
+        const friend = await User.findById(friendId).populate('profileDetails');
+        if (!friend) {
+            throw new Error('friend not found');
+        }
+        if (friend.profileDetails.visibility === 'private') {
+            throw new Error('cannot follow a private account');
+        }
+        const user = await User.findById(id);
+        const alReadyFriended = user.friends.includes(friend._id);
+        if (alReadyFriended) {
+            throw new Error('Already followed');
+        }
+        const userAddFriend = await User.findByIdAndUpdate(id, { $push: { friends: friend._id } });
+        const friendAddUser = await User.findByIdAndUpdate(friend._id, { $push: { friends: id } });
+        if (!userAddFriend || !friendAddUser) {
+            throw new Error('unable to follow');
+        }
+        res.status(200).json({
+            success: true,
+            message: 'friend followed successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
 exports.removeFriend = async (req, res) => {
     try {
         const { friendId } = req.body;
