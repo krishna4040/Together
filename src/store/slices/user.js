@@ -71,5 +71,5 @@ const userSlice = createSlice({
     }
 });
 
-export const { setUser, setFriend, removeFriend, addPost, addChat, removePost, acceptFriendRequest, rejectFriendRequest, addFriend, updateProfile } = userSlice.actions;
+export const { setUser, removeFriend, addPost, addChat, removePost, acceptFriendRequest, rejectFriendRequest, addFriend, updateProfile } = userSlice.actions;
 export default userSlice.reducer;

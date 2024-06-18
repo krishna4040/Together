@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { getAllUsers, search, getUserNameSuggestions } = require('../controllers/allUsers');
+const { getPublicAccounts, search, getUserNameSuggestions } = require('../controllers/allUsers');
 
 // AllUsers
 /**
@@ -42,7 +42,7 @@ const { getAllUsers, search, getUserNameSuggestions } = require('../controllers/
  *               type: string
  *               description: An error message describing the internal server error.
  */
-router.get('/getAllUsers', auth, getAllUsers);
+router.get('/getPublicAccounts', auth, getPublicAccounts);
 
 /**
  * @swagger

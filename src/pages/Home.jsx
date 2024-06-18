@@ -1,7 +1,7 @@
 import React from 'react'
 import Friends from '../components/core/Home/Friends'
-import AllUsers from '../components/core/Home/AllUsers'
 import PersonalizedFeed from '../components/core/Home/PersonalizedFeed'
+import PublicAccountList from '../components/core/Home/PublicAccounts'
 
 const Home = () => {
     return (
@@ -11,7 +11,7 @@ const Home = () => {
                 <PersonalizedFeed />
             </div>
             <div className='hidden overflow-y-auto border-b border-l md:hidden lg:fixed lg:block lg:top-20 lg:right-10 max-h-[550px] rounded-md'>
-                <AllUsers />
+                <PublicAccountList />
             </div>
         </div>
     )

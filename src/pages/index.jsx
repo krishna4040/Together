@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Logout from '../components/common/Logout';
 import Search from '../components/common/Search';
 import Notifications from '../components/common/Notifications';
@@ -13,6 +13,13 @@ export const DashBoard = () => {
     const [notification, setNotification] = useState(false);
 
     const { token } = useSelector(state => state.auth)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (window.location.pathname === '/') {
+            navigate('/home');
+        }
+    }, [navigate]);
 
     return (
         <main>

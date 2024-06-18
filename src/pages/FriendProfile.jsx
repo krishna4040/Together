@@ -3,17 +3,20 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Posts from '../components/core/friendsProfile/Posts'
 import Friends from '../components/core/friendsProfile/Friends'
+import { useSelector } from 'react-redux';
 
 const FriendProfile = () => {
-
     const { userName } = useParams();
     const [friend, setFriend] = useState({});
     const [step, setStep] = useState('posts');
+    const user = useSelector(state => state.user)
+    const friendIds = user.friends.map(friend => friend._id);
 
     const fetchFriend = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
-            setFriend(response.data.data[0]);
+            setFriend(response.data.data);
+            console.log("log")
         } catch (error) {
             console.log(error);
         }
@@ -26,7 +29,7 @@ const FriendProfile = () => {
     return (
         <div className='min-h-screen text-white bg-black'>
             {
-                Object.keys(friend).length &&
+                friend && Object.keys(friend).length &&
                 <>
                     <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400 lg:flex-row'>
                         <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
@@ -46,18 +49,24 @@ const FriendProfile = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='flex flex-col items-center justify-center w-full gap-5 p-8 lg:w-11/12 lg:ml-auto'>
-                        <div className='text-white tabs bordered success bottom lg:ml-[200px]'>
-                            <div className={`p-4 tab ${step === 'posts' ? 'active' : null}`} onClick={() => { setStep('posts') }}>
-                                Posts
+                    {
+                        (friend.profileDetails.visibility === 'public' || friendIds.includes(friend._id)) ?
+                            <div className='flex flex-col items-center justify-center w-full gap-5 p-8 lg:w-11/12 lg:ml-auto'>
+                                <div className='text-white tabs bordered success bottom lg:ml-[200px]'>
+                                    <div className={`p-4 tab ${step === 'posts' ? 'active' : null}`} onClick={() => { setStep('posts') }}>
+                                        Posts
+                                    </div>
+                                    <div className={`p-4 tab ${step === 'friends' ? 'active' : null}`} onClick={() => { setStep('friends') }}>
+                                        Friends
+                                    </div>
+                                </div>
+                                {step === 'posts' && <Posts friend={friend} />}
+                                {step === 'friends' && <Friends friend={friend} setStep={setStep} />}
+                            </div> :
+                            <div className='flex flex-col items-center justify-center w-full gap-5 p-8 lg:w-11/12 lg:ml-auto'>
+                                <p>This is a Private Account. Send a Friend Request</p>
                             </div>
-                            <div className={`p-4 tab ${step === 'friends' ? 'active' : null}`} onClick={() => { setStep('friends') }}>
-                                Friends
-                            </div>
-                        </div>
-                        {step === 'posts' && <Posts friend={friend} />}
-                        {step === 'friends' && <Friends friend={friend} setStep={setStep} />}
-                    </div>
+                    }
                 </>
             }
         </div>

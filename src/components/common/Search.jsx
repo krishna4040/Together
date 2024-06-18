@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
 const Search = ({ setSearch }) => {
-
     const currentUser = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
     const [userName, setUserName] = useState('');
@@ -45,18 +44,33 @@ const Search = ({ setSearch }) => {
 
     const connectHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            if (friend.profileDetails.visibility === 'public') {
+                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/followFriend`, {
+                    friendId: friend._id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (!response.data.success) {
+                    throw new Error(response.data.message);
                 }
-            });
-            if (!response.data.success) {
-                throw new Error(response.data.message);
+                fetchUser(userName)
+                toast.success("friend followed!");
+            } else {
+                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
+                    friendId: friend._id
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (!response.data.success) {
+                    throw new Error(response.data.message);
+                }
+                fetchUser(userName)
+                toast.success("friend request sent!");
             }
-            fetchUser(userName)
-            toast.success("friend request sent!");
         } catch (error) {
             console.log(error);
         }
@@ -129,7 +143,13 @@ const Search = ({ setSearch }) => {
                                             <button className='btn outline danger' onClick={() => { removeHandler(user) }}>Remove</button> :
                                             user.requests.find(req => req._id === currentUser._id) ?
                                                 <button className='btn outline info' onClick={() => { withDrawHandler(user) }}>Requested</button> :
-                                                <button className='btn solid success' onClick={() => { connectHandler(user) }}>Connect</button>
+                                                <button className='btn solid success' onClick={() => { connectHandler(user) }}>
+                                                    {
+                                                        user.profileDetails.visibility === 'public'?
+                                                        "Follow":
+                                                        "Request"
+                                                    }
+                                                </button>
                                     }
                                     <button className='btn outline danger' onClick={() => { visitHandler(user.userName) }}>Visit</button>
                                 </div>

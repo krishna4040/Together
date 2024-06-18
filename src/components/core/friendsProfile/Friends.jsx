@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const Friends = ({ friend, setStep }) => {
-
     const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
     const fetchFriends = async () => {

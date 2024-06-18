@@ -11,9 +11,12 @@ exports.sendFriendRequest = async (req, res) => {
             throw new Error('friend id is required');
         }
 
-        const friend = await User.findById(friendId)
+        const friend = await User.findById(friendId).populate('profileDetails').exec();
         if (!friend) {
             throw new Error('Friend id do not exist');
+        }
+        if (friend.profileDetails.visibility === 'public') {
+            throw new Error('cannot send a public account');
         }
 
         const idx = friend.requests.findIndex(req => req == id)
@@ -52,9 +55,13 @@ exports.withDrawFriendRequest = async (req, res) => {
             throw new Error('friend id is required');
         }
 
-        const friend = await User.findById(friendId)
+        const friend = await User.findById(friendId).populate('profileDetails').exec();
         if (!friend) {
             throw new Error('Friend id do not exist');
+        }
+
+        if (friend.profileDetails.visibility === 'public') {
+            throw new Error('cannot withdraw req from public account');
         }
 
         const idx = friend.requests.findIndex(req => req == id)
