@@ -6,53 +6,40 @@ import { setToken } from '../../../store/slices/auth'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../../common/DeleteModal'
+import { updateProfile } from '../../../store/slices/user';
 
 const EditPage = () => {
 
-    const { register, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm();
+    const { register, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm({
+        defaultValues: {
+            userName: "",
+            email: "",
+            dob: "",
+            gender: "",
+            pfp: null
+        }
+    });
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { token } = useSelector(state => state.auth);
     const user = useSelector(state => state.user);
 
-    const updatePfp = async (pfp) => {
+    const submitHandler = async (data) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/updatePfp`, { pfp }, {
+            !data.pfp.length ? delete data.pfp : data.pfp = data.pfp[0];
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/user/updateProfile`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            });
-            if (!response.data.success) {
-                throw new Error(response.data.message);
+            })
+            if (!res.data.success) {
+                throw new Error(res.data.message);
             }
+            dispatch(updateProfile(res.data.data))
+            toast.success("profile updated");
         } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const updateAbout = async (about) => {
-        try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/user/updateAbout`, { about }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
-                throw new Error(response.data.message);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const sumbitHandler = (data) => {
-        if (data.pfp) {
-            updatePfp(data.pfp[0]);
-            console.log(data.pfp[0]);
-        }
-        if (data.about) {
-            updateAbout(data.about);
-            console.log(data.about);
+            toast.error(error.message)
+            console.log(error)
         }
     };
 
@@ -84,7 +71,7 @@ const EditPage = () => {
     const [modal, setModal] = useState(false);
 
     return (
-        <form className='lg:ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-start lg:justify-center' onSubmit={handleSubmit(sumbitHandler)}>
+        <form className='lg:ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-start lg:justify-center' onSubmit={handleSubmit(submitHandler)}>
             {
                 Object.keys(user).length &&
                 (
@@ -112,7 +99,6 @@ const EditPage = () => {
                                 type="text"
                                 placeholder={user.userName}
                                 className='input success pill'
-                                disabled
                             />
                         </div>
                         <div className='flex items-center justify-center w-[400px] p-3'>
@@ -127,15 +113,14 @@ const EditPage = () => {
                         <div className='flex items-center justify-center w-[400px] p-3'>
                             <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Date Of Birth:</label>
                             <input
-                                type="text"
+                                type="date"
                                 placeholder={user.profileDetails.dob}
                                 className='input success pill'
-                                disabled
                             />
                         </div>
                         <div className='flex items-center justify-center w-[400px] p-3'>
                             <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Gender:</label>
-                            <select className='select pill success' defaultValue={user.profileDetails.gender} disabled>
+                            <select className='select pill success' defaultValue={user.profileDetails.gender}>
                                 <option value={"Male"}>
                                     Male
                                 </option>

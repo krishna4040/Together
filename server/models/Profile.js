@@ -59,7 +59,7 @@ const profileSchema = new mongoose.Schema({
     gender: {
         type: String,
         enum: ['Male', 'Female', 'Other'],
-        requiered: true
+        required: true
     },
     about: {
         type: String,
@@ -67,11 +67,16 @@ const profileSchema = new mongoose.Schema({
     },
     pfp: {
         type: String,
-        requiered: true
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    visibility: {
+        type: String,
+        enum: ['Public', 'Private'],
+        default: 'Public'
     }
 });
 

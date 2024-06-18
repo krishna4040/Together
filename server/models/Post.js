@@ -39,6 +39,7 @@ const postSchema = new mongoose.Schema({
         ref: 'User'
     },
     title: String,
+    //TODO: Add multiple images
     image: String,
     desc: String,
     likes: [
