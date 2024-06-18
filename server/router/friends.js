@@ -119,6 +119,4 @@ router.put('/removeFriend', auth, removeFriend);
 
 router.get('/getFriends', getFriends);
 
-router.get('/getFriendsPosts', auth, getFriendsPosts);
-
 module.exports = router;

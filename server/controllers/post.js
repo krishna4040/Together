@@ -189,7 +189,7 @@ exports.getPostComment = async (req, res) => {
         if (!postId) {
             throw new Error('post Id not found');
         }
-        const comments = await Comment.find({ post: postId }).populate({path: 'user', populate: 'profileDetails'}).exec();
+        const comments = await Comment.find({ post: postId }).populate({ path: 'user', populate: 'profileDetails' }).exec();
         res.status(200).json({
             success: true,
             message: 'Comments for a Post fetched',
@@ -226,15 +226,24 @@ exports.getPostForUser = async (req, res) => {
     }
 }
 
-exports.getAllPublicPosts = async (req, res) => {
+exports.getPersonalizedFeed = async (req, res) => {
     try {
-        const allPosts = await Post.find({}).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).exec();
-        const publicPosts = allPosts.filter(post => post.user.profileDetails.visibility === 'public')
-        const shufflePosts = shuffleArray(publicPosts);
+        const { id } = req.user;
+        const { skip, limit } = req.query;
+        const user = await User.findById(id)
+        const allPosts = await Post.find({}).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).skip(skip).limit(limit).exec();
+        const publicPosts = allPosts.filter(post => post.user.profileDetails.visibility === 'public' && !user.friends.includes(post.user))
+        const friendsPosts = allPosts.filter(post => user.friends.includes(post.user))
+
+        const shuffledPublicPosts = shuffleArray(publicPosts);
+        const shuffledFriendsPosts = shuffleArray(friendsPosts);
+
+        const personalizedPosts = [].concat(shuffledPublicPosts, shuffledFriendsPosts)
+
         res.status(200).json({
             success: true,
             message: 'all posts fetched successfully',
-            data: shufflePosts
+            data: personalizedPosts
         });
     } catch (error) {
         res.status(500).json({

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middlewares/auth');
-const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost, getPostForUser, getAllPublicPosts } = require('../controllers/post');
+const { createPost, deletePost, likePost, commentPost, likedPostByaUser, getPostComment, unlikePost, getPostForUser, getPersonalizedFeed } = require('../controllers/post');
 
 // Post Routes
 /**
@@ -456,6 +456,6 @@ router.put('/commentPost', auth, commentPost);
  */
 router.get('/getUserPost/:userId', getPostForUser);
 
-router.get('/getAllPosts', getAllPublicPosts);
+router.get('/getPersonalizedFeed', auth, getPersonalizedFeed);
 
 module.exports = router;
