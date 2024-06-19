@@ -251,10 +251,21 @@ exports.getPersonalizedFeed = async (req, res) => {
 
         const personalizedPosts = [...shuffledPublicPosts, ...shuffledFriendsPosts];
 
+        const allPostsAvailable = await Post.find({}).populate({ path: 'user', populate: 'profileDetails' }).exec();
+        const publicPostsAvailable = allPostsAvailable.filter(post => post.user.profileDetails.visibility === 'public' && !user.friends.includes(post.user._id))
+        const friendsPostsAvailable = allPostsAvailable.filter(post => user.friends.includes(post.user._id))
+        const totalPostsAvailable = publicPostsAvailable.length + friendsPostsAvailable.length;
+
+        // page * limit = skip + limit
+        const hasMore = (skip + limit) <= totalPostsAvailable;
+
         res.status(200).json({
             success: true,
             message: 'all posts fetched successfully',
-            data: personalizedPosts
+            data: {
+                personalizedPosts,
+                hasMore
+            }
         });
     } catch (error) {
         res.status(500).json({

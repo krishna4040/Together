@@ -68,9 +68,10 @@ const PublicAccountList = () => {
                 {
                     users.map(user => (
                         <ListItem
+                            key={user._id}
                             secondaryAction={
                                 <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon onClick={() => followHandler(user)} />
+                                    <DeleteIcon />
                                 </IconButton>
                             }
                         >

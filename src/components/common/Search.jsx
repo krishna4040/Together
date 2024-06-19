@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { removeFriend } from '../../store/slices/user'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import _ from 'loadash'
+import * as _ from 'lodash'
 
 const Search = ({ setSearch }) => {
     const currentUser = useSelector(state => state.user);

@@ -9,6 +9,7 @@ const PersonalizedFeed = () => {
     const [posts, setPosts] = useState([]);
     const { token } = useSelector(state => state.auth)
     const [pageNum, setPageNum] = useState(1)
+    const [hasMore, setHasMore] = useState(true)
 
     const fetchPersonalizedFeed = async (page, limit = 3) => {
         try {
@@ -17,7 +18,8 @@ const PersonalizedFeed = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            setPosts(data.data)
+            setPosts(prev => [...prev, ...data.data.personalizedPosts]);
+            setHasMore(data.data.hasMore);
         } catch (error) {
             setPosts([]);
             console.log(error)
@@ -31,9 +33,10 @@ const PersonalizedFeed = () => {
     return (
         <InfiniteScroll
             dataLength={posts.length}
+            hasMore={hasMore}
             next={() => {
                 const nextPage = pageNum + 1
-                fetchPersonalizedFeed(nextPage);
+                fetchPersonalizedFeed(nextPage, 3, true);
                 setPageNum(nextPage);
             }}
             pullDownToRefresh
@@ -50,7 +53,12 @@ const PersonalizedFeed = () => {
                     height="80"
                     width="80"
                     ariaLabel="vortex-loading"
-                    wrapperStyle={{}}
+                    wrapperStyle={{
+                        width: '100%',
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
                     wrapperClass="vortex-wrapper"
                     colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
                 />

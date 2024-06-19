@@ -75,7 +75,7 @@ const profileSchema = new mongoose.Schema({
     },
     visibility: {
         type: String,
-        enum: ['Public', 'Private'],
+        enum: ['public', 'private'],
         default: 'Public'
     }
 });
