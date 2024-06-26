@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { InfoButton } from '../../ui/Button';
 import { useAxiosWithoutAuth } from '../../../hooks/useAxios';
+import { Avatar } from '../../ui/Avatar';
 
 const Friends = ({ friend, setStep }) => {
     const [friends, setFriends] = useState([]);
@@ -50,11 +50,7 @@ const Friends = ({ friend, setStep }) => {
                         friends.map((friend, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>
-                                        <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
-                                            <img src={friend?.profileDetails?.pfp} alt="pfp" />
-                                        </div>
-                                    </td>
+                                    <td><Avatar w={70} h={70} p={4} border src={friend.profileDetails.pfp} /></td>
                                     <td>{friend.userName}</td>
                                     <td><InfoButton onClick={() => visitHandler(friend)} text={"Visit"} /></td>
                                 </tr>

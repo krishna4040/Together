@@ -5,6 +5,7 @@ import { IoCreateOutline } from 'react-icons/io5'
 import { BiMessageSquareDots, BiSearch } from 'react-icons/bi'
 import { FiLogOut } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
+import { Avatar } from '../ui/Avatar'
 
 const BottomNavigation = ({ setSearch, setLogout }) => {
 
@@ -29,9 +30,7 @@ const BottomNavigation = ({ setSearch, setLogout }) => {
                             {
                                 item.title !== 'Profile' ? <item.icon className='text-3xl text-white' />
                                     :
-                                    <div className='flex items-center justify-center w-12 h-12 p-2 overflow-hidden border rounded-full'>
-                                        <img src={user.profileDetails.pfp} alt="pfp_pic" className='w-full' />
-                                    </div>
+                                    <Avatar src={user.profileDetails.pfp} w={48} h={48} />
                             }
                         </div>
                     )

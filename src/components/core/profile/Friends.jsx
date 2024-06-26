@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { ErrorButton, InfoButton } from '../../ui/Button'
 import { useAxiosWithAuth } from '../../../hooks/useAxios'
+import { Avatar } from '../../ui/Avatar'
 
 
 const Friends = ({ user }) => {
@@ -45,11 +46,7 @@ const Friends = ({ user }) => {
                         user.friends.map((friend, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>
-                                        <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
-                                            <img src={friend?.profileDetails?.pfp} alt="pfp" />
-                                        </div>
-                                    </td>
+                                    <td><Avatar w={70} h={70} p={4} border src={friend?.profileDetails?.pfp} /></td>
                                     <td>{friend.userName}</td>
                                     <td><InfoButton onClick={() => navigate(`/view-profile/${friend.userName}`)} text={"Visit"} /></td>
                                     <td><ErrorButton onClick={() => removeHandler(friend)} text={"Remove"} /></td>

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Mutuals from '../components/core/friendsProfile/Mutuals';
 import { ErrorButton, InfoButton, SuccessButton } from '../components/ui/Button';
 import { useAxiosWithAuth } from '../hooks/useAxios';
+import { Avatar } from '../components/ui/Avatar';
 
 const FriendProfile = () => {
     const { userName } = useParams();
@@ -89,9 +90,7 @@ const FriendProfile = () => {
                 friend && Object.keys(friend).length &&
                 <>
                     <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400 lg:flex-row'>
-                        <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
-                            <img src={friend?.profileDetails?.pfp} alt="friend" className='w-full' />
-                        </div>
+                        <Avatar src={friend.profileDetails.pfp} w={200} h={200} p={24} border />
                         <div className='flex flex-col justify-center gap-5 p-4'>
                             <div className='flex items-center justify-center gap-3'>
                                 <p className='text-xl font-semibold'>{friend.friendName}</p>

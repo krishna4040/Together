@@ -7,6 +7,7 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination'
 import { useAxiosWithAuth } from '../../../hooks/useAxios'
+import { Avatar } from '../../ui/Avatar';
 
 const Posts = ({ posts, setPosts }) => {
     const user = useSelector(state => state.user)
@@ -100,9 +101,7 @@ const Posts = ({ posts, setPosts }) => {
                             post.length !== 0 &&
                             <div key={index} className='flex flex-col justify-center w-full gap-3'>
                                 <div className='flex items-center gap-3'>
-                                    <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-1 border'>
-                                        <img src={post.user.profileDetails.pfp} alt="friend" className='w-full' />
-                                    </div>
+                                    <Avatar src={post.user.profileDetails.pfp} h={50} w={50} p={4} border />
                                     <h1 className='text-xl text-white capitalize text-red-500'>{post.user.userName}</h1>
                                 </div>
                                 <div className='relative lg:w-[600px] w-full mx-auto'>

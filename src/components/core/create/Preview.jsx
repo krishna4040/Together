@@ -9,6 +9,7 @@ import 'swiper/css';
 import 'swiper/css/pagination'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ErrorButton, InfoButton } from '../../ui/Button';
+import { Avatar } from '../../ui/Avatar';
 
 const Preview = ({ setStep }) => {
     const post = useSelector(state => state.post);
@@ -47,9 +48,7 @@ const Preview = ({ setStep }) => {
     return (
         <div className='flex flex-col justify-center lg:w-[500px] w-full gap-5'>
             <div className='flex items-center gap-3'>
-                <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center p-2 border'>
-                    <img src={user.profileDetails.pfp} alt="friend" className='w-full' />
-                </div>
+                <Avatar w={50} h={50} p={8} border src={user.profileDetails.pfp} />
                 <h1 className='text-xl text-white capitalize'>{user.userName}</h1>
             </div>
             <div className='relative lg:w-[400px] w-full mx-auto'>

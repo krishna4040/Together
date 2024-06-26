@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { acceptFriendRequest, rejectFriendRequest } from '../../store/slices/user';
 import { Modal } from '../ui/Modal';
 import { useAxiosWithAuth } from '../../hooks/useAxios';
+import { Avatar } from '../ui/Avatar';
 
 const Notifications = ({ setNotification }) => {
     const [notices, setNotices] = useState({})
@@ -79,9 +80,7 @@ const Notifications = ({ setNotification }) => {
                                 {
                                     notifications.map(notification => (
                                         <div className='flex items-center justify-between gap-3' key={notification._id}>
-                                            <div className='h-[50px] w-[50px] flex items-center justify-center p-1 border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
-                                                <img src={notification.by.profileDetails.pfp} alt="user" className='w-full' />
-                                            </div>
+                                            <Avatar src={notification.by.profileDetails.pfp} scaleOnHover h={50} w={50} />
                                             <span>{notification.content}</span>
                                             <span>{notification.createdAt.time}</span>
                                             {
