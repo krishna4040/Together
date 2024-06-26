@@ -1,27 +1,23 @@
 import React, { useState } from 'react'
 import { AiOutlineComment, AiFillHeart } from 'react-icons/ai'
 import { toast } from 'react-hot-toast'
-import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination'
+import { useAxiosWithAuth } from '../../../utils/axiosInstance'
 
 const Posts = ({ posts, setPosts }) => {
-    const { token } = useSelector(state => state.auth)
     const user = useSelector(state => state.user)
     const [comment, setComment] = useState('')
     const [comments, setComments] = useState([])
     const [commentSection, setCommentSection] = useState(false)
+    const axiosPrivate = useAxiosWithAuth()
 
     const likeHandler = async (postId) => {
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/post/likePost`, { postId }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const { data } = await axiosPrivate.put('/post/likePost', { postId })
             if (!data.success) {
                 throw new Error(data.message);
             }
@@ -45,11 +41,7 @@ const Posts = ({ posts, setPosts }) => {
 
     const unlikeHandler = async (postId) => {
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/post/unlikePost`, { postId }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const { data } = await axiosPrivate.put('/post/unlikePost', { postId })
             if (!data.success) {
                 throw new Error(data.message);
             }
@@ -70,11 +62,7 @@ const Posts = ({ posts, setPosts }) => {
 
     const commentHandler = async (postId) => {
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/post/commentPost`, { postId, comment }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const { data } = await axiosPrivate.put('/post/commentPost', { postId, comment })
             if (!data.success) {
                 throw new Error(data.message);
             }
@@ -92,11 +80,7 @@ const Posts = ({ posts, setPosts }) => {
 
     const fetchPostsComments = async (postId) => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/getPostComments/${postId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.get(`/post/getPostComments/${postId}`)
             if (!data.success) {
                 throw new Error(data.message)
             }

@@ -8,26 +8,23 @@ import EditPage from './pages/EditPage'
 
 import Auth from './pages/Auth'
 import FriendProfile from './pages/FriendProfile'
-import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './store/slices/user'
 import Message from './pages/Message'
 import { Protect } from './components/guards/Protect'
 import { DashBoard } from './pages'
+import { useAxiosWithAuth } from './utils/axiosInstance'
 
 const App = () => {
   const { token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const axiosPrivate = useAxiosWithAuth();
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/user/getUserDetails`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      dispatch(setUser(response.data.data));
+      const { data } = await axiosPrivate.get('/user/getUserDetails');
+      dispatch(setUser(data.data));
     } catch (error) {
       console.log(error);
     }

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { pushChat, setSelectedChat } from '../../../../store/slices/chat'
 import UserBadgeItem from './UserBadgeItem'
 import UserListItems from './UserListItems';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import { useAxiosWithAuth } from '../../../../utils/axiosInstance';
 
 const GroupChatModel = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,14 +15,12 @@ const GroupChatModel = () => {
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
-    const { chats } = useSelector(state => state.chat);
-    const { token } = useSelector(state => state.auth);
+    const axiosPrivate = useAxiosWithAuth()
 
     const fetchSuggestions = async (q) => {
         try {
             setLoading(true);
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${q}`);
+            const { data } = await axiosPrivate.get(`/all-users/suggestion?q=${q}`);
             setSuggestions(data.data);
             setLoading(false);
         } catch (error) {
@@ -34,17 +32,10 @@ const GroupChatModel = () => {
         event.preventDefault();
         try {
             if (!groupChatName || !selectedUsers) {
-                toast.error("Both Inputs are requiered");
+                toast.error("Both Inputs are required");
             }
             const users = selectedUsers.map(user => user._id);
-            const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/chat/createGroupChat`, {
-                chatName: groupChatName,
-                users
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.post('/chat/createGroupChat', { chatName: groupChatName, users })
             dispatch(pushChat(data.data));
             dispatch(setSelectedChat(data.data));
             setIsOpen(false);

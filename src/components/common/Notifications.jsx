@@ -1,24 +1,20 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import toast from 'react-hot-toast';
 import { acceptFriendRequest, rejectFriendRequest } from '../../store/slices/user';
 import { Modal } from '../ui/Modal';
+import { useAxiosWithAuth } from '../../utils/axiosInstance';
 
 const Notifications = ({ setNotification }) => {
     const [notices, setNotices] = useState({})
-    const { token } = useSelector(state => state.auth)
     const dispatch = useDispatch();
+    const axiosPrivate = useAxiosWithAuth();
 
     const fetchNotifications = async () => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/notifications/fetchNotifications`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const { data } = await axiosPrivate.get('/notifications/fetchNotifications')
             setNotices(data.data)
         } catch (error) {
             console.log(error)
@@ -27,10 +23,7 @@ const Notifications = ({ setNotification }) => {
 
     const acceptRequestHandler = async (friend, date) => {
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/acceptFriendRequest`,
-                { friendId: friend._id }, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
+            const { data } = await axiosPrivate.put('/friends/acceptFriendRequest', { friendId: friend._id })
             if (!data.success) {
                 throw new Error(data.message)
             }
@@ -49,13 +42,7 @@ const Notifications = ({ setNotification }) => {
 
     const rejectRequestHandler = async (friend, date) => {
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/rejectFriendRequest`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const { data } = await axiosPrivate.put('/friends/rejectFriendRequest', { friendId: friend._id })
             if (!data.success) {
                 throw new Error(data.message)
             }

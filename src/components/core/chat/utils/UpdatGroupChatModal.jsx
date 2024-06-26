@@ -3,12 +3,11 @@ import { FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedChat } from '../../../../store/slices/chat'
 import UserBadgeItem from './UserBadgeItem'
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import UserListItems from './UserListItems';
+import { useAxiosWithAuth } from '../../../../utils/axiosInstance';
 
-const UpdatGroupChatModal = ({ fetchAgain, setfetchAgain }) => {
-
+const UpdatGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const dispatch = useDispatch();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -17,14 +16,14 @@ const UpdatGroupChatModal = ({ fetchAgain, setfetchAgain }) => {
     const [userName, setUserName] = useState("");
     const { selectedChat } = useSelector(state => state.chat);
     const currentUser = useSelector(state => state.user);
-    const { token } = useSelector(state => state.auth);
+    const axiosPrivate = useAxiosWithAuth();
 
     const fetchSuggestions = async (q) => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${q}`);
+            const { data } = await axiosPrivate.get(`/all-users/suggestion?q=${q}`);
             setSuggestions(data.data);
         } catch (error) {
-            toast.error("unable tofetch suggestions");
+            toast.error("unable to fetch suggestions");
             console.log(error);
         }
     }
@@ -36,17 +35,10 @@ const UpdatGroupChatModal = ({ fetchAgain, setfetchAgain }) => {
             return;
         }
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/chat/renameGroup`, {
-                chatId: selectedChat._id,
-                chatName: groupChatName
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.put('/chat/renameGroup', { chatId: selectedChat._id, chatName: groupChatName })
             dispatch(setSelectedChat(data.data));
             setGroupChatName('');
-            setfetchAgain(!fetchAgain);
+            setFetchAgain(!fetchAgain);
         } catch (error) {
             toast.error("unable to rename group");
             console.log(error);
@@ -71,20 +63,12 @@ const UpdatGroupChatModal = ({ fetchAgain, setfetchAgain }) => {
             return;
         }
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/chat/addToGroup`, {
-                chatId: selectedChat._id,
-                userId: user._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.put('/chat/addToGroup', { chatId: selectedChat._id, chatName: groupChatName })
         } catch (error) {
             toast.error("unable to add user to group");
             console.log(error);
         }
     }
-
 
     const changeHandler = (event) => {
         fetchSuggestions(event.target.value);

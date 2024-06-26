@@ -8,6 +8,7 @@ import * as _ from 'lodash'
 import { ErrorButton, InfoButton, SuccessButton } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { Avatar } from '../ui/Avatar';
+import { useAxiosWithAuth } from '../../utils/axiosInstance';
 
 const Search = ({ setSearch }) => {
     const currentUser = useSelector(state => state.user);
@@ -17,11 +18,12 @@ const Search = ({ setSearch }) => {
     const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const axiosPrivate = useAxiosWithAuth()
 
     const fetchSuggestions = async (key) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
-            setSuggestions(response.data.data);
+            const { data } = await axiosPrivate.get(`/all-users/suggestion?q=${key}`);
+            setSuggestions(data.data);
         } catch (error) {
             toast.error("unable to fetch suggestions");
             console.log(error);
@@ -41,9 +43,9 @@ const Search = ({ setSearch }) => {
 
     const fetchUser = async (userName) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
-            if (response.data.success) {
-                setUser(response.data.data);
+            const { data } = await axiosPrivate.get(`/all-users/search?userName=${userName}`);
+            if (data.success) {
+                setUser(data.data);
             }
         } catch (error) {
             toast.error("unable to fetch user from userName");
@@ -54,27 +56,15 @@ const Search = ({ setSearch }) => {
     const connectHandler = async (friend) => {
         try {
             if (friend.profileDetails.visibility === 'public') {
-                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/followFriend`, {
-                    friendId: friend._id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                if (!response.data.success) {
+                const { data } = await axiosPrivate.post(`/friends/followFriend`, { friendId: friend._id });
+                if (!data.success) {
                     throw new Error(response.data.message);
                 }
                 fetchUser(userName)
                 toast.success("friend followed!");
             } else {
-                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
-                    friendId: friend._id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                if (!response.data.success) {
+                const { data } = await axiosPrivate.post(`/friends/sendFriendRequest`, { friendId: friend._id });
+                if (!data.success) {
                     throw new Error(response.data.message);
                 }
                 fetchUser(userName)
@@ -87,14 +77,8 @@ const Search = ({ setSearch }) => {
 
     const withDrawHandler = async (friend) => {
         try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/withdrawFriendRequest`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.put('/friends/withdrawFriendRequest', { friendId: friend._id })
+            if (!data.success) {
                 throw new Error(response.data.message);
             }
             fetchUser(userName)
@@ -106,14 +90,8 @@ const Search = ({ setSearch }) => {
 
     const removeHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.post('/friends/removeFriend', { friendId: friend._id });
+            if (!data.success) {
                 throw new Error(response.data.message);
             }
             toast.error("Friend removed");

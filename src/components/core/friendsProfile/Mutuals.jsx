@@ -1,19 +1,14 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useSelector } from 'react-redux'
+import { useAxiosWithAuth } from '../../../utils/axiosInstance'
 
 const Mutuals = ({ userId }) => {
-    const { token } = useSelector(state => state.auth)
     const [mutuals, setMutuals] = useState([])
+    const axiosPrivate = useAxiosWithAuth()
 
     const fetchMutualFriends = async () => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/friends/getMutualFriends?userId=${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const { data } = await axiosPrivate.get(`/friends/getMutualFriends?userId=${userId}`)
             if (!data.success) {
                 throw new Error('unable to fetch mutuals')
             }

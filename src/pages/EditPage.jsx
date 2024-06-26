@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
 import { useForm } from 'react-hook-form';
 import { setToken } from '../store/slices/auth'
 import toast from 'react-hot-toast';
@@ -8,9 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../components/common/DeleteModal'
 import { updateProfile } from '../store/slices/user';
 import { ErrorButton, InfoButton } from '../components/ui/Button';
+import { Avatar } from '../components/ui/Avatar';
+import { useAxiosWithAuth } from '../utils/axiosInstance';
 
 const EditPage = () => {
-
     const { register, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm({
         defaultValues: {
             userName: "",
@@ -22,17 +22,13 @@ const EditPage = () => {
     });
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { token } = useSelector(state => state.auth);
     const user = useSelector(state => state.user);
+    const axiosPrivate = useAxiosWithAuth();
 
     const submitHandler = async (data) => {
         try {
             !data.pfp.length ? delete data.pfp : data.pfp = data.pfp[0];
-            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/user/updateProfile`, data, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const res = await axiosPrivate.put('/user/updateProfile', data)
             if (!res.data.success) {
                 throw new Error(res.data.message);
             }
@@ -54,12 +50,8 @@ const EditPage = () => {
 
     const deleteProfileHandler = async () => {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/user/deleteUser`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (response.data.success) {
+            const { data } = await axiosPrivate.delete('/user/deleteUser');
+            if (data.success) {
                 toast.error("profile deleted");
                 dispatch(setToken(null));
                 navigate('/');
@@ -76,9 +68,7 @@ const EditPage = () => {
             {
                 <>
                     <div className='flex flex-col items-center justify-center w-1/2 gap-5 mt-10 lg:flex-row lg:mt-0'>
-                        <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
-                            <img src={user.profileDetails.pfp} alt="user" />
-                        </div>
+                        <Avatar src={user.profileDetails.pfp} w={200} h={200} />
                         <div>
                             <InfoButton onClick={handleClick} type={"button"} text={"Update Profile Picture"} />
                             <input

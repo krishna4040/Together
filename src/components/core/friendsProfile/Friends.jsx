@@ -3,14 +3,17 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { InfoButton } from '../../ui/Button';
+import { useAxiosWithoutAuth } from '../../../utils/axiosInstance';
 
 const Friends = ({ friend, setStep }) => {
     const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
     const currentUser = useSelector(state => state.user)
+    const axiosPublic = useAxiosWithoutAuth()
+
     const fetchFriends = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/friends/getFriends?id=${friend._id}`);
+            const response = await axiosPublic.get(`/friends/getFriends?id=${friend._id}`);
             setFriends(response.data.data);
         } catch (error) {
             console.log(error);

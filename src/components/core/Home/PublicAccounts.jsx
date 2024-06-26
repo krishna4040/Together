@@ -4,29 +4,24 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addFriend } from '../../../store/slices/user'
 import { ListItemText } from '@mui/material';
+import { useAxiosWithAuth } from '../../../utils/axiosInstance';
 
 const PublicAccountList = () => {
-    const { token } = useSelector(state => state.auth);
     const [users, setUsers] = useState([]);
     const dispatch = useDispatch();
     const currentUser = useSelector(state => state.user);
     const friendsId = currentUser.friends.map(friend => friend._id);
 
+    const axiosPrivate = useAxiosWithAuth()
+
     const fetchPublicUsers = async (limit = 4) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/getPublicAccounts?limit=${limit}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setUsers(response.data.data);
+            const { data } = await axiosPrivate.get(`/all-users/getPublicAccounts?limit=${limit}`)
+            setUsers(data.data);
         } catch (error) {
             console.log(error);
         }
@@ -42,14 +37,8 @@ const PublicAccountList = () => {
 
     const followHandler = async (friend) => {
         try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/followFriend`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.put('/friends/followFriend', { friendId: friend._id })
+            if (!data.success) {
                 throw new Error(response.data.message);
             }
             dispatch(addFriend(friend))

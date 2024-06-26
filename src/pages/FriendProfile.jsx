@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import Posts from '../components/core/friendsProfile/Posts'
 import Friends from '../components/core/friendsProfile/Friends'
 import { useSelector } from 'react-redux';
 import Mutuals from '../components/core/friendsProfile/Mutuals';
 import { ErrorButton, InfoButton, SuccessButton } from '../components/ui/Button';
+import { useAxiosWithAuth } from '../utils/axiosInstance';
 
 const FriendProfile = () => {
     const { userName } = useParams();
@@ -14,11 +14,12 @@ const FriendProfile = () => {
     const user = useSelector(state => state.user)
     const friendIds = user.friends.map(friend => friend._id);
     const navigate = useNavigate();
+    const axiosPrivate = useAxiosWithAuth();
 
     const fetchFriend = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
-            setFriend(response.data.data);
+            const { data } = await axiosPrivate.get(`/all-users/search?userName=${userName}`)
+            setFriend(data.data);
         } catch (error) {
             console.log(error);
         }
@@ -27,27 +28,15 @@ const FriendProfile = () => {
     const connectHandler = async (friend) => {
         try {
             if (friend.profileDetails.visibility === 'public') {
-                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/followFriend`, {
-                    friendId: friend._id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                if (!response.data.success) {
+                const { data } = await axiosPrivate.post(`/friends/followFriend`, { friendId: friend._id });
+                if (!data.success) {
                     throw new Error(response.data.message);
                 }
                 fetchUser(userName)
                 toast.success("friend followed!");
             } else {
-                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
-                    friendId: friend._id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                if (!response.data.success) {
+                const { data } = await axiosPrivate.post(`/friends/sendFriendRequest`, { friendId: friend._id });
+                if (!data.success) {
                     throw new Error(response.data.message);
                 }
                 fetchUser(userName)
@@ -60,14 +49,8 @@ const FriendProfile = () => {
 
     const withDrawHandler = async (friend) => {
         try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/withdrawFriendRequest`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.put('/friends/withdrawFriendRequest', { friendId: friend._id })
+            if (!data.success) {
                 throw new Error(response.data.message);
             }
             fetchUser(userName)
@@ -79,14 +62,8 @@ const FriendProfile = () => {
 
     const removeHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.post('/friends/removeFriend', { friendId: friend._id });
+            if (!data.success) {
                 throw new Error(response.data.message);
             }
             toast.error("Friend removed");
@@ -130,9 +107,9 @@ const FriendProfile = () => {
                             <div>
                                 {
                                     user.friends.find(fr => fr._id === friend._id) ?
-                                        <ErrorButton onClick={() => removeHandler(friend)} text={"Remove"} />:
+                                        <ErrorButton onClick={() => removeHandler(friend)} text={"Remove"} /> :
                                         friend.requests.find(req => req._id === user._id) ?
-                                            <InfoButton onClick={() => withDrawHandler(friend)} text={"Requested"}  /> :
+                                            <InfoButton onClick={() => withDrawHandler(friend)} text={"Requested"} /> :
                                             <SuccessButton onClick={() => connectHandler(friend)} text={friend.profileDetails.visibility === 'public' ? "Follow" : "Request"} />
                                 }
                             </div>

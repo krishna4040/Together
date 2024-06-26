@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import Post from './Post'
+import { useAxiosWithoutAuth } from '../../../utils/axiosInstance';
 
 const Liked = ({ user }) => {
-
     const [liked, setLiked] = useState([]);
+    const axiosPublic = useAxiosWithoutAuth()
 
     const fetchLikedPosts = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/likedPostByaUser/${user._id}`);
+            const response = await axiosPublic.get(`/post/likedPostByaUser/${user._id}`);
             setLiked(response.data.data);
         } catch (error) {
             console.log(error);

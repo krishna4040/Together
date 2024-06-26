@@ -10,6 +10,7 @@ import { Input } from "../../ui/Input";
 import { cn } from "../../../utils/cn";
 import { LightButton } from '../../ui/Button'
 import { useNavigate } from 'react-router-dom'
+import { useAxiosWithoutAuth } from '../../../utils/axiosInstance'
 
 export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
     const { register, handleSubmit, formState, reset } = form;
     const { isSubmitSuccessful, errors } = formState;
     const dispatch = useDispatch();
+    const axiosPublic = useAxiosWithoutAuth()
 
     useEffect(() => {
         if (isSubmitSuccessful) {
@@ -39,14 +41,14 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
                     return toast.error("Passwords do not match");
                 }
                 dispatch(setSignupData(data));
-                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, { email: data.email });
+                const response = await axiosPublic.post(`/auth/sendotp`, { email: data.email });
                 if (!response.data.success) {
                     throw new Error(response.data.message);
                 }
                 setIsOtpSent(true)
                 toast.success("OTP sent to your email!");
             } else {
-                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, data);
+                const response = await axiosPublic.post(`/auth/login`, data);
                 if (!response.data.success) {
                     throw new Error(response.data.message);
                 }

@@ -2,7 +2,6 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 export const useAxiosWithAuth = () => {
-
     const { token } = useSelector(state => state.auth)
 
     const axiosPrivate = axios.create({

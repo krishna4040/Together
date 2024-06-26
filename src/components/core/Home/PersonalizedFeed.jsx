@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Vortex } from 'react-loader-spinner';
 import Posts from './Posts';
+import { useAxiosWithAuth } from '../../../utils/axiosInstance';
 
 const PersonalizedFeed = () => {
     const [posts, setPosts] = useState([]);
-    const { token } = useSelector(state => state.auth)
     const [pageNum, setPageNum] = useState(1)
     const [hasMore, setHasMore] = useState(true)
+    const axiosPrivate = useAxiosWithAuth()
 
     const fetchPersonalizedFeed = async (page, limit = 3) => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/getPersonalizedFeed?page=${page}&limit=${limit}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.get(`/post/getPersonalizedFeed?page=${page}&limit=${limit}`)
             setPosts(prev => [...prev, ...data.data.personalizedPosts]);
             setHasMore(data.data.hasMore);
         } catch (error) {

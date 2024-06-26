@@ -11,7 +11,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { ErrorButton, InfoButton } from '../../ui/Button';
 
 const Preview = ({ setStep }) => {
-
     const post = useSelector(state => state.post);
     const user = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);

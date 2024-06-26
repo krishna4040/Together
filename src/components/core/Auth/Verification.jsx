@@ -1,18 +1,19 @@
 import { Box } from "@mui/system";
 import { LightButton, DarkButton, BackButton } from '../../ui/Button';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { OTP } from "../../ui/OTPInput";
 import { useState } from "react";
+import { useAxiosWithoutAuth } from "../../../utils/axiosInstance";
 
 export default function Verification({ setIsOtpSent }) {
     const [otp, setOtp] = useState('');
     const signupData = useSelector(state => state.auth)
+    const axiosPublic = useAxiosWithoutAuth()
 
     const connectHandler = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/signup`, {
+            const response = await axiosPublic.post(`/auth/signup`, {
                 email: signupData.email,
                 password: signupData.password,
                 otp: otp
@@ -31,9 +32,7 @@ export default function Verification({ setIsOtpSent }) {
 
     const resendHandler = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/sendotp`, {
-                email: signupData.email
-            });
+            const response = await axiosPublic.post(`/auth/sendotp`, { email: signupData.email });
             if (response.data.success) {
                 toast.success("otp resent successfully");
             }
