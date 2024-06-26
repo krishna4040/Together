@@ -3,20 +3,14 @@ const Profile = require('../models/Profile');
 const Post = require('../models/Post');
 const Like = require('../models/Like');
 const Comment = require('../models/Comment');
-const Chat = require('../models/Chat');
 const { cdupload } = require('../utils/cloudinary');
 require('dotenv').config();
-const cloudinary = require('cloudinary').v2;
 
 exports.createProfile = async (req, res) => {
     try {
         const { gender, id, userName } = req.body;
         let pfp;
-        if (gender === 'Male') {
-            pfp = cloudinary.url('Together/Firefly_user_icon_45739_yj31wj');
-        } else {
-            pfp = cloudinary.url('Together/Firefly_user_icon_72437_ne1d0o');
-        }
+        //TODO: use dice-bearer to generate avatar
         const data = await Profile.create({
             gender,
             pfp,
@@ -35,7 +29,6 @@ exports.createProfile = async (req, res) => {
             success: false,
             message: error.message,
         });
-        console.log(error);
     }
 }
 
@@ -67,7 +60,7 @@ exports.deleteUser = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'Acconut deleted suuccesfully'
+            message: 'Account deleted successfully'
         });
 
     } catch (error) {
@@ -92,7 +85,7 @@ exports.getUserDetails = async (req, res) => {
         }
         res.status(200).json({
             success: true,
-            message: 'fechted user details successfully',
+            message: 'fetched user details successfully',
             data: user
         });
     } catch (error) {
@@ -103,110 +96,35 @@ exports.getUserDetails = async (req, res) => {
     }
 }
 
-exports.updatePfp = async (req, res) => {
+exports.updateProfile = async (req, res) => {
     try {
-        const { pfp } = req.files;
-        if (!pfp) {
-            return new Error('pfp not found');
-        }
         const { id } = req.user;
+        const updateData = req.body;
+
+        console.log(req)
+
+        const { pfp } = req.files
+
+        if (pfp) {
+            const image = await cdupload(pfp, process.env.FOLDER);
+            if (!image) {
+                throw new Error('unable to upload pfp');
+            }
+            uploadData.pfp = image
+        }
+        console.log(updateData)
         const user = await User.findById(id);
-        const uploaded = await cdupload(pfp, process.env.FOLDER);
-        if (!uploaded) {
-            throw new Error('unable to upload pfp');
-        }
-        await Profile.findByIdAndUpdate(user.profileDetails, { image: uploaded });
-        res.status(200).json({
-            success: true,
-            messgae: 'pfp updated successfully'
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            messgae: error.message
-        });
-    }
-}
+        const profile = await Profile.findById(user.profileDetails, updateData);
 
-exports.updateAbout = async (req, res) => {
-    try {
-        const { about } = req.body;
-        if (!about) {
-            return new Error('about not found');
-        }
-        const { id } = req.user;
-        const user = await User.findById(id);
-        await Profile.findByIdAndUpdate(user.profileDetails, { about });
         res.status(200).json({
             success: true,
-            messgae: 'about updated successfully'
+            message: 'profile updated successfully',
+            data: profile
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            messgae: error.message
-        });
-    }
-}
-
-exports.updateFirstName = async (req, res) => {
-    try {
-        const { firstName } = req.body;
-        const { id } = req.user;
-        if (!firstName) {
-            throw new Error('firstName not found');
-        }
-        await Profile.findOneAndUpdate({ user: id }, { firstName });
-        res.status(200).json({
-            success: true,
-            messgae: 'firstName updated successfully'
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            messgae: error.message
-        });
-    }
-}
-
-exports.updateLastName = async (req, res) => {
-    try {
-        const { lastName } = req.body;
-        const { id } = req.user;
-        if (!lastName) {
-            throw new Error('lastName not found');
-        }
-        await Profile.findOneAndUpdate({ user: id }, { lastName });
-        res.status(200).json({
-            success: true,
-            messgae: 'about lastName successfully'
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            messgae: error.message
-        });
-    }
-}
-
-exports.updateDob = async (req, res) => {
-    try {
-        const { bday } = req.body;
-        const { id } = req.user;
-        if (!bday) {
-            throw new Error('bDay not found');
-        }
-        const dob = new Date(bday);
-        const age = new Date().getFullYear() - dob.getFullYear();
-        await Profile.findOneAndUpdate({ user: id }, { dob, age });
-        res.status(200).json({
-            success: true,
-            messgae: 'dob and age updated successfully'
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            messgae: error.message
+            message: error.message
         });
     }
 }

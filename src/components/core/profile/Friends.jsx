@@ -1,27 +1,21 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { removeFriend } from '../../../store/slices/user'
-import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { ErrorButton, InfoButton } from '../../ui/Button'
+import { useAxiosWithAuth } from '../../../utils/axiosInstance'
 
 
 const Friends = ({ user }) => {
-
-    const { token } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const axiosPrivate = useAxiosWithAuth()
 
     const removeHandler = async (friend) => {
         try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.put('/friends/removeFriend', { friendId: friend._id })
+            if (!data.success) {
                 toast.error(response.data.message);
             }
             toast.error("Friend removed");
@@ -57,8 +51,8 @@ const Friends = ({ user }) => {
                                         </div>
                                     </td>
                                     <td>{friend.userName}</td>
-                                    <td><button onClick={() => { navigate(`/view-profile/${friend.userName}`) }} className='btn light info'>Visit</button></td>
-                                    <td><button className='btn outline danger' onClick={() => { removeHandler(friend) }}>Remove</button></td>
+                                    <td><InfoButton onClick={() => navigate(`/view-profile/${friend.userName}`)} text={"Visit"} /></td>
+                                    <td><ErrorButton onClick={() => removeHandler(friend)} text={"Remove"} /></td>
                                 </tr>
                             )
                         })

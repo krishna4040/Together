@@ -1,14 +1,19 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { InfoButton } from '../../ui/Button';
+import { useAxiosWithoutAuth } from '../../../utils/axiosInstance';
 
 const Friends = ({ friend, setStep }) => {
-
     const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
+    const currentUser = useSelector(state => state.user)
+    const axiosPublic = useAxiosWithoutAuth()
+
     const fetchFriends = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/friends/getFriends?id=${friend._id}`);
+            const response = await axiosPublic.get(`/friends/getFriends?id=${friend._id}`);
             setFriends(response.data.data);
         } catch (error) {
             console.log(error);
@@ -18,6 +23,13 @@ const Friends = ({ friend, setStep }) => {
     useEffect(() => {
         fetchFriends();
     }, []);
+
+    const visitHandler = (friend) => {
+        currentUser._id !== friend._id ?
+            navigate(`/view-profile/${friend.userName}`) :
+            navigate(`/profile`)
+        setStep("posts")
+    }
 
     if (!friends.length) {
         return <p className='relative text-xl text-center text-white capitalize translate-x-24'>No Friends Yet. Connect Now!</p>
@@ -44,7 +56,7 @@ const Friends = ({ friend, setStep }) => {
                                         </div>
                                     </td>
                                     <td>{friend.userName}</td>
-                                    <td><button onClick={() => { navigate(`/view-profile/${friend.userName}`); setStep("posts") }} className='btn light info'>Visit</button></td>
+                                    <td><InfoButton onClick={() => visitHandler(friend)} text={"Visit"} /></td>
                                 </tr>
                             )
                         })

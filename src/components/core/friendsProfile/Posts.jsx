@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Post from './Post'
-import axios from 'axios';
+import { useAxiosWithoutAuth } from '../../../utils/axiosInstance';
 
 const Posts = ({ friend }) => {
-
     const [posts, setPosts] = useState([]);
+    const axiosPublic = useAxiosWithoutAuth()
 
     const fetchFriendPosts = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post/getUserPost/${friend._id}`);
+            const response = await axiosPublic.get(`/post/getUserPost/${friend._id}`);
             setPosts(response.data.data);
         } catch (error) {
             console.log(error);

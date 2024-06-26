@@ -7,6 +7,8 @@ const authSlice = createSlice({
         signupData: {
             email: null,
             password: null,
+            firstName: null,
+            lastName: null
         },
         userId: null
     },

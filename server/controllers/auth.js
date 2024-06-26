@@ -73,15 +73,16 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            throw new Error('All feilds are requiered');
+            throw new Error('All fields are required');
         }
         const check = await User.findOne({ email });
         if (!check) {
             throw new Error('User not signed up');
         }
-        const compare = await bcrypt.compare(password, check.password);
+        // const compare = await bcrypt.compare(password, check.password);
+        const compare = password === check.password;
         if (!compare) {
-            throw new Error('Password do not macth');
+            throw new Error('Password do not match');
         }
         const payload = {
             id: check._id,

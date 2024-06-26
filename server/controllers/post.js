@@ -11,13 +11,18 @@ require('dotenv').config();
 exports.createPost = async (req, res) => {
     try {
         const { title, desc } = req.body;
-        const { image } = req.files;
+        const { images } = req.files;
         const { id } = req.user;
-        if (!title || !desc || !image) {
+        if (!title || !desc || !images) {
             throw new Error('All fields are required');
         }
-        const uploaded = await cdupload(image, process.env.FOLDER);
-        const post = await Post.create({ title: title, desc: desc, image: uploaded, user: id });
+        const uploaded = []
+        for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            const upload = await cdupload(image, process.env.FOLDER);
+            uploaded.push(upload)
+        }
+        const post = await Post.create({ title: title, desc: desc, images: uploaded, user: id });
         if (!post) {
             throw new Error('unable to create post');
         }
@@ -49,12 +54,12 @@ exports.deletePost = async (req, res) => {
         await User.findByIdAndUpdate(userId, { $pull: { posts: postId } });
         res.status(200).json({
             success: true,
-            message: 'Deleted succesfully'
+            message: 'Deleted successfully'
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'smth went wrong'
+            message: 'something went wrong'
         })
     }
 }
@@ -153,7 +158,7 @@ exports.commentPost = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "post commented successfully",
-            data: commentPost
+            data: post
         });
     } catch (error) {
         res.status(500).json({
@@ -189,7 +194,7 @@ exports.getPostComment = async (req, res) => {
         if (!postId) {
             throw new Error('post Id not found');
         }
-        const comments = await Comment.find({ post: postId }).populate({path: 'user', populate: 'profileDetails'}).exec();
+        const comments = await Comment.find({ post: postId }).populate({ path: 'user', populate: 'profileDetails' }).exec();
         res.status(200).json({
             success: true,
             message: 'Comments for a Post fetched',
@@ -226,14 +231,41 @@ exports.getPostForUser = async (req, res) => {
     }
 }
 
-exports.getAllPosts = async (req, res) => {
+exports.getPersonalizedFeed = async (req, res) => {
     try {
-        const allPosts = await Post.find({}).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).exec();
-        const shufflePosts = shuffleArray(allPosts);
+        const { id } = req.user;
+        const { page, limit } = req.query;
+
+        if (!page || !limit) {
+            throw new Error('page and limit are required');
+        }
+
+        const skip = (page - 1) * limit
+        const user = await User.findById(id)
+        const allPosts = await Post.find({}).populate('likes').populate('comments').populate({ path: 'user', populate: 'profileDetails' }).skip(skip).limit(limit).exec();
+        const publicPosts = allPosts.filter(post => post.user.profileDetails.visibility === 'public' && !user.friends.includes(post.user._id))
+        const friendsPosts = allPosts.filter(post => user.friends.includes(post.user._id))
+
+        const shuffledPublicPosts = shuffleArray(publicPosts);
+        const shuffledFriendsPosts = shuffleArray(friendsPosts);
+
+        const personalizedPosts = [...shuffledPublicPosts, ...shuffledFriendsPosts];
+
+        const allPostsAvailable = await Post.find({}).populate({ path: 'user', populate: 'profileDetails' }).exec();
+        const publicPostsAvailable = allPostsAvailable.filter(post => post.user.profileDetails.visibility === 'public' && !user.friends.includes(post.user._id))
+        const friendsPostsAvailable = allPostsAvailable.filter(post => user.friends.includes(post.user._id))
+        const totalPostsAvailable = publicPostsAvailable.length + friendsPostsAvailable.length;
+
+        // page * limit = skip + limit
+        const hasMore = (skip + limit) <= totalPostsAvailable;
+
         res.status(200).json({
             success: true,
             message: 'all posts fetched successfully',
-            data: shufflePosts
+            data: {
+                personalizedPosts,
+                hasMore
+            }
         });
     } catch (error) {
         res.status(500).json({

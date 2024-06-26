@@ -1,25 +1,20 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setChats, setSelectedChat } from '../../../store/slices/chat'
 import toast from 'react-hot-toast';
 import GroupChatModel from './utils/GroupChatModel'
 import { FaUsers } from "react-icons/fa6";
+import { useAxiosWithAuth } from '../../../utils/axiosInstance';
 
 const MyChat = ({ fetchAgain }) => {
-
     const dispatch = useDispatch();
-    const { token } = useSelector(state => state.auth);
     const { selectedChat, chats } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
+    const axiosPrivate = useAxiosWithAuth()
 
     const fetchChats = async () => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/chat/fetchChat`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.get('/chat/fetchChat')
             dispatch(setChats(data.data));
         } catch (error) {
             toast.error("unable to fetch chats");

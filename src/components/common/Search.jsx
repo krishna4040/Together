@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { removeFriend } from '../../store/slices/user'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import * as _ from 'lodash'
+import { ErrorButton, InfoButton, SuccessButton } from '../ui/Button';
+import { Modal } from '../ui/Modal';
+import { Avatar } from '../ui/Avatar';
+import { useAxiosWithAuth } from '../../utils/axiosInstance';
 
 const Search = ({ setSearch }) => {
-
     const currentUser = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
     const [userName, setUserName] = useState('');
@@ -14,28 +18,34 @@ const Search = ({ setSearch }) => {
     const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const axiosPrivate = useAxiosWithAuth()
 
-    const changeSuggestions = async (key) => {
+    const fetchSuggestions = async (key) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
-            setSuggestions(response.data.data);
+            const { data } = await axiosPrivate.get(`/all-users/suggestion?q=${key}`);
+            setSuggestions(data.data);
         } catch (error) {
             toast.error("unable to fetch suggestions");
             console.log(error);
         }
-    }
+    };
 
-    const changeHandler = async (event) => {
-        setUser({});
-        setUserName(event.target.value);
-        changeSuggestions(event.target.value);
-    }
+    const debouncedFetch = _.debounce(fetchSuggestions, 500);
+
+    useEffect(() => {
+        if (userName) {
+            debouncedFetch(userName);
+        }
+        return () => {
+            debouncedFetch.cancel();
+        };
+    }, [userName, debouncedFetch]);
 
     const fetchUser = async (userName) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/search?userName=${userName}`);
-            if (response.data.success) {
-                setUser(response.data.data);
+            const { data } = await axiosPrivate.get(`/all-users/search?userName=${userName}`);
+            if (data.success) {
+                setUser(data.data);
             }
         } catch (error) {
             toast.error("unable to fetch user from userName");
@@ -45,18 +55,21 @@ const Search = ({ setSearch }) => {
 
     const connectHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/sendFriendRequest`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            if (friend.profileDetails.visibility === 'public') {
+                const { data } = await axiosPrivate.post(`/friends/followFriend`, { friendId: friend._id });
+                if (!data.success) {
+                    throw new Error(response.data.message);
                 }
-            });
-            if (!response.data.success) {
-                throw new Error(response.data.message);
+                fetchUser(userName)
+                toast.success("friend followed!");
+            } else {
+                const { data } = await axiosPrivate.post(`/friends/sendFriendRequest`, { friendId: friend._id });
+                if (!data.success) {
+                    throw new Error(response.data.message);
+                }
+                fetchUser(userName)
+                toast.success("friend request sent!");
             }
-            fetchUser(userName)
-            toast.success("friend request sent!");
         } catch (error) {
             console.log(error);
         }
@@ -64,14 +77,8 @@ const Search = ({ setSearch }) => {
 
     const withDrawHandler = async (friend) => {
         try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/friends/withdrawFriendRequest`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.put('/friends/withdrawFriendRequest', { friendId: friend._id })
+            if (!data.success) {
                 throw new Error(response.data.message);
             }
             fetchUser(userName)
@@ -83,14 +90,8 @@ const Search = ({ setSearch }) => {
 
     const removeHandler = async (friend) => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/friends/removeFriend`, {
-                friendId: friend._id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!response.data.success) {
+            const { data } = await axiosPrivate.post('/friends/removeFriend', { friendId: friend._id });
+            if (!data.success) {
                 throw new Error(response.data.message);
             }
             toast.error("Friend removed");
@@ -105,50 +106,44 @@ const Search = ({ setSearch }) => {
     }
 
     return (
-        <div>
-            <label className="fixed inset-0 z-50 flex items-center justify-center w-screen h-screen backdrop-blur-sm">
-                <div className="flex flex-col w-full lg:w-[25%] gap-5 modal show pause-scroll">
-                    <button className="absolute right-4 top-3" onClick={() => { setSearch(false) }}>✕</button>
-                    <h2 className="text-xl">Search</h2>
-                    <div className='flex items-center gap-1'>
-                        <div className='is-divider' />
-                        <input placeholder='Enter Username to search' value={userName} onChange={changeHandler} className='input success' />
+        <Modal>
+            <button className="absolute right-4 top-3" onClick={() => { setSearch(false) }}>✕</button>
+            <h2 className="text-xl">Search</h2>
+            <div className='flex items-center gap-1'>
+                <div className='is-divider' />
+                <input placeholder='Enter Username to search' value={userName} onChange={e => setUserName(e.target.value)} className='input success' />
+            </div>
+            {
+                user?.userName ?
+                    <div className='flex flex-col items-center gap-5'>
+                        <div className='flex flex-col items-center justify-center'>
+                            <Avatar src={user.profileDetails.pfp} h={80} w={80} />
+                            <p className='min-w-[55px] text-lg capitalize'>{user.userName}</p>
+                        </div>
+                        <div className='flex items-center justify-center gap-5'>
+                            {
+                                currentUser.friends.find(friend => friend._id === user._id) ?
+                                    <ErrorButton text="Remove" onClick={() => removeHandler(user)} /> :
+                                    user.requests.find(req => req._id === currentUser._id) ?
+                                        <InfoButton text="Requested" onClick={() => withDrawHandler(user)} /> :
+                                        <SuccessButton onClick={() => connectHandler(user)} text={user.profileDetails.visibility === 'public' ? "Follow" : "Request"} />
+                            }
+                            <ErrorButton onClick={() => visitHandler(user.userName)} text="Visit" />
+                        </div>
                     </div>
-                    {
-                        user?.userName ?
-                            <div className='flex flex-col items-center gap-5'>
-                                <div className='flex flex-col items-center justify-center'>
-                                    <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
-                                        <img src={user.profileDetails.pfp} alt="user_image" className='w-full' />
-                                    </div>
-                                    <p className='min-w-[55px] text-lg capitalize'>{user.userName}</p>
-                                </div>
-                                <div className='flex items-center justify-center gap-5'>
-                                    {
-                                        currentUser.friends.find(friend => friend._id === user._id) ?
-                                            <button className='btn outline danger' onClick={() => { removeHandler(user) }}>Remove</button> :
-                                            user.requests.find(req => req._id === currentUser._id) ?
-                                                <button className='btn outline info' onClick={() => { withDrawHandler(user) }}>Requested</button> :
-                                                <button className='btn solid success' onClick={() => { connectHandler(user) }}>Connect</button>
-                                    }
-                                    <button className='btn outline danger' onClick={() => { visitHandler(user.userName) }}>Visit</button>
-                                </div>
-                            </div>
-                            :
-                            <div className='flex flex-col items-start justify-start gap-3 p-2 overflow-x-hidden overflow-y-auto h-fit'>
-                                {
-                                    suggestions.slice(0, 4).map((suggestion, index) => {
-                                        return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { fetchUser(suggestion.userName) }}>{suggestion.userName}</button>
-                                    })
-                                }
-                            </div>
-                    }
-                    <div className="flex gap-3">
-                        <button className="flex-1 btn solid danger" onClick={() => { fetchUser(userName) }}>Search</button>
+                    :
+                    <div className='flex flex-col items-start justify-start gap-3 p-2 overflow-x-hidden overflow-y-auto h-fit'>
+                        {
+                            suggestions.slice(0, 4).map((suggestion, index) => {
+                                return <button key={index} className='w-full p-2 text-left transition-all duration-200 rounded-md bg-slate-200 hover:scale-105' onClick={() => { fetchUser(suggestion.userName) }}>{suggestion.userName}</button>
+                            })
+                        }
                     </div>
-                </div>
-            </label>
-        </div>
+            }
+            <div className="flex gap-3">
+                <button className="flex-1 btn solid danger" onClick={() => { fetchUser(userName) }}>Search</button>
+            </div>
+        </Modal>
     )
 }
 

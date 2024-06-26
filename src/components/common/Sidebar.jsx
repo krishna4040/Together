@@ -11,7 +11,7 @@ const Sidebar = ({ setLogout, setSearch, setNotification }) => {
     const user = useSelector(state => state.user);
 
     const arr = [
-        { title: 'Home', icon: AiFillHome, link: '/' },
+        { title: 'Home', icon: AiFillHome, link: '/home' },
         { title: 'Search', icon: BiSearch, clickHandler: setSearch },
         { title: 'Messages', icon: BiMessageSquareDots, link: '/messages' },
         { title: 'Notification', icon: AiOutlineHeart, clickHandler: setNotification },

@@ -6,7 +6,6 @@ import Caption from '../components/core/create/Caption'
 import Preview from '../components/core/create/Preview'
 
 function Create() {
-
     const [step, setStep] = useState('title');
 
     return (

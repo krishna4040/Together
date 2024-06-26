@@ -13,7 +13,8 @@ const userSlice = createSlice({
             age: null,
             gender: null,
             about: null,
-            pfp: null
+            pfp: null,
+            visibility: null
         },
         requests: [],
         friends: [],
@@ -64,14 +65,11 @@ const userSlice = createSlice({
         addChat: (state, action) => {
             state.chat.push(action.payload);
         },
-        setAbout: (state, action) => {
-            state.profileDetails.about = action.payload;
-        },
-        setPfp: (state, action) => {
-            state.profileDetails.pfp = action.payload;
+        updateProfile: (state, action) => {
+            state.profileDetails = action.payload;
         }
     }
 });
 
-export const { setUser, setFriend, removeFriend, addPost, addChat, removePost, acceptFriendRequest, rejectFriendRequest, addFriend } = userSlice.actions;
+export const { setUser, removeFriend, addPost, addChat, removePost, acceptFriendRequest, rejectFriendRequest, addFriend, updateProfile } = userSlice.actions;
 export default userSlice.reducer;

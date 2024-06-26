@@ -1,23 +1,18 @@
-import axios from 'axios';
 import React from 'react';
 import { FaHeart, FaComment } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removePost } from '../../../store/slices/user'
 import toast from 'react-hot-toast';
+import { useAxiosWithAuth } from '../../../utils/axiosInstance';
 
 function Post({ title, imageSrc, likes, comments, _id }) {
-
     const dispatch = useDispatch();
-    const { token } = useSelector(state => state.auth);
+    const axiosPrivate = useAxiosWithAuth()
 
     const handleDelete = async (_id) => {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/post/deletePost?postId=${_id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.delete(`/post/deletePost?postId=${_id}`)
             toast.error("post deleted");
             dispatch(removePost(_id));
         } catch (error) {

@@ -1,0 +1,39 @@
+import { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom'
+import Logout from '../components/common/Logout';
+import Search from '../components/common/Search';
+import Notifications from '../components/common/Notifications';
+import { useSelector } from 'react-redux';
+import BottomNavigation from '../components/common/BottomNavigation';
+import Sidebar from '../components/common/Sidebar';
+
+export const DashBoard = () => {
+    const [logout, setLogout] = useState(false);
+    const [search, setSearch] = useState(false);
+    const [notification, setNotification] = useState(false);
+
+    const { token } = useSelector(state => state.auth)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (window.location.pathname === '/') {
+            navigate('/home');
+        }
+    }, [navigate]);
+
+    return (
+        <main>
+            <Outlet />
+            {
+                token &&
+                <>
+                    <Sidebar setLogout={setLogout} setSearch={setSearch} setNotification={setNotification} />
+                    <BottomNavigation setLogout={setLogout} setSearch={setSearch} />
+                </>
+            }
+            {logout && <Logout setLogout={setLogout} />}
+            {search && <Search setSearch={setSearch} />}
+            {notification && <Notifications setNotification={setNotification} />}
+        </main>
+    )
+}

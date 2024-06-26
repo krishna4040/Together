@@ -1,6 +1,4 @@
 const User = require('../models/User');
-const Post = require('../models/Post');
-const { shuffleArray } = require('../utils/shuffle');
 const Notification = require('../models/Notification');
 
 exports.sendFriendRequest = async (req, res) => {
@@ -11,9 +9,12 @@ exports.sendFriendRequest = async (req, res) => {
             throw new Error('friend id is required');
         }
 
-        const friend = await User.findById(friendId)
+        const friend = await User.findById(friendId).populate('profileDetails').exec();
         if (!friend) {
             throw new Error('Friend id do not exist');
+        }
+        if (friend.profileDetails.visibility === 'public') {
+            throw new Error('cannot send a public account');
         }
 
         const idx = friend.requests.findIndex(req => req == id)
@@ -52,9 +53,13 @@ exports.withDrawFriendRequest = async (req, res) => {
             throw new Error('friend id is required');
         }
 
-        const friend = await User.findById(friendId)
+        const friend = await User.findById(friendId).populate('profileDetails').exec();
         if (!friend) {
             throw new Error('Friend id do not exist');
+        }
+
+        if (friend.profileDetails.visibility === 'public') {
+            throw new Error('cannot withdraw req from public account');
         }
 
         const idx = friend.requests.findIndex(req => req == id)
@@ -147,6 +152,42 @@ exports.rejectFriendRequest = async (req, res) => {
     }
 }
 
+exports.followFriend = async (req, res) => {
+    try {
+        const { friendId } = req.body;
+        const { id } = req.user;
+        if (!friendId) {
+            throw new Error('friend id is required');
+        }
+        const friend = await User.findById(friendId).populate('profileDetails');
+        if (!friend) {
+            throw new Error('friend not found');
+        }
+        if (friend.profileDetails.visibility === 'private') {
+            throw new Error('cannot follow a private account');
+        }
+        const user = await User.findById(id);
+        const alReadyFriended = user.friends.includes(friend._id);
+        if (alReadyFriended) {
+            throw new Error('Already followed');
+        }
+        const userAddFriend = await User.findByIdAndUpdate(id, { $push: { friends: friend._id } });
+        const friendAddUser = await User.findByIdAndUpdate(friend._id, { $push: { friends: id } });
+        if (!userAddFriend || !friendAddUser) {
+            throw new Error('unable to follow');
+        }
+        res.status(200).json({
+            success: true,
+            message: 'friend followed successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
 exports.removeFriend = async (req, res) => {
     try {
         const { friendId } = req.body;
@@ -204,36 +245,23 @@ exports.getFriends = async (req, res) => {
     }
 }
 
-exports.getFriendsPosts = async (req, res) => {
+exports.getMutualFriends = async (req, res) => {
     try {
-        const { id } = req.user
-        if (!id) {
-            throw new Error('id not found')
-        }
-        const user = await User.findById(id).select('friends').exec();
-        const friendIds = user.friends
-
-        if (!friendIds.length) {
-            return res.status(200).json({
-                success: true,
-                message: 'No Friends Found',
-                data: []
-            });
+        const { id } = req.user;
+        const { userId } = req.query;
+        if (!userId) {
+            throw new Error('friend id is required');
         }
 
-        const posts = await Post
-            .find({ user: { $in: friendIds } })
-            .populate('likes')
-            .populate({ path: 'user', populate: 'profileDetails' })
-            .exec();
-
-        const shuffledPosts = shuffleArray(posts)
+        const user1 = await User.findById(id).populate({path: 'friends', populate: 'profileDetails'}).exec()
+        const user2 = await User.findById(userId)
+        const mutualFriends = user1.friends.filter(friend => user2.friends.includes(friend._id))
 
         res.status(200).json({
             success: true,
-            message: 'posts fetched successfully',
-            data: shuffledPosts
-        });
+            message: 'mutual friends fetched successfully',
+            data: mutualFriends
+        })
     } catch (error) {
         res.status(500).json({
             success: false,

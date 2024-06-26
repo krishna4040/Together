@@ -4,9 +4,9 @@ import { setSelectedChat } from '../../../store/slices/chat'
 import { FaArrowLeft } from "react-icons/fa";
 import UpdateGroupChatModal from './utils/UpdatGroupChatModal'
 import ScrollableChat from './utils/ScrollableChat'
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useSocket } from '../../../context/SocketContext';
+import { useAxiosWithAuth } from '../../../utils/axiosInstance';
 
 let selectedChatCompare;
 
@@ -18,6 +18,7 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
     const { selectedChat } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
+    const axiosPrivate = useAxiosWithAuth();
     const getSender = (loggedUser, users) => {
         return users[0]._id === loggedUser._id ? users[1].userName : users[0].userName
     }
@@ -30,11 +31,7 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
             return;
         }
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/message/fetchMessages/${selectedChat._id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const { data } = await axiosPrivate.get(`/message/fetchMessages/${selectedChat._id}`)
             setMessages(data.data);
             socket.emit('joinChat', selectedChat._id);
         } catch (error) {
@@ -71,14 +68,10 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
         if (e.key === "Enter" && newMessage) {
             try {
                 setNewMessage('');
-                const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/message/sendMessage`, {
+                const { data } = await axiosPrivate.post('/message/sendMessage', {
                     content: newMessage,
                     chatId: selectedChat._id
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                })
                 socket.emit('newMsg', data.data);
                 setMessages([...messages, data.data]);
             } catch (error) {

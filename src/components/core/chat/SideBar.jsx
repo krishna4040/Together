@@ -1,13 +1,12 @@
-import axios from 'axios';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { CiSearch } from "react-icons/ci";
 import { useDispatch, useSelector } from 'react-redux';
 import UserListItem from './utils/UserListItems'
 import { pushChat, setSelectedChat } from '../../../store/slices/chat'
+import { useAxiosWithAuth } from '../../../utils/axiosInstance';
 
 const SideBar = () => {
-
     const [loadingChat, setLoadingChat] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
@@ -15,7 +14,7 @@ const SideBar = () => {
 
     const dispatch = useDispatch();
     const { chats } = useSelector(state => state.chat);
-    const { token } = useSelector(state => state.auth);
+    const axiosPrivate = useAxiosWithAuth()
 
     const toggleDrawer = () => {
         setIsDrawerOpen(prev => !prev);
@@ -23,10 +22,10 @@ const SideBar = () => {
 
     const changeSuggestions = async (key) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/suggestion?q=${key}`);
+            const response = await axiosPrivate.get(`/all-users/suggestion?q=${key}`);
             setSuggestions(response.data.data);
         } catch (error) {
-            toast.error("unable fetch suggetions");
+            toast.error("unable fetch suggestions");
         }
     }
 
@@ -38,14 +37,7 @@ const SideBar = () => {
     const accessChat = async (userId) => {
         try {
             setLoadingChat(true);
-            const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/chat/createChat`, {
-                userId: userId
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
-            });
+            const { data } = await axiosPrivate.post(`/chat/createChat`, { userId });
             if (!chats.find((c) => c._id === data.data._id)) {
                 dispatch(pushChat(data.data));
             }

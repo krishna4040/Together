@@ -1,16 +1,19 @@
 const User = require('../models/User');
 
-exports.getAllUsers = async (req, res) => {
+exports.getPublicAccounts = async (req, res) => {
     try {
         const { id } = req.user;
-        const users = await User.find({ _id: { $ne: id } }).populate('profileDetails').populate('requests').exec();
-        if (!users) {
+        const { limit } = req.query
+        const currentUser = await User.findById(id)
+        const allUsers = await User.find({ _id: { $ne: id } }).populate('profileDetails').populate('requests').limit(limit).exec();
+        const publicAcc = allUsers.filter(user => user.profileDetails.visibility === "public" && !currentUser.friends.includes(user._id));
+        if (!publicAcc) {
             throw new Error('unable to fetch users');
         }
         res.status(200).json({
             success: true,
-            message: 'search database succesfull',
-            data: users
+            message: 'search database successful',
+            data: publicAcc
         });
     } catch (error) {
         res.status(500).json({

@@ -79,21 +79,6 @@ Install dependencies in root directory and server directory
 
 Make sure to make .env file with following env variables in root directory
 
-```bash
-  VITE_BASE_URL = http://localhost:4000/api/v1
-  PORT = 4000
-  DB = mongodb://127.0.0.1:27017/together
-  Cloudinary_CLOUD_NAME = <Your credentials>
-  Cloudinary_API_KEY = <Your credentials>
-  Cloudinary_API_SECRET = <Your credentials>
-  Cloudinary_FOLDER = <Your credentials>
-  MAIL_HOST = <Your credentials>
-  MAIL_USER = <Your credentials>
-  Mail_pass = <Your credentials>
-  JWT_SECRET = <Your credentials>
-```
-
-
 Start the server and run vite app using concurrently by running
 
 ```bash
