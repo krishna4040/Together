@@ -4,7 +4,7 @@ import { MdDelete } from 'react-icons/md'
 import { useDispatch } from 'react-redux';
 import { removePost } from '../../../store/slices/user'
 import toast from 'react-hot-toast';
-import { useAxiosWithAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../hooks/useAxios';
 
 function Post({ title, imageSrc, likes, comments, _id }) {
     const dispatch = useDispatch();

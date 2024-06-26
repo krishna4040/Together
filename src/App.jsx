@@ -13,7 +13,7 @@ import { setUser } from './store/slices/user'
 import Message from './pages/Message'
 import { Protect } from './components/guards/Protect'
 import { DashBoard } from './pages'
-import { useAxiosWithAuth } from './utils/axiosInstance'
+import { useAxiosWithAuth } from './hooks/useAxios'
 
 const App = () => {
   const { token } = useSelector(state => state.auth);

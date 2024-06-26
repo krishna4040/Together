@@ -4,7 +4,7 @@ import { removeFriend } from '../../../store/slices/user'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { ErrorButton, InfoButton } from '../../ui/Button'
-import { useAxiosWithAuth } from '../../../utils/axiosInstance'
+import { useAxiosWithAuth } from '../../../hooks/useAxios'
 
 
 const Friends = ({ user }) => {

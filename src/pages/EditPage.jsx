@@ -8,7 +8,7 @@ import DeleteModal from '../components/common/DeleteModal'
 import { updateProfile } from '../store/slices/user';
 import { ErrorButton, InfoButton } from '../components/ui/Button';
 import { Avatar } from '../components/ui/Avatar';
-import { useAxiosWithAuth } from '../utils/axiosInstance';
+import { useAxiosWithAuth } from '../hooks/useAxios';
 
 const EditPage = () => {
     const { register, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm({

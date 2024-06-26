@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useAxiosWithAuth } from '../../../utils/axiosInstance'
+import { useAxiosWithAuth } from '../../../hooks/useAxios'
 
 const Mutuals = ({ userId }) => {
     const [mutuals, setMutuals] = useState([])

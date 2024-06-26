@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Post from './Post'
-import { useAxiosWithoutAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithoutAuth } from '../../../hooks/useAxios';
 
 const Posts = ({ friend }) => {
     const [posts, setPosts] = useState([]);

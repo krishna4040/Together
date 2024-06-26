@@ -4,7 +4,7 @@ import { CiSearch } from "react-icons/ci";
 import { useDispatch, useSelector } from 'react-redux';
 import UserListItem from './utils/UserListItems'
 import { pushChat, setSelectedChat } from '../../../store/slices/chat'
-import { useAxiosWithAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../hooks/useAxios';
 
 const SideBar = () => {
     const [loadingChat, setLoadingChat] = useState(false);

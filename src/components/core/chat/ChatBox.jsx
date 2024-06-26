@@ -6,7 +6,7 @@ import UpdateGroupChatModal from './utils/UpdatGroupChatModal'
 import ScrollableChat from './utils/ScrollableChat'
 import toast from 'react-hot-toast';
 import { useSocket } from '../../../context/SocketContext';
-import { useAxiosWithAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../hooks/useAxios';
 
 let selectedChatCompare;
 

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { OTP } from "../../ui/OTPInput";
 import { useState } from "react";
-import { useAxiosWithoutAuth } from "../../../utils/axiosInstance";
+import { useAxiosWithoutAuth } from "../../../hooks/useAxios";
 
 export default function Verification({ setIsOtpSent }) {
     const [otp, setOtp] = useState('');

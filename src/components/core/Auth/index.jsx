@@ -10,7 +10,7 @@ import { Input } from "../../ui/Input";
 import { cn } from "../../../utils/cn";
 import { LightButton } from '../../ui/Button'
 import { useNavigate } from 'react-router-dom'
-import { useAxiosWithoutAuth } from '../../../utils/axiosInstance'
+import { useAxiosWithoutAuth } from '../../../hooks/useAxios'
 
 export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
     const navigate = useNavigate();

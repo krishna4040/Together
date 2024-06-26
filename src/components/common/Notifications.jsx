@@ -5,7 +5,7 @@ import { ImCross } from "react-icons/im";
 import toast from 'react-hot-toast';
 import { acceptFriendRequest, rejectFriendRequest } from '../../store/slices/user';
 import { Modal } from '../ui/Modal';
-import { useAxiosWithAuth } from '../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../hooks/useAxios';
 
 const Notifications = ({ setNotification }) => {
     const [notices, setNotices] = useState({})

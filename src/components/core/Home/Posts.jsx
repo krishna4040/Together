@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination'
-import { useAxiosWithAuth } from '../../../utils/axiosInstance'
+import { useAxiosWithAuth } from '../../../hooks/useAxios'
 
 const Posts = ({ posts, setPosts }) => {
     const user = useSelector(state => state.user)

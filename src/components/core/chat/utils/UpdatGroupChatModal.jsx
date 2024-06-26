@@ -5,7 +5,7 @@ import { setSelectedChat } from '../../../../store/slices/chat'
 import UserBadgeItem from './UserBadgeItem'
 import toast from 'react-hot-toast';
 import UserListItems from './UserListItems';
-import { useAxiosWithAuth } from '../../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../../hooks/useAxios';
 
 const UpdatGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const dispatch = useDispatch();

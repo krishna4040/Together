@@ -5,7 +5,7 @@ import Friends from '../components/core/friendsProfile/Friends'
 import { useSelector } from 'react-redux';
 import Mutuals from '../components/core/friendsProfile/Mutuals';
 import { ErrorButton, InfoButton, SuccessButton } from '../components/ui/Button';
-import { useAxiosWithAuth } from '../utils/axiosInstance';
+import { useAxiosWithAuth } from '../hooks/useAxios';
 
 const FriendProfile = () => {
     const { userName } = useParams();

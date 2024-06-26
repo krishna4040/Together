@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { InfoButton } from '../../ui/Button';
-import { useAxiosWithoutAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithoutAuth } from '../../../hooks/useAxios';
 
 const Friends = ({ friend, setStep }) => {
     const [friends, setFriends] = useState([]);

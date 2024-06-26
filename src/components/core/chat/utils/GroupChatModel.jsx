@@ -4,7 +4,7 @@ import { pushChat, setSelectedChat } from '../../../../store/slices/chat'
 import UserBadgeItem from './UserBadgeItem'
 import UserListItems from './UserListItems';
 import toast from 'react-hot-toast';
-import { useAxiosWithAuth } from '../../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../../hooks/useAxios';
 
 const GroupChatModel = () => {
     const [isOpen, setIsOpen] = useState(false);

@@ -4,7 +4,7 @@ import { setChats, setSelectedChat } from '../../../store/slices/chat'
 import toast from 'react-hot-toast';
 import GroupChatModel from './utils/GroupChatModel'
 import { FaUsers } from "react-icons/fa6";
-import { useAxiosWithAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../hooks/useAxios';
 
 const MyChat = ({ fetchAgain }) => {
     const dispatch = useDispatch();

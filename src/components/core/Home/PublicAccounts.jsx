@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addFriend } from '../../../store/slices/user'
 import { ListItemText } from '@mui/material';
-import { useAxiosWithAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../hooks/useAxios';
 
 const PublicAccountList = () => {
     const [users, setUsers] = useState([]);

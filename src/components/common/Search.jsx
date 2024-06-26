@@ -8,7 +8,7 @@ import * as _ from 'lodash'
 import { ErrorButton, InfoButton, SuccessButton } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { Avatar } from '../ui/Avatar';
-import { useAxiosWithAuth } from '../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../hooks/useAxios';
 
 const Search = ({ setSearch }) => {
     const currentUser = useSelector(state => state.user);

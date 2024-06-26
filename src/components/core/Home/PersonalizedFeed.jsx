@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Vortex } from 'react-loader-spinner';
 import Posts from './Posts';
-import { useAxiosWithAuth } from '../../../utils/axiosInstance';
+import { useAxiosWithAuth } from '../../../hooks/useAxios';
 
 const PersonalizedFeed = () => {
     const [posts, setPosts] = useState([]);
