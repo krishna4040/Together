@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { setCation } from '../../../store/slices/post'
 import { useDispatch } from 'react-redux'
 import toast from 'react-hot-toast';
+import { InfoButton } from '../../ui/Button';
 
 const Caption = ({ setStep }) => {
 
@@ -23,7 +24,7 @@ const Caption = ({ setStep }) => {
                 <div className='flex flex-col items-start justify-center gap-5'>
                     <h1 className='text-3xl font-semibold text-white'>Set Caption For Your Post</h1>
                     <input className='input success xl' placeholder='Enter Caption of Your Post' onChange={(event) => { setPostCaption(event.target.value) }} />
-                    <button className='bn5' onClick={clickHandler}>Next</button>
+                    <InfoButton onClick={clickHandler} text="Next" />
                 </div>
                 <div className='flex items-center justify-start gap-20'>
                     <ul className='text-lg text-white list-disc'>

@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination'
+import { InfoButton, SuccessButton } from '../../ui/Button';
 
 const Image = ({ setStep }) => {
 
@@ -65,8 +66,8 @@ const Image = ({ setStep }) => {
                     </Swiper>
                 </div>
                 <div className='flex items-center justify-start gap-5'>
-                    <button className='bn29' onClick={chooseHandler}>Choose</button>
-                    <button className='bn5' onClick={uploadHandler}>Upload</button>
+                    <InfoButton text="Choose" onClick={chooseHandler} />
+                    <SuccessButton text="Upload" onClick={uploadHandler} />
                 </div>
             </div>
             <div className='flex items-center justify-start gap-20'>

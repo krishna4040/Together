@@ -1,7 +1,8 @@
 import React from 'react'
 import { cn } from '../../utils/cn'
 import { IoChevronBackCircle } from "react-icons/io5";
-import { Button } from '@mui/base';
+import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 
 export const LightButton = ({ type, text, className, onClick }) => {
     return (
@@ -19,11 +20,54 @@ export const DarkButton = ({ type, text, className, onClick }) => {
     )
 }
 
-export const BackButton = ({ type, text, className, onClick }) => {
+export const BackButton = ({ type, onClick }) => {
     return (
-        <Button type={type} className={className} onClick={onClick}>
+        <IconButton type={type} onClick={onClick} >
+            <IoChevronBackCircle />
+        </IconButton>
+    )
+}
+
+export const CancelButton = ({ type, onClick }) => {
+    return (
+        <IconButton type={type} onClick={onClick} >
+            <IoChevronBackCircle />
+        </IconButton>
+    )
+}
+
+export const SettingsButton = ({ type, onClick }) => {
+    return (
+        <IconButton type={type} onClick={onClick} >
+            <IoChevronBackCircle />
+        </IconButton>
+    )
+}
+
+export const SuccessButton = ({ type, text, onClick, loading }) => {
+    return (
+        <Button type={type} variant='contained' color='success' onClick={onClick} disabled={loading}>
             {text}
-            <IoChevronBackCircle className='text-2xl' />
         </Button>
     )
+}
+
+export const ErrorButton = ({ type, text, onClick, loading }) => {
+    return (
+        <Button type={type} variant='contained' color='error' onClick={onClick} disabled={loading} >
+            {text}
+        </Button>
+    )
+}
+
+export const InfoButton = ({ type, text, onClick, loading }) => {
+    return (
+        <Button type={type} variant='contained' color='info' onClick={onClick} disabled={loading}>
+            {text}
+        </Button>
+    )
+}
+
+export const CustomButton = ({ text, className }) => {
+    return <button className={className}>{text}</button>
 }

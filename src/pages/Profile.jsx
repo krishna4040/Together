@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Posts from '../components/core/profile/Posts'
 import Liked from '../components/core/profile/Liked'
 import Friends from '../components/core/profile/Friends'
+import { InfoButton, SettingsButton } from '../components/ui/Button';
 
 const Profile = () => {
 
@@ -29,8 +30,8 @@ const Profile = () => {
                         <div className='flex flex-col justify-center gap-5 p-4'>
                             <div className='flex items-center justify-center gap-3'>
                                 <p className='text-xl font-semibold'>{user.userName}</p>
-                                <button className='btn solid bw' onClick={editHandler}>Edit Profile</button>
-                                <button><LuSettings className='hidden text-2xl text-white lg:block' /></button>
+                                <InfoButton text={"Edit Profile"} onClick={editHandler} />
+                                <SettingsButton />
                             </div>
                             <div className='flex items-center w-full gap-3'>
                                 <p>{user.posts.length} Posts</p>

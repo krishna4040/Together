@@ -6,18 +6,20 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { styled } from '@mui/system';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addFriend } from '../../../store/slices/user'
+import { ListItemText } from '@mui/material';
 
 const PublicAccountList = () => {
     const { token } = useSelector(state => state.auth);
     const [users, setUsers] = useState([]);
     const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.user);
+    const friendsId = currentUser.friends.map(friend => friend._id);
 
-    const fetchAllUsers = async (limit = 4) => {
+    const fetchPublicUsers = async (limit = 4) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/all-users/getPublicAccounts?limit=${limit}`, {
                 headers: {
@@ -31,7 +33,7 @@ const PublicAccountList = () => {
     }
 
     useEffect(() => {
-        fetchAllUsers();
+        fetchPublicUsers();
 
         return () => {
             setUsers([]);
@@ -55,6 +57,7 @@ const PublicAccountList = () => {
                 const updatedList = prev.filter(user => user._id !== friend._id);
                 return updatedList
             })
+            fetchPublicUsers();
             toast.success("Friend Followed");
         } catch (error) {
             toast.error(error.message);
@@ -63,28 +66,27 @@ const PublicAccountList = () => {
     }
 
     return (
-        <div>
-            <List dense>
-                {
-                    users.map(user => (
-                        <ListItem
-                            key={user._id}
-                            secondaryAction={
-                                <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            }
-                        >
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <FolderIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                        </ListItem>
-                    ))
-                }
-            </List>
-        </div>
+        <List dense className='w-[300px] bg-slate-300'>
+            {
+                users.map(user => (
+                    <ListItem
+                        key={user._id}
+                        secondaryAction={
+                            <IconButton edge="end" onClick={() => followHandler(user)} >
+                                Follow
+                            </IconButton>
+                        }
+                    >
+                        <ListItemAvatar>
+                            <Avatar src={user.profileDetails.pfp} alt='pfp' />
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={user.userName}
+                        />
+                    </ListItem>
+                ))
+            }
+        </List>
     )
 }
 

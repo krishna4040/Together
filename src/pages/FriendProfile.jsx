@@ -5,6 +5,7 @@ import Posts from '../components/core/friendsProfile/Posts'
 import Friends from '../components/core/friendsProfile/Friends'
 import { useSelector } from 'react-redux';
 import Mutuals from '../components/core/friendsProfile/Mutuals';
+import { ErrorButton, InfoButton, SuccessButton } from '../components/ui/Button';
 
 const FriendProfile = () => {
     const { userName } = useParams();
@@ -99,7 +100,7 @@ const FriendProfile = () => {
         if (window.location.pathname === `/view-profile/${user.userName}`) {
             navigate('/home');
         }
-    },[navigate])
+    }, [navigate])
 
     useEffect(() => {
         fetchFriend();
@@ -129,16 +130,10 @@ const FriendProfile = () => {
                             <div>
                                 {
                                     user.friends.find(fr => fr._id === friend._id) ?
-                                        <button className='btn outline danger' onClick={() => { removeHandler(friend) }}>Remove</button> :
-                                        friend.requests.find(req => req._id === friend._id) ?
-                                            <button className='btn outline info' onClick={() => { withDrawHandler(friend) }}>Requested</button> :
-                                            <button className='btn solid success' onClick={() => { connectHandler(friend) }}>
-                                                {
-                                                    friend.profileDetails.visibility === 'public' ?
-                                                        "Follow" :
-                                                        "Request"
-                                                }
-                                            </button>
+                                        <ErrorButton onClick={() => removeHandler(friend)} text={"Remove"} />:
+                                        friend.requests.find(req => req._id === user._id) ?
+                                            <InfoButton onClick={() => withDrawHandler(friend)} text={"Requested"}  /> :
+                                            <SuccessButton onClick={() => connectHandler(friend)} text={friend.profileDetails.visibility === 'public' ? "Follow" : "Request"} />
                                 }
                             </div>
                             <Mutuals userId={friend._id} />

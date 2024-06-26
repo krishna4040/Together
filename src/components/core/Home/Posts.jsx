@@ -4,9 +4,8 @@ import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Scrollbar } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/scrollbar';
 import 'swiper/css/pagination'
 
 const Posts = ({ posts, setPosts }) => {
@@ -124,13 +123,10 @@ const Posts = ({ posts, setPosts }) => {
                                 </div>
                                 <div className='relative lg:w-[600px] w-full mx-auto'>
                                     <Swiper
-                                        scrollbar={{
-                                            hide: true,
-                                        }}
                                         pagination={{
                                             dynamicBullets: true,
                                         }}
-                                        modules={[Scrollbar, Pagination]}
+                                        modules={[Pagination]}
                                     >
                                         {
                                             post.images.map((image, idx) => (

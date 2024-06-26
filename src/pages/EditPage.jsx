@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../components/common/DeleteModal'
 import { updateProfile } from '../store/slices/user';
+import { ErrorButton, InfoButton } from '../components/ui/Button';
 
 const EditPage = () => {
 
@@ -73,77 +74,72 @@ const EditPage = () => {
     return (
         <form className='lg:ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-start lg:justify-center' onSubmit={handleSubmit(submitHandler)}>
             {
-                Object.keys(user).length &&
-                (
-                    <>
-                        <div className='flex flex-col items-center justify-center w-1/2 gap-5 mt-10 lg:flex-row lg:mt-0'>
-                            <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
-                                <img src={user.profileDetails.pfp} alt="user" />
-                            </div>
-                            <div>
-                                <button onClick={handleClick} className="btn solid bw" type='button'>
-                                    Update Profile Picture
-                                </button>
-                                <input
-                                    type="file"
-                                    {...register("pfp")}
-                                    id='fileInput'
-                                    style={{ display: 'none' }}
-                                    accept='.png , .jpg , .jpeg , .svg , .gif , .ico , .svg'
-                                />
-                            </div>
+                <>
+                    <div className='flex flex-col items-center justify-center w-1/2 gap-5 mt-10 lg:flex-row lg:mt-0'>
+                        <div className='flex items-center justify-center w-[200px] h-[200px] rounded-full overflow-hidden p-6 border'>
+                            <img src={user.profileDetails.pfp} alt="user" />
                         </div>
-                        <div className='flex items-center justify-center w-[400px] p- mt-10 lg:mt-0'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Username:</label>
+                        <div>
+                            <InfoButton onClick={handleClick} type={"button"} text={"Update Profile Picture"} />
                             <input
-                                type="text"
-                                placeholder={user.userName}
-                                className='input success pill'
+                                type="file"
+                                {...register("pfp")}
+                                id='fileInput'
+                                style={{ display: 'none' }}
+                                accept='.png , .jpg , .jpeg , .svg , .gif , .ico , .svg'
                             />
                         </div>
-                        <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Email:</label>
-                            <input
-                                type="email"
-                                placeholder={user.email}
-                                className='input success pill'
-                                disabled
-                            />
-                        </div>
-                        <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Date Of Birth:</label>
-                            <input
-                                type="date"
-                                placeholder={user.profileDetails.dob}
-                                className='input success pill'
-                            />
-                        </div>
-                        <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Gender:</label>
-                            <select className='select pill success' defaultValue={user.profileDetails.gender}>
-                                <option value={"Male"}>
-                                    Male
-                                </option>
-                                <option value={"Female"}>
-                                    Female
-                                </option>
-                            </select>
-                        </div>
-                        <div className='flex items-center justify-center w-[400px] p-3'>
-                            <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>About:</label>
-                            <input
-                                type="text"
-                                {...register("about")}
-                                placeholder={user.profileDetails.about}
-                                className='input success pill'
-                            />
-                        </div>
-                        <div className='flex items-center justify-start gap-5 mt-10 lg:mt-5 w-[400px]'>
-                            <button type='submit' className='btn solid warn'>Update Changes</button>
-                            <button type='button' className='btn solid danger' onClick={() => { setModal(true) }}>Delete Profile</button>
-                        </div>
-                    </>
-                )
+                    </div>
+                    <div className='flex items-center justify-center w-[400px] p- mt-10 lg:mt-0'>
+                        <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Username:</label>
+                        <input
+                            type="text"
+                            placeholder={user.userName}
+                            className='input success pill'
+                        />
+                    </div>
+                    <div className='flex items-center justify-center w-[400px] p-3'>
+                        <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Email:</label>
+                        <input
+                            type="email"
+                            placeholder={user.email}
+                            className='input success pill'
+                            disabled
+                        />
+                    </div>
+                    <div className='flex items-center justify-center w-[400px] p-3'>
+                        <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Date Of Birth:</label>
+                        <input
+                            type="date"
+                            placeholder={user.profileDetails.dob}
+                            className='input success pill'
+                        />
+                    </div>
+                    <div className='flex items-center justify-center w-[400px] p-3'>
+                        <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>Gender:</label>
+                        <select className='select pill success' defaultValue={user.profileDetails.gender}>
+                            <option value={"Male"}>
+                                Male
+                            </option>
+                            <option value={"Female"}>
+                                Female
+                            </option>
+                        </select>
+                    </div>
+                    <div className='flex items-center justify-center w-[400px] p-3'>
+                        <label htmlFor="userName" className='text-xs text-white uppercase w-[150px]'>About:</label>
+                        <input
+                            type="text"
+                            {...register("about")}
+                            placeholder={user.profileDetails.about}
+                            className='input success pill'
+                        />
+                    </div>
+                    <div className='flex items-center justify-start gap-5 mt-10 lg:mt-5 w-[400px]'>
+                        <InfoButton type={"submit"} text={"Update Profile"} />
+                        <ErrorButton type={"button"} onClick={() => setModal(true)} text={"Delete Profile"} />
+                    </div>
+                </>
             }
             {modal && <DeleteModal setModal={setModal} deleteHandler={deleteProfileHandler} />}
         </form>

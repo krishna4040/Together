@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { InfoButton } from '../../ui/Button';
 
 const Friends = ({ friend, setStep }) => {
     const [friends, setFriends] = useState([]);
@@ -52,7 +53,7 @@ const Friends = ({ friend, setStep }) => {
                                         </div>
                                     </td>
                                     <td>{friend.userName}</td>
-                                    <td><button onClick={() => visitHandler(friend)} className='btn light info'>Visit</button></td>
+                                    <td><InfoButton onClick={() => visitHandler(friend)} text={"Visit"} /></td>
                                 </tr>
                             )
                         })

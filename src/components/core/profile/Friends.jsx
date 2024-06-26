@@ -4,6 +4,7 @@ import { removeFriend } from '../../../store/slices/user'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { ErrorButton, InfoButton } from '../../ui/Button'
 
 
 const Friends = ({ user }) => {
@@ -57,8 +58,8 @@ const Friends = ({ user }) => {
                                         </div>
                                     </td>
                                     <td>{friend.userName}</td>
-                                    <td><button onClick={() => { navigate(`/view-profile/${friend.userName}`) }} className='btn light info'>Visit</button></td>
-                                    <td><button className='btn outline danger' onClick={() => { removeHandler(friend) }}>Remove</button></td>
+                                    <td><InfoButton onClick={() => navigate(`/view-profile/${friend.userName}`)} text={"Visit"} /></td>
+                                    <td><ErrorButton onClick={() => removeHandler(friend)} text={"Remove"} /></td>
                                 </tr>
                             )
                         })

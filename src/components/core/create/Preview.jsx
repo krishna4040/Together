@@ -8,6 +8,7 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination'
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { ErrorButton, InfoButton } from '../../ui/Button';
 
 const Preview = ({ setStep }) => {
 
@@ -79,8 +80,8 @@ const Preview = ({ setStep }) => {
                 <p className='text-2xl text-white'><span className='text-base text-blue-400'>#postDesc</span> {post.caption}</p>
             </div>
             <div className='flex items-center justify-start gap-7'>
-                <button className='bn29' onClick={uploadHandler}>Post</button>
-                <button className='bn5' onClick={cancelHandler}>Cancel</button>
+                <InfoButton text="Info" onClick={uploadHandler} />
+                <ErrorButton text="Cancel" onClick={cancelHandler} />
             </div>
         </div>
     )
