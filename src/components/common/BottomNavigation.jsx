@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { AiFillHome } from 'react-icons/ai'
 import { IoCreateOutline } from 'react-icons/io5'
-import { BiMessageSquareDots, BiSearch } from 'react-icons/bi'
+import { BiMessageSquareDots } from 'react-icons/bi'
 import { FiLogOut } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { Avatar } from '../ui/Avatar'
@@ -11,7 +11,6 @@ const BottomNavigation = ({ setSearch, setLogout }) => {
 
     const arr = [
         { title: 'Home', icon: AiFillHome, link: '/' },
-        // { title: 'Search', icon: BiSearch, clickHandler: setSearch },
         { title: 'Messages', icon: BiMessageSquareDots, link: '/messages' },
         { title: 'Create', icon: IoCreateOutline, link: '/create' },
         { title: 'Profile', icon: AiFillHome, link: '/profile' },
@@ -22,7 +21,7 @@ const BottomNavigation = ({ setSearch, setLogout }) => {
     const user = useSelector(state => state.user);
 
     return (
-        <div className='z-50 fixed bottom-0 left-0 right-0 flex items-center justify-center gap-8 p-5 bg-black lg:hidden'>
+        <div className='z-50 fixed bottom-0 left-0 right-0 flex items-center justify-center gap-10 p-5 bg-black lg:hidden'>
             {
                 arr.map((item, index) => {
                     return (

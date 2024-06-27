@@ -11,13 +11,11 @@ import { useAxiosWithAuth } from '../../../hooks/useAxios';
 let selectedChatCompare;
 
 const ChatBox = ({ fetchAgain, setFetchAgain }) => {
-
     const socket = useSocket();
 
     const dispatch = useDispatch();
     const { selectedChat } = useSelector(state => state.chat);
     const user = useSelector(state => state.user);
-    const { token } = useSelector(state => state.auth);
     const axiosPrivate = useAxiosWithAuth();
     const getSender = (loggedUser, users) => {
         return users[0]._id === loggedUser._id ? users[1].userName : users[0].userName
@@ -82,7 +80,7 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
     }
 
     return (
-        <div className={`${selectedChat ? null : 'hidden'} lg:flex items-center flex-col bg-white rounded-lg w-[55%]`}>
+        <div className={`${selectedChat ? null : 'hidden'} lg:flex items-center flex-col bg-white rounded-lg lg:w-[55%] w-full`}>
             {
                 selectedChat ?
                     <>

@@ -1,4 +1,5 @@
 const Chat = require('../models/Chat');
+const User = require('../models/User')
 
 exports.accessChat = async (req, res) => {
     try {
@@ -45,21 +46,33 @@ exports.accessChat = async (req, res) => {
 exports.fetchChat = async (req, res) => {
     try {
         const userChat = await Chat.find({ users: { $elemMatch: { $eq: req.user.id } } })
-            .populate({ path: 'users', populate: 'profileDetails' })
-            .populate({ path: 'latestMessage', populate: { path: 'sender', populate: 'profileDetails' } })
-            .exec()
+            .populate({ path: 'users', populate: { path: 'profileDetails' } })
+            .populate({ path: 'latestMessage', populate: { path: 'sender', populate: { path: 'profileDetails' } } })
+            .exec();
+
+        const userIdsInChats = new Set();
+        userChat.forEach(chat => {
+            chat.users.forEach(user => userIdsInChats.add(user._id.toString()))
+        })
+
+        const currentUser = await User.findById(req.user.id).populate({ path: 'friends', populate: 'profileDetails' }).exec();
+        const friendsNotChatted = currentUser.friends.filter(friend => !userIdsInChats.has(friend._id.toString()));
+
         res.status(200).json({
             success: true,
-            message: 'chat for the user fetched',
-            data: userChat
-        })
+            message: 'Chat for the user fetched',
+            data: {
+                chats: userChat,
+                newFriends: friendsNotChatted
+            }
+        });
     } catch (error) {
         res.status(500).json({
             success: false,
             message: error.message
-        })
+        });
     }
-}
+};
 
 exports.createGroupChat = async (req, res) => {
     try {

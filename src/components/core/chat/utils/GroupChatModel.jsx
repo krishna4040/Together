@@ -64,7 +64,7 @@ const GroupChatModel = () => {
         <div>
             <label className="btn success solid" onClick={() => { setIsOpen(true) }}>New Group Chat</label>
             <label className="modal-overlay" onClick={() => { setIsOpen(false) }}></label>
-            <div className={`modal flex flex-col gap-5 pause-scroll ${isOpen ? 'show' : null}`}>
+            <div className={`modal flex flex-col gap-5 w-full lg:w-[25%] pause-scroll ${isOpen ? 'show' : null}`}>
                 <button className="absolute right-4 top-3" onClick={() => { setIsOpen(false) }}>✕</button>
                 <h2 className="flex justify-center text-xl">Create Group Chat</h2>
                 <div className='flex flex-col items-center gap-3'>
