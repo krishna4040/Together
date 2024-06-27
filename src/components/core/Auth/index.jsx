@@ -4,7 +4,6 @@ import { ErrorMessage } from "@hookform/error-message"
 import { toast } from 'react-hot-toast'
 import { setSignupData, setToken } from '../../../store/slices/auth'
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
 import { Label } from "../../ui/Label";
 import { Input } from "../../ui/Input";
 import { cn } from "../../../utils/cn";

@@ -7,8 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Avatar } from '../ui/Avatar'
 
-const Sidebar = ({ setLogout, setSearch, setNotification }) => {
-
+const Sidebar = ({ setLogout, setSearch, setNotification, notificationRef }) => {
     const user = useSelector(state => state.user);
 
     const arr = [
@@ -23,6 +22,7 @@ const Sidebar = ({ setLogout, setSearch, setNotification }) => {
     ];
 
     const navigate = useNavigate();
+
     return (
         <div className='lg:flex flex-col hidden justify-center gap-7 bg-black w-[200px] fixed top-0 left-0 p-3 h-screen border-r border-gray-500'>
             <h1 className='text-2xl text-white'>Together</h1>
@@ -35,7 +35,11 @@ const Sidebar = ({ setLogout, setSearch, setNotification }) => {
                                     :
                                     <Avatar src={user.profileDetails.pfp} h={48} w={48} p={8} border />
                             }
-                            <p className='text-xl text-white'>{item.title}</p>
+                            <p ref={el => {
+                                if(item.title === 'Notification') {
+                                    notificationRef.current = el
+                                }
+                            }} className='text-xl text-white'>{item.title}</p>
                         </div>
                     )
                 })

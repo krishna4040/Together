@@ -1,17 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import toast from 'react-hot-toast';
 import { acceptFriendRequest, rejectFriendRequest } from '../../store/slices/user';
-import { Modal } from '../ui/Modal';
 import { useAxiosWithAuth } from '../../hooks/useAxios';
 import { Avatar } from '../ui/Avatar';
+import { PopOver } from '../ui/Popover';
+import { IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@mui/material';
+import { useClickOutside } from '../../hooks/useClickOutside';
+import { makeStyles } from 'tss-react/mui';
 
-const Notifications = ({ setNotification }) => {
+const Notifications = ({ notification, setNotification, notificationRef }) => {
     const [notices, setNotices] = useState({})
     const dispatch = useDispatch();
     const axiosPrivate = useAxiosWithAuth();
+    const ref = useRef(null)
+
+    const ListItemWithWiderSecondaryAction = makeStyles({
+        secondaryAction: {
+            paddingRight: 96
+        }
+    })(ListItem);
+
+    useClickOutside(ref, () => setNotification(false))
 
     const fetchNotifications = async () => {
         try {
@@ -69,36 +81,53 @@ const Notifications = ({ setNotification }) => {
     }, [])
 
     return (
-        <Modal>
-            <button onClick={() => setNotification(false)}>Close</button>
-            {
-                Object.keys(notices).length > 0 ?
-                    Object.entries(notices).map(([date, notifications]) => {
-                        return <div key={date}>
-                            <span>{date}</span>
-                            <div>
-                                {
-                                    notifications.map(notification => (
-                                        <div className='flex items-center justify-between gap-3' key={notification._id}>
-                                            <Avatar src={notification.by.profileDetails.pfp} scaleOnHover h={50} w={50} />
-                                            <span>{notification.content}</span>
-                                            <span>{notification.createdAt.time}</span>
-                                            {
-                                                notification.notificationType === 'action' &&
-                                                <div className='flex gap-3 items-center justify-center'>
-                                                    <FaCheck onClick={() => acceptRequestHandler(notification.by, notification.createdAt.date)} className='text-xl hover:text-green-400 hover:scale-110 duration-200 transition-all' />
-                                                    <ImCross onClick={() => rejectRequestHandler(notification.by, notification.createdAt.date)} className='text-xl hover:text-red-600 hover:scale-110 duration-200 transition-all' />
-                                                </div>
-                                            }
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
-                    }) :
-                    <p className='text-black'>No notifications</p>
-            }
-        </Modal>
+        <PopOver open={notification} anchorRef={notificationRef}>
+            <div className='min-w-[300px] px-4 py-2 flex flex-col items-center w-full border' ref={ref}>
+                <div>
+                    {
+                        Object.keys(notices).length > 0 ?
+                            Object.entries(notices).map(([date, notifications]) => {
+                                return <div key={date}>
+                                    <span>{date}</span>
+                                    <List dense>
+                                        {
+                                            notifications.map(notification => (
+                                                <ListItem
+                                                    dense
+                                                    key={notification._id}
+                                                    divider
+                                                >
+                                                    <ListItemAvatar>
+                                                        <Avatar src={notification.by.profileDetails.pfp} scaleOnHover h={50} w={50} />
+                                                    </ListItemAvatar>
+                                                    <ListItemText
+                                                        primary={notification.content}
+                                                        secondary={notification.createdAt.time}
+                                                    />
+                                                    <ListItemSecondaryAction>
+                                                        {
+                                                            notification.notificationType === 'action' &&
+                                                            <>
+                                                                <IconButton onClick={() => acceptRequestHandler(notification.by, notification.createdAt.date)}>
+                                                                    <FaCheck className='text-xl hover:text-green-400 hover:scale-110 duration-200 transition-all' />
+                                                                </IconButton>
+                                                                <IconButton onClick={() => rejectRequestHandler(notification.by, notification.createdAt.date)}>
+                                                                    <ImCross className='text-xl hover:text-red-600 hover:scale-110 duration-200 transition-all' />
+                                                                </IconButton>
+                                                            </>
+                                                        }
+                                                    </ListItemSecondaryAction>
+                                                </ListItem>
+                                            ))
+                                        }
+                                    </List>
+                                </div>
+                            }) :
+                            <p className='text-black'>No notifications</p>
+                    }
+                </div>
+            </div>
+        </PopOver>
     )
 }
 

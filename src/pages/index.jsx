@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom'
 import Logout from '../components/common/Logout';
 import Search from '../components/common/Search';
@@ -11,6 +11,7 @@ export const DashBoard = () => {
     const [logout, setLogout] = useState(false);
     const [search, setSearch] = useState(false);
     const [notification, setNotification] = useState(false);
+    const notificationRef = useRef(null);
 
     const { token } = useSelector(state => state.auth)
     const navigate = useNavigate();
@@ -27,13 +28,13 @@ export const DashBoard = () => {
             {
                 token &&
                 <>
-                    <Sidebar setLogout={setLogout} setSearch={setSearch} setNotification={setNotification} />
+                    <Sidebar notificationRef={notificationRef} setLogout={setLogout} setSearch={setSearch} setNotification={setNotification} />
                     <BottomNavigation setLogout={setLogout} setSearch={setSearch} />
                 </>
             }
             {logout && <Logout setLogout={setLogout} />}
             {search && <Search setSearch={setSearch} />}
-            {notification && <Notifications setNotification={setNotification} />}
+            {notification && <Notifications setNotification={setNotification} notification={notification} notificationRef={notificationRef} />}
         </main>
     )
 }
