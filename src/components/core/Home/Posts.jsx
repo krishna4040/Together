@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/pagination'
 import { useAxiosWithAuth } from '../../../hooks/useAxios'
 import { Avatar } from '../../ui/Avatar';
+import CommentSection from './CommentSection';
 
 const Posts = ({ posts, setPosts }) => {
     const user = useSelector(state => state.user)
@@ -93,72 +94,58 @@ const Posts = ({ posts, setPosts }) => {
     }
 
     return (
-        <div className='flex flex-col items-center justify-center w-full gap-10 p-4'>
+        <div className='flex flex-col items-center justify-center w-full gap-10 p-4 overflow-hidden'>
             {
-                posts && posts.length ?
+                posts.length ?
                     posts.map((post, index) => {
                         return (
                             post.length !== 0 &&
-                            <div key={index} className='flex flex-col justify-center w-full gap-3'>
-                                <div className='flex items-center gap-3'>
+                            <div className="mx-auto w-full bg-black max-w-md overflow-hidden rounded-lg shadow" key={index}>
+                                <div className="header">
                                     <Avatar src={post.user.profileDetails.pfp} h={50} w={50} p={4} border />
                                     <h1 className='text-xl text-white capitalize text-red-500'>{post.user.userName}</h1>
                                 </div>
-                                <div className='relative lg:w-[600px] w-full mx-auto'>
-                                    <Swiper
-                                        pagination={{
-                                            dynamicBullets: true,
-                                        }}
-                                        modules={[Pagination]}
-                                    >
-                                        {
-                                            post.images.map((image, idx) => (
-                                                <SwiperSlide key={idx}>
-                                                    <img src={image || ""} alt="post_here" />
-                                                </SwiperSlide>
-                                            ))
-                                        }
-                                    </Swiper>
-                                </div>
-                                <div className='flex items-center gap-3'>
+                                <Swiper
+                                    pagination={{
+                                        dynamicBullets: true,
+                                    }}
+                                    modules={[Pagination]}
+                                >
                                     {
-                                        post.likes.findIndex(like => like.user === user._id) !== -1 ?
-                                            <AiFillHeart onClick={() => unlikeHandler(post._id)} className='text-3xl text-red-600 cursor-pointer hover:scale-95 duration-200 transition-all hover:text-white' /> :
-                                            <AiFillHeart onClick={() => likeHandler(post._id)} className='text-3xl text-white cursor-pointer hover:scale-95 duration-200 transition-all hover:text-red-600' />
+                                        post.images.map((image, idx) => (
+                                            <SwiperSlide key={idx}>
+                                                <img src={image || ""} alt="post_here" className="aspect-video w-full object-cover" />
+                                            </SwiperSlide>
+                                        ))
                                     }
-                                    <span className='text-white text-xs'>{post.likes.length}</span>
-                                    <AiOutlineComment onClick={() => {
-                                        setCommentSection(prev => !prev)
-                                        if (commentSection) {
-                                            fetchPostsComments(post._id)
-                                        }
-                                    }} className='text-3xl text-white cursor-pointer' />
-                                    <span className='text-white text-xs'>{post.comments.length}</span>
-                                    <input type='text' onChange={(e) => setComment(e.target.value)} value={comment} onKeyDown={e => {
-                                        if (e.key === 'Enter') {
-                                            commentHandler(post._id)
-                                        }
-                                    }} />
-                                </div>
-                                <div>
-                                    <p className='text-2xl text-white'><span className='text-base text-blue-400'>#caption</span> {post.title}</p>
-                                    <p className='text-2xl text-white'><span className='text-base text-blue-400'>#postDesc</span> {post.desc}</p>
-                                </div>
-                                {
-                                    commentSection &&
-                                    <div>
-                                        {
-                                            comments.map(comment => (
-                                                <div className='flex items-center justify-between gap-3' key={comment._id}>
-                                                    <div className='h-[50px] w-[50px] flex items-center justify-center p-1 border rounded-full overflow-hidden hover:scale-110 duration-200 transition-all'>
-                                                        <img src={comment.user.profileDetails.pfp} alt="user" className='w-full' />
-                                                    </div>
-                                                    <span className='text-white text-xs'>{comment.comment}</span>
-                                                </div>
-                                            ))
-                                        }
+                                </Swiper>
+                                <div className="p-4">
+                                    <div className="mb-1 text-sm text-primary-500 flex items-center justify-start gap-4">
+                                        <div className='flex items-center justify-center gap-2'>
+                                            {
+                                                post.likes.findIndex(like => like.user === user._id) !== -1 ?
+                                                    <AiFillHeart onClick={() => unlikeHandler(post._id)} className='text-3xl text-red-600 cursor-pointer hover:scale-95 duration-200 transition-all hover:text-white' /> :
+                                                    <AiFillHeart onClick={() => likeHandler(post._id)} className='text-3xl text-white cursor-pointer hover:scale-95 duration-200 transition-all hover:text-red-600' />
+                                            }
+                                            <span className='text-white text-xs'>{post.likes.length}</span>
+                                        </div>
+                                        <div className='flex items-center justify-center gap-2'>
+                                            <AiOutlineComment onClick={() => {
+                                                setCommentSection(prev => !prev)
+                                                if (commentSection) {
+                                                    fetchPostsComments(post._id)
+                                                }
+                                            }} className='text-3xl text-white cursor-pointer' />
+                                            <span className='text-white text-xs'>{post.comments.length}</span>
+                                        </div>
                                     </div>
-                                }
+                                    <h3 className="text-xl font-medium text-blue-900">{post.title}</h3>
+                                    <p className="mt-1 text-gray-500">{post.desc}</p>
+                                    {
+                                        commentSection &&
+                                        <CommentSection comments={comments} comment={comment} setComment={setComment} post={post} setCommentSection={setCommentSection} commentHandler={commentHandler} />
+                                    }
+                                </div>
                             </div>
                         )
                     })

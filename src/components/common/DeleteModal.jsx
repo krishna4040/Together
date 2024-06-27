@@ -3,7 +3,7 @@ import { Modal } from '../ui/Modal'
 
 const DeleteModal = ({ setModal, deleteHandler }) => {
     return (
-        <Modal>
+        <Modal outSideCallback={() => setModal(false)}>
             <button className={`absolute right-4 top-3`} onClick={() => { setModal(false) }}>✕</button>
             <h2 className="text-xl">Confirm Delete</h2>
             <span>Once you delete there is no coming back</span>

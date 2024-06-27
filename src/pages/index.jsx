@@ -5,6 +5,7 @@ import Search from '../components/common/Search';
 import Notifications from '../components/common/Notifications';
 import { useSelector } from 'react-redux';
 import BottomNavigation from '../components/common/BottomNavigation';
+import UpperNavigation from '../components/common/UpperNavigation';
 import Sidebar from '../components/common/Sidebar';
 
 export const DashBoard = () => {
@@ -28,8 +29,14 @@ export const DashBoard = () => {
             {
                 token &&
                 <>
-                    <Sidebar notificationRef={notificationRef} setLogout={setLogout} setSearch={setSearch} setNotification={setNotification} />
-                    <BottomNavigation setLogout={setLogout} setSearch={setSearch} />
+                    {
+                        window.innerWidth > 768 ?
+                            <Sidebar notificationRef={notificationRef} setLogout={setLogout} setSearch={setSearch} setNotification={setNotification} /> :
+                            <>
+                                <BottomNavigation setLogout={setLogout} setSearch={setSearch} />
+                                <UpperNavigation notificationRef={notificationRef} setNotification={setNotification} setSearch={setSearch} />
+                            </>
+                    }
                 </>
             }
             {logout && <Logout setLogout={setLogout} />}

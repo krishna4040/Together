@@ -1,22 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaHeart, FaComment } from 'react-icons/fa';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
 
-function Post({ title, imageSrc, likes, comments, _id }) {
+function Post({ images, likes, comments }) {
+    const [show, setShow] = useState(false)
 
     return (
-        <div className="relative max-w-sm p-4 text-black bg-white rounded-lg shadow-lg">
-            <div>
-                <h2 className="mb-2 text-xl font-semibold">{title}</h2>
-                <img src={imageSrc} alt={title} className="w-full mb-2 rounded-lg" />
-                <div className="flex items-center mb-2">
-                    <FaHeart className="mr-2 text-red-500" />
-                    <p className="text-gray-700">{likes} Likes</p>
-                </div>
-                <div className="flex items-center mb-4">
-                    <FaComment className="mr-2 text-blue-500" />
-                    <p className="text-gray-700">{comments} Comments</p>
-                </div>
-            </div>
+        <div className="mx-auto w-full relative bg-black max-w-md overflow-hidden rounded-lg shadow hover-area"
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+        >
+            <Swiper
+                pagination={{
+                    dynamicBullets: true,
+                }}
+                modules={[Pagination]}
+            >
+                {
+                    images.map((image, idx) => (
+                        <SwiperSlide key={idx}>
+                            <img
+                                src={image || ""}
+                                alt="post_here"
+                                className="aspect-video w-full object-cover"
+                            />
+                            <div className={`transition-all duration-500 ${show ? 'opacity-100' : 'opacity-0'}`}>
+                                <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-3'>
+                                    <div className='flex items-center justify-center gap-2'>
+                                        <FaHeart className='text-white text-xl cursor-pointer hover:scale-95 duration-200 transition-all' />
+                                        <span className='text-white text-xs'>{likes}</span>
+                                    </div>
+                                    <div className='flex items-center justify-center gap-2'>
+                                        <FaComment className='text-white text-xl cursor-pointer hover:scale-95 duration-200 transition-all' />
+                                        <span className='text-white text-xs'>{comments}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                    ))
+                }
+            </Swiper>
         </div>
     );
 }

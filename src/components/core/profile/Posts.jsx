@@ -12,7 +12,7 @@ const Posts = ({ user }) => {
             {
                 user.posts.map(post => {
                     return (
-                        <Post key={post._id} _id={post._id} title={post.title} imageSrc={post.image} likes={post.likes.length} comments={post.comments.length} />
+                        <Post key={post._id} images={post.images} likes={post.likes.length} comments={post.comments.length} />
                     )
                 })
             }

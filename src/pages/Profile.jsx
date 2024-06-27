@@ -9,7 +9,6 @@ import { InfoButton, SettingsButton } from '../components/ui/Button';
 import { Avatar } from '../components/ui/Avatar';
 
 const Profile = () => {
-
     const user = useSelector(state => state.user);
     const [step, setStep] = useState('posts');
 
@@ -19,7 +18,7 @@ const Profile = () => {
     }
 
     return (
-        <div className='min-h-screen text-white bg-black'>
+        <div className='min-h-screen text-white bg-black mt-16 lg:mt-0'>
             <div className='flex flex-col items-center justify-center w-11/12 gap-5 p-8 ml-auto border-b border-gray-400 lg:flex-row'>
                 <Avatar w={200} h={200} src={user.profileDetails.pfp} border p={24} />
                 <div className='flex flex-col justify-center gap-5 p-4'>

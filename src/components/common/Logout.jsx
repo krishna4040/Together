@@ -21,7 +21,7 @@ const Logout = ({ setLogout }) => {
     }
 
     return (
-        <Modal>
+        <Modal outSideCallback={() => setLogout(false)}>
             <button className={`absolute right-4 top-3`} onClick={() => setLogout(false)}>✕</button>
             <h2 className="text-xl">Logout</h2>
             <span>Sure You wanna Logout</span>
