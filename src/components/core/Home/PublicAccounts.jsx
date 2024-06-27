@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { addFriend } from '../../../store/slices/user'
 import { ListItemText } from '@mui/material';
 import { useAxiosWithAuth } from '../../../hooks/useAxios';
+import { InfoButton } from '../../ui/Button';
 
 const PublicAccountList = () => {
     const [users, setUsers] = useState([]);
@@ -61,9 +62,7 @@ const PublicAccountList = () => {
                     <ListItem
                         key={user._id}
                         secondaryAction={
-                            <IconButton edge="end" onClick={() => followHandler(user)} >
-                                Follow
-                            </IconButton>
+                            <InfoButton onClick={() => followHandler(user)} text="Follow"  />
                         }
                     >
                         <ListItemAvatar>

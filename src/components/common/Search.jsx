@@ -106,8 +106,8 @@ const Search = ({ setSearch }) => {
     }
 
     return (
-        <Modal>
-            <button className="absolute right-4 top-3" onClick={() => { setSearch(false) }}>✕</button>
+        <Modal outSideCallback={() => setSearch(false)}>
+            <button className="absolute right-4 top-3" onClick={() => setSearch(false)}>✕</button>
             <h2 className="text-xl">Search</h2>
             <div className='flex items-center gap-1'>
                 <div className='is-divider' />

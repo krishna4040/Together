@@ -64,7 +64,7 @@ const EditPage = () => {
     const [modal, setModal] = useState(false);
 
     return (
-        <form className='lg:ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-start lg:justify-center' onSubmit={handleSubmit(submitHandler)}>
+        <form className='lg:ml-[200px] bg-black min-h-screen flex flex-col gap-3 items-center justify-start lg:justify-center mt-16 lg:mt-0' onSubmit={handleSubmit(submitHandler)}>
             {
                 <>
                     <div className='flex flex-col items-center justify-center w-1/2 gap-5 mt-10 lg:flex-row lg:mt-0'>

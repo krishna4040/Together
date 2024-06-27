@@ -52,7 +52,7 @@ const SideBar = () => {
 
     return (
         <div className='flex items-center justify-between p-2 bg-black w-[calc(100vw-200px)]'>
-            <span className="tooltip bw bottom" data-tooltip="search users to chat">
+            <span className="tooltip bw bottom hidden lg:block" data-tooltip="search users to chat">
                 <button className="text-white solid bw btn" onClick={toggleDrawer}>
                     <CiSearch />
                     <div className='px-4 sm:hidden md:flex'>
@@ -60,7 +60,7 @@ const SideBar = () => {
                     </div>
                 </button>
             </span>
-            <h2 className='text-xl font-bold text-white'>
+            <h2 className='text-xl font-bold text-white hidden lg:block'>
                 Talk-Together
             </h2>
             <div>

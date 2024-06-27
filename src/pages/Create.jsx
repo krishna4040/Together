@@ -9,7 +9,7 @@ function Create() {
     const [step, setStep] = useState('title');
 
     return (
-        <div className="min-w-screen lg:ml-[200px] min-h-screen bg-black p-10 flex flex-col items-center justify-start gap-20">
+        <div className="min-w-screen lg:ml-[200px] min-h-screen bg-black p-10 flex flex-col items-center justify-start gap-20 mt-16 lg:mt-0">
             <div className='steps success top'>
                 <div className={`step text-white active`}>
                     Title
