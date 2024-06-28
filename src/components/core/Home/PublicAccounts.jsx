@@ -3,8 +3,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addFriend } from '../../../store/slices/user'
 import { ListItemText } from '@mui/material';
@@ -14,8 +13,6 @@ import { InfoButton } from '../../ui/Button';
 const PublicAccountList = () => {
     const [users, setUsers] = useState([]);
     const dispatch = useDispatch();
-    const currentUser = useSelector(state => state.user);
-    const friendsId = currentUser.friends.map(friend => friend._id);
 
     const axiosPrivate = useAxiosWithAuth()
 
@@ -47,7 +44,10 @@ const PublicAccountList = () => {
                 const updatedList = prev.filter(user => user._id !== friend._id);
                 return updatedList
             })
-            fetchPublicUsers();
+            setUsers(prev => {
+                const updatedList = prev.filter(user => user._id !== friend._id);
+                return updatedList
+            })
             toast.success("Friend Followed");
         } catch (error) {
             toast.error(error.message);
@@ -56,10 +56,12 @@ const PublicAccountList = () => {
     }
 
     return (
-        <List dense className='w-[300px] bg-slate-300'>
+        users.length ?
+        <List dense>
             {
                 users.map(user => (
                     <ListItem
+                        dense
                         key={user._id}
                         secondaryAction={
                             <InfoButton onClick={() => followHandler(user)} text="Follow"  />
@@ -74,7 +76,12 @@ const PublicAccountList = () => {
                     </ListItem>
                 ))
             }
+            <ListItem>
+                Load More
+            </ListItem>
         </List>
+        :
+        <></>
     )
 }
 

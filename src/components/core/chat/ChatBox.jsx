@@ -7,6 +7,8 @@ import ScrollableChat from './utils/ScrollableChat'
 import toast from 'react-hot-toast';
 import { useSocket } from '../../../context/SocketContext';
 import { useAxiosWithAuth } from '../../../hooks/useAxios';
+import { IoSend } from "react-icons/io5";
+import { IconButton } from '@mui/material';
 
 let selectedChatCompare;
 
@@ -54,7 +56,7 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
         })
 
         return () => {
-            socket.off("msgRecieved")
+            socket.off("msgReceived")
         }
     }, []);
 
@@ -80,7 +82,7 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
     }
 
     return (
-        <div className={`${selectedChat ? null : 'hidden'} lg:flex items-center flex-col bg-white rounded-lg lg:w-[55%] w-full`}>
+        <div className={`${selectedChat ? null : 'hidden'} lg:flex items-center flex-col bg-white rounded-lg lg:w-[55%] w-full mb-20 lg:mb-0`}>
             {
                 selectedChat ?
                     <>
@@ -103,7 +105,10 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
                             <div className='messages'>
                                 <ScrollableChat messages={messages} setMessages={setMessages} />
                             </div>
-                            <input type="text" onChange={typingHandler} onKeyDown={sendMessage} value={newMessage} placeholder='Enter a message...' className='input bg-[#e0e0e0] mt-3' />
+                            <div className='flex items-baseline justify-center gap-2'>
+                                <input type="text" onChange={typingHandler} onKeyDown={sendMessage} value={newMessage} placeholder='Enter a message...' className='input bg-[#e0e0e0] mt-3' />
+                                <IconButton onClick={sendMessage}><IoSend /></IconButton>
+                            </div>
                         </div>
                     </>
                     :

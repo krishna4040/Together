@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setChats, setSelectedChat } from '../../../store/slices/chat'
+import { setChats, setSelectedChat, pushChat } from '../../../store/slices/chat'
 import toast from 'react-hot-toast';
 import GroupChatModel from './utils/GroupChatModel'
 import { FaUsers } from "react-icons/fa6";
@@ -12,6 +12,7 @@ const MyChat = ({ fetchAgain }) => {
     const user = useSelector(state => state.user);
     const [newFriends, setNewFriends] = useState([]);
     const axiosPrivate = useAxiosWithAuth()
+    const [loadingChat, setLoadingChat] = useState(false)
 
     const accessChat = async (userId) => {
         try {
@@ -21,8 +22,11 @@ const MyChat = ({ fetchAgain }) => {
                 dispatch(pushChat(data.data));
             }
             dispatch(setSelectedChat(data.data));
+            setNewFriends(prev => {
+                const updatedList = prev.filter(friend => friend._id !== userId);
+                return updatedList;
+            })
             setLoadingChat(false);
-            toggleDrawer();
         } catch (error) {
             toast.error("unable to access chat");
             console.log(error);
@@ -45,10 +49,16 @@ const MyChat = ({ fetchAgain }) => {
     }, [fetchAgain]);
 
     const getSenderUserName = (users) => {
+        if (!users || users.length < 2) {
+            return ''
+        }
         return users[0]._id === user._id ? users[1].userName : users[0].userName;
     }
 
     const getSenderPfp = (users) => {
+        if (!users || users.length < 2) {
+            return ''
+        }
         return users[0]._id === user._id ? users[1].profileDetails.pfp : users[1].profileDetails.pfp;
     }
 
@@ -60,6 +70,7 @@ const MyChat = ({ fetchAgain }) => {
             </div>
             <div className='flex flex-col p-3 bg-[#f8f8f8] w-full rounded-lg gap-2'>
                 {
+                    chats.length ?
                     chats.map(chat => {
                         return (
                             <div key={chat._id} onClick={() => { dispatch(setSelectedChat(chat)) }} className={`cursor-pointer ${selectedChat === chat ? 'bg-[#38b2ac] text-white' : 'bg-[#e8e8e8] text-black'} px-3 py-2 rounded-lg`}>
@@ -76,7 +87,8 @@ const MyChat = ({ fetchAgain }) => {
                                 }
                             </div>
                         )
-                    })
+                    }) :
+                    <></>
                 }
             </div>
             <hr />
@@ -85,6 +97,7 @@ const MyChat = ({ fetchAgain }) => {
             </div>
             <div className='flex flex-col p-3 bg-[#f8f8f8] w-full rounded-lg gap-2'>
                 {
+                    newFriends.length ?
                     newFriends.map(friend => {
                         return (
                             <div key={friend._id} onClick={() => accessChat(friend._id)} className={`cursor-pointer bg-[#e8e8e8] text-black px-3 py-2 rounded-lg`}>
@@ -94,9 +107,11 @@ const MyChat = ({ fetchAgain }) => {
                                 </div>
                             </div>
                         )
-                    })
+                    }) :
+                    <></>
                 }
             </div>
+            {loadingChat && <div className='spinner'></div>}
         </div>
     )
 }
