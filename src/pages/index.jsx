@@ -40,7 +40,7 @@ export const DashBoard = () => {
                 </>
             }
             {logout && <Logout setLogout={setLogout} />}
-            {search && <Search setSearch={setSearch} />}
+            {search && <Search setSearch={setSearch} search={search} />}
             {notification && <Notifications setNotification={setNotification} notification={notification} notificationRef={notificationRef} />}
         </main>
     )

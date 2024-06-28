@@ -36,7 +36,7 @@ const Sidebar = ({ setLogout, setSearch, setNotification, notificationRef }) => 
                                     <Avatar src={user.profileDetails.pfp} h={48} w={48} p={8} border />
                             }
                             <p ref={el => {
-                                if(item.title === 'Notification') {
+                                if (item.title === 'Notification') {
                                     notificationRef.current = el
                                 }
                             }} className='text-xl text-white'>{item.title}</p>
