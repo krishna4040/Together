@@ -49,7 +49,7 @@ const Notifications = ({ notification, setNotification, notificationRef }) => {
             })
         } catch (error) {
             console.log(error)
-            toast.error(error.message)
+            toast.error(error.response.data.message)
         }
     }
 
@@ -68,7 +68,7 @@ const Notifications = ({ notification, setNotification, notificationRef }) => {
             })
         } catch (error) {
             console.log(error)
-            toast.error(error.message)
+            toast.error(error.response.data.message)
         }
     }
 

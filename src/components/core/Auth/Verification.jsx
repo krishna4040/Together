@@ -25,7 +25,7 @@ export default function Verification({ setIsOtpSent }) {
             toast.success('signed up successfully');
             setTab('profile');
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.response.data.message);
             console.log(error);
         }
     }

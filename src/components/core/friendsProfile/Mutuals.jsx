@@ -14,7 +14,7 @@ const Mutuals = ({ userId }) => {
             }
             setMutuals(data.data)
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.response.data.message)
             console.log(error)
         }
     }

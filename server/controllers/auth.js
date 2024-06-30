@@ -23,10 +23,9 @@ exports.signup = async (req, res) => {
         if (otp != response[0].otp) {
             throw new Error('Invalid OTP');
         }
-        const hash = await bcrypt.hash(password, 10);
-        const user = await User.create({ email, password: hash });
+        const user = await User.create({ email, password });
         if (!user) {
-            throw new Error('smth went wrong while signing up');
+            throw new Error('something went wrong while signing up');
         }
         res.status(200).json({
             success: true,
@@ -79,8 +78,7 @@ exports.login = async (req, res) => {
         if (!check) {
             throw new Error('User not signed up');
         }
-        const compare = await bcrypt.compare(password, check.password);
-        // const compare = password === check.password;
+        const compare = password === check.password
         if (!compare) {
             throw new Error('Password do not match');
         }

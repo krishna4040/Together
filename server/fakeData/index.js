@@ -95,13 +95,13 @@ const postSchema = new mongoose.Schema({
             ref: 'Comment'
         }
     ]
-});
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 const Profile = mongoose.model('Profile', profileSchema);
 const Post = mongoose.model('Post', postSchema);
 
-mongoose.connect('mongodb://localhost:27017/fakeDataDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function generateFakeData() {
     await mongoose.connection.dropDatabase();

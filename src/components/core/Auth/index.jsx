@@ -57,8 +57,8 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
                 navigate('/home');
             }
         } catch (error) {
-            console.log(error)
-            toast.error(error.message);
+            console.log(error);
+            toast.error(error.response.data.message);
         }
     }, [isSignup]);
 

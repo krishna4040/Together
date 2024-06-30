@@ -50,7 +50,7 @@ const PublicAccountList = () => {
             })
             toast.success("Friend Followed");
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.response.data.message);
             console.log(error);
         }
     }

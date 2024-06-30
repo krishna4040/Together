@@ -35,7 +35,7 @@ const EditPage = () => {
             dispatch(updateProfile(res.data.data))
             toast.success("profile updated");
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.response.data.message)
             console.log(error)
         }
     };

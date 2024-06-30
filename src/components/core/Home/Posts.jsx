@@ -36,7 +36,7 @@ const Posts = ({ posts, setPosts }) => {
                 }]
             })
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.response.data.message)
             console.log(error)
         }
     }
@@ -57,7 +57,7 @@ const Posts = ({ posts, setPosts }) => {
                 }]
             })
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.response.data.message)
             console.log(error)
         }
     }
@@ -88,7 +88,7 @@ const Posts = ({ posts, setPosts }) => {
             }
             setComments(data.data)
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.response.data.message)
             console.log(error)
         }
     }
