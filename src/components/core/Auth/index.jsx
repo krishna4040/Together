@@ -82,7 +82,7 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
             </LabelInputContainer>
             {
                 isSignup ?
-                    <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+                    <div className="flex space-x-2 mb-4">
                         <LabelInputContainer>
                             <Label htmlFor="password">Password</Label>
                             <Input id="password" placeholder="••••••••" type="password" {...register("password", {
