@@ -57,31 +57,32 @@ const PublicAccountList = () => {
 
     return (
         users.length ?
-        <List dense>
-            {
-                users.map(user => (
-                    <ListItem
-                        dense
-                        key={user._id}
-                        secondaryAction={
-                            <InfoButton onClick={() => followHandler(user)} text="Follow"  />
-                        }
-                    >
-                        <ListItemAvatar>
-                            <Avatar src={user.profileDetails.pfp} alt='pfp' />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={user.userName}
-                        />
-                    </ListItem>
-                ))
-            }
-            <ListItem>
-                Load More
-            </ListItem>
-        </List>
-        :
-        <></>
+            <List dense sx={{
+                backgroundColor: '#737373',
+                width: '100%'
+            }}>
+                {
+                    users.map(user => (
+                        <ListItem
+                            dense
+                            key={user._id}
+                            secondaryAction={
+                                <InfoButton onClick={() => followHandler(user)} text="Follow" />
+                            }
+                        >
+                            <ListItemAvatar>
+                                <Avatar src={user.profileDetails.pfp} alt='pfp' />
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={user.userName}
+                                secondary="suggested for you"
+                            />
+                        </ListItem>
+                    ))
+                }
+            </List>
+            :
+            <></>
     )
 }
 

@@ -10,7 +10,11 @@ const Home = () => {
                 <Friends />
                 <PersonalizedFeed />
             </div>
-            <div className='hidden overflow-y-auto border-b border-l md:hidden lg:fixed lg:block lg:top-20 lg:right-10 max-h-[550px] rounded-md'>
+            <div className='w-[320px] hidden overflow-y-auto md:hidden lg:fixed lg:block lg:top-20 lg:right-10 max-h-[550px]'>
+                <div className='flex items-center justify-between text-white mb-2'>
+                    <p>suggested for you</p>
+                    <span>see all</span>
+                </div>
                 <PublicAccountList />
             </div>
         </div>

@@ -100,8 +100,8 @@ const Posts = ({ posts, setPosts }) => {
                     posts.map((post, index) => {
                         return (
                             post.length !== 0 &&
-                            <div className="mx-auto w-full bg-black max-w-md overflow-hidden rounded-lg shadow" key={index}>
-                                <div className="header">
+                            <div className="mx-auto w-full bg-black max-w-md overflow-hidden shadow border-b border-[#737373]" key={index}>
+                                <div className="flex items-center gap-3 mb-2">
                                     <Avatar src={post.user.profileDetails.pfp} h={50} w={50} p={4} border />
                                     <h1 className='text-xl text-white capitalize text-red-500'>{post.user.userName}</h1>
                                 </div>
