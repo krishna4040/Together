@@ -16,6 +16,7 @@ const Notifications = ({ notification, setNotification, notificationRef }) => {
     const dispatch = useDispatch();
     const axiosPrivate = useAxiosWithAuth();
     const ref = useRef(null)
+    const [loading, setLoading] = useState(false)
 
     const ListItemWithWiderSecondaryAction = makeStyles({
         secondaryAction: {
@@ -27,8 +28,10 @@ const Notifications = ({ notification, setNotification, notificationRef }) => {
 
     const fetchNotifications = async () => {
         try {
+            setLoading(true)
             const { data } = await axiosPrivate.get('/notifications/fetchNotifications')
             setNotices(data.data)
+            setLoading(false)
         } catch (error) {
             console.log(error)
         }
@@ -82,51 +85,56 @@ const Notifications = ({ notification, setNotification, notificationRef }) => {
 
     return (
         <PopOver open={notification} anchorRef={notificationRef}>
-            <div className='min-w-[300px] px-4 py-2 flex flex-col items-center w-full border' ref={ref}>
-                <div>
-                    {
-                        Object.keys(notices).length > 0 ?
-                            Object.entries(notices).map(([date, notifications]) => {
-                                return <div key={date}>
-                                    <span>{date}</span>
-                                    <List dense>
-                                        {
-                                            notifications.map(notification => (
-                                                <ListItem
-                                                    dense
-                                                    key={notification._id}
-                                                    divider
-                                                >
-                                                    <ListItemAvatar>
-                                                        <Avatar src={notification.by.profileDetails.pfp} scaleOnHover h={50} w={50} />
-                                                    </ListItemAvatar>
-                                                    <ListItemText
-                                                        primary={notification.content}
-                                                        secondary={notification.createdAt.time}
-                                                    />
-                                                    <ListItemSecondaryAction>
-                                                        {
-                                                            notification.notificationType === 'action' &&
-                                                            <>
-                                                                <IconButton onClick={() => acceptRequestHandler(notification.by, notification.createdAt.date)}>
-                                                                    <FaCheck className='text-xl hover:text-green-400 hover:scale-110 duration-200 transition-all' />
-                                                                </IconButton>
-                                                                <IconButton onClick={() => rejectRequestHandler(notification.by, notification.createdAt.date)}>
-                                                                    <ImCross className='text-xl hover:text-red-600 hover:scale-110 duration-200 transition-all' />
-                                                                </IconButton>
-                                                            </>
-                                                        }
-                                                    </ListItemSecondaryAction>
-                                                </ListItem>
-                                            ))
-                                        }
-                                    </List>
-                                </div>
-                            }) :
-                            <p className='text-black'>No notifications</p>
-                    }
-                </div>
-            </div>
+            {
+                loading ?
+                    <div className='min-w-[300px] px-4 py-2 flex flex-col items-center w-full border'>Loading...</div>
+                    :
+                    <div className='min-w-[300px] px-4 py-2 flex flex-col items-center w-full border' ref={ref}>
+                        <div>
+                            {
+                                Object.keys(notices).length > 0 ?
+                                    Object.entries(notices).map(([date, notifications]) => {
+                                        return <div key={date}>
+                                            <span>{date}</span>
+                                            <List dense>
+                                                {
+                                                    notifications.map(notification => (
+                                                        <ListItem
+                                                            dense
+                                                            key={notification._id}
+                                                            divider
+                                                        >
+                                                            <ListItemAvatar>
+                                                                <Avatar src={notification.by.profileDetails.pfp} h={50} w={50} />
+                                                            </ListItemAvatar>
+                                                            <ListItemText
+                                                                primary={notification.content}
+                                                                secondary={notification.createdAt.time}
+                                                            />
+                                                            <ListItemSecondaryAction>
+                                                                {
+                                                                    notification.notificationType === 'action' &&
+                                                                    <>
+                                                                        <IconButton onClick={() => acceptRequestHandler(notification.by, notification.createdAt.date)}>
+                                                                            <FaCheck className='text-xl hover:text-green-400 hover:scale-110 duration-200 transition-all' />
+                                                                        </IconButton>
+                                                                        <IconButton onClick={() => rejectRequestHandler(notification.by, notification.createdAt.date)}>
+                                                                            <ImCross className='text-xl hover:text-red-600 hover:scale-110 duration-200 transition-all' />
+                                                                        </IconButton>
+                                                                    </>
+                                                                }
+                                                            </ListItemSecondaryAction>
+                                                        </ListItem>
+                                                    ))
+                                                }
+                                            </List>
+                                        </div>
+                                    }) :
+                                    <p className='text-black'>No notifications</p>
+                            }
+                        </div>
+                    </div>
+            }
         </PopOver>
     )
 }

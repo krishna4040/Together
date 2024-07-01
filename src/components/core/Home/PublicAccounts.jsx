@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
+import { Avatar } from '../../ui/Avatar';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addFriend } from '../../../store/slices/user'
@@ -71,7 +71,7 @@ const PublicAccountList = () => {
                             }
                         >
                             <ListItemAvatar>
-                                <Avatar src={user.profileDetails.pfp} alt='pfp' />
+                                <Avatar src={user.profileDetails.pfp} h={48} w={48} border/>
                             </ListItemAvatar>
                             <ListItemText
                                 primary={user.userName}
