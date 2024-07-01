@@ -13,6 +13,7 @@ export default function Verification({ setIsOtpSent }) {
 
     const connectHandler = async () => {
         try {
+            const id = toast.loading('Verifying OTP...');
             const response = await axiosPublic.post(`/auth/signup`, {
                 email: signupData.email,
                 password: signupData.password,
@@ -22,6 +23,7 @@ export default function Verification({ setIsOtpSent }) {
                 toast.error(response.data.message);
             }
             setUserId(response.data.data._id);
+            toast.dismiss(id);
             toast.success('signed up successfully');
             setTab('profile');
         } catch (error) {

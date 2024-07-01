@@ -13,6 +13,7 @@ import { useAxiosWithoutAuth } from '../../../hooks/useAxios'
 
 export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
     const navigate = useNavigate();
+    const token = sessionStorage.getItem("token");
 
     const form = useForm({
         defaultValues: {
@@ -33,6 +34,12 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
         }
     }, [isSubmitSuccessful]);
 
+    useEffect(() => {
+        if (token) {
+            navigate('/home')
+        }
+    }, [token])
+
     const submitHandler = useCallback(async (data) => {
         try {
             if (isSignup) {
@@ -40,17 +47,21 @@ export function SignupForm({ isSignup, setIsSignup, setIsOtpSent }) {
                     return toast.error("Passwords do not match");
                 }
                 dispatch(setSignupData(data));
+                const id = toast.loading("Sending OTP..")
                 const response = await axiosPublic.post(`/auth/sendotp`, { email: data.email });
                 if (!response.data.success) {
                     throw new Error(response.data.message);
                 }
                 setIsOtpSent(true)
+                toast.dismiss(id)
                 toast.success("OTP sent to your email!");
             } else {
+                const id = toast.loading("Logging in..")
                 const response = await axiosPublic.post(`/auth/login`, data);
                 if (!response.data.success) {
                     throw new Error(response.data.message);
                 }
+                toast.dismiss(id)
                 toast.success("signed up successfully");
                 sessionStorage.setItem("token", response.data.token);
                 dispatch(setToken(response.data.token));

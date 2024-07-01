@@ -11,6 +11,7 @@ const Logout = ({ setLogout }) => {
     const navigate = useNavigate();
     const btn1Handler = () => {
         dispatch(setToken(null));
+        sessionStorage.removeItem('token');
         toast.success('Logged out');
         setLogout(false);
         navigate('/');
