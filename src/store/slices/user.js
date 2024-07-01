@@ -22,7 +22,7 @@ const userSlice = createSlice({
     },
     reducers: {
         setUser: (state, action) => {
-            const { _id, userName, email, profileDetails: { firstName, lastName, bday, age, gender, about, pfp }, friends, posts, chat } = action.payload;
+            const { _id, userName, email, requests, profileDetails: { firstName, lastName, bday, age, gender, about, pfp }, friends, posts, chat } = action.payload;
             state._id = _id;
             state.userName = userName;
             state.email = email;
@@ -36,6 +36,7 @@ const userSlice = createSlice({
             state.friends = friends;
             state.posts = posts;
             state.chat = chat;
+            state.requests = requests;
         },
         addFriend: (state, action) => {
             state.friends.push(action.payload);

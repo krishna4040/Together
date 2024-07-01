@@ -97,9 +97,34 @@ const postSchema = new mongoose.Schema({
     ]
 }, { timestamps: true });
 
+const notificationSchema = new mongoose.Schema({
+    for: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }],
+    by: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    content: String,
+    notificationType: {
+        type: String,
+        enum: ['action', 'readOnly'],
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        expires: 24 * 7 * 60 * 60 * 1000, // 7 days
+    }
+})
+
 const User = mongoose.model('User', userSchema);
 const Profile = mongoose.model('Profile', profileSchema);
 const Post = mongoose.model('Post', postSchema);
+const Notification = mongoose.model('Notification', notificationSchema);
 
 mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -109,8 +134,9 @@ async function generateFakeData() {
     const users = [];
     const profiles = [];
     const posts = [];
+    const notifications = [];
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
         const user1 = new User({
             userName: faker.internet.userName(),
             email: faker.internet.email(),
@@ -134,6 +160,20 @@ async function generateFakeData() {
 
         user1.requests.push(user3._id);
         user3.requests.push(user2._id);
+
+        const notification1 = new Notification({
+            for: [user1._id],
+            by: user3._id,
+            content: `${user3.userName} has requested to connect`,
+            notificationType: 'action'
+        });
+
+        const notification2 = new Notification({
+            for: [user3._id],
+            by: user2._id,
+            content: `${user2.userName} has requested to connect`,
+            notificationType: 'action'
+        });
 
         const profile1 = new Profile({
             firstName: faker.person.firstName(),
@@ -183,6 +223,9 @@ async function generateFakeData() {
         profiles.push(profile2);
         profiles.push(profile3);
 
+        notifications.push(notification1);
+        notifications.push(notification2);
+
         for (let j = 0; j < 5; j++) {
             const post = new Post({
                 user: user1._id,
@@ -219,6 +262,7 @@ async function generateFakeData() {
     await User.insertMany(users);
     await Profile.insertMany(profiles);
     await Post.insertMany(posts);
+    await Notification.insertMany(notifications)
 
     mongoose.connection.close();
 }
