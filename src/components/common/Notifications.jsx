@@ -108,6 +108,9 @@ const Notifications = ({ notification, setNotification, notificationRef }) => {
                                                                 <Avatar src={notification.by.profileDetails.pfp} h={50} w={50} />
                                                             </ListItemAvatar>
                                                             <ListItemText
+                                                                sx={{
+                                                                    width: '200px'
+                                                                }}
                                                                 primary={notification.content}
                                                                 secondary={notification.createdAt.time}
                                                             />
